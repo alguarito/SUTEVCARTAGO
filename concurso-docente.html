@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUTEV Cartago - Simulador de Concursos y Sistema Maestro</title>
+<meta name="description" content="Simula tu puntaje del Sistema Maestro y la Valoración de Antecedentes del Concurso Docente (CNSC). Evalúa tus oportunidades en la educación pública.">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  @media (min-width: 1024px) {
+    .dashboard-grid {
+      grid-template-columns: 420px 1fr;
+    }
+  }
+
+  .form-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .result-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 35px;
+    box-shadow: var(--shadow-md);
+    min-height: 400px;
+  }
+
+  .tabs-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--gray-200);
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gray-50);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tab-btn:hover {
+    color: var(--green-700);
+    background-color: var(--green-50);
+  }
+
+  .tab-btn.active {
+    color: white;
+    background-color: var(--green-600);
+  }
+
+  .score-badge {
+    text-align: center;
+    background-color: var(--green-50);
+    border: 2px solid var(--green-200);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 25px;
+  }
+
+  .score-value {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--green-700);
+    font-family: var(--font-heading);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .score-label {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .highlight-box {
+    background: rgba(16, 185, 129, 0.04);
+    border-left: 4px solid var(--green-600);
+    padding: 15px 20px;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin: 15px 0;
+  }
+
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 0.95rem;
+  }
+
+  .metric-row:last-child {
+    border-bottom: none;
+  }
+
+  .metric-label {
+    color: var(--gray-700);
+    font-weight: 600;
+  }
+
+  .metric-val {
+    font-weight: 800;
+    color: var(--gray-900);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+<div class="container">
+<a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV"><div class="header__logo-text">SUTEV Cartago<span>Norte del Valle</span></div></a>
+<nav><ul class="nav__list" id="navList">
+<li><a href="index.html" class="nav__link">Inicio</a></li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Nosotros <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="index.html#nosotros" class="nav__dropdown-item"><i data-lucide="users" style="width: 14px; height: 14px;"></i> ¿Quiénes Somos?</a></li>
+    <li><a href="index.html#estatutos" class="nav__dropdown-item"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i> Estatutos del Sindicato</a></li>
+    <li><a href="index.html#galeria" class="nav__dropdown-item"><i data-lucide="image" style="width: 14px; height: 14px;"></i> Galería de Fotos</a></li>
+  </ul>
+</li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Servicios <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+    <ul class="nav__dropdown-menu">
+    <li><a href="index.html#servicios" class="nav__dropdown-item"><i data-lucide="briefcase" style="width: 14px; height: 14px;"></i> Portafolio de Servicios</a></li>
+    <li><a href="permisos-docentes.html" class="nav__dropdown-item"><i data-lucide="scale" style="width: 14px; height: 14px;"></i> Permisos de Ley y Licencias</a></li>
+    <li><a href="calculadora-salarial.html" class="nav__dropdown-item"><i data-lucide="calculator" style="width: 14px; height: 14px;"></i> Calculadora Salarial</a></li>
+    <li><a href="simulador-pension.html" class="nav__dropdown-item"><i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i> Simulador de Pensión</a></li>
+    <li><a href="derechos-peticion.html" class="nav__dropdown-item"><i data-lucide="file-signature" style="width: 14px; height: 14px;"></i> Derechos de Petición</a></li>
+    <li><a href="auditor-nomina.html" class="nav__dropdown-item"><i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> Auditor de Nómina</a></li>
+    <li><a href="escalafon-docente.html" class="nav__dropdown-item"><i data-lucide="graduation-cap" style="width: 14px; height: 14px;"></i> Escalafón y Ascenso</a></li>
+    <li><a href="carga-academica.html" class="nav__dropdown-item"><i data-lucide="calendar-range" style="width: 14px; height: 14px;"></i> Carga Académica 1850</a></li>
+    <li><a href="concurso-docente.html" class="nav__dropdown-item"><i data-lucide="clipboard-check" style="width: 14px; height: 14px;"></i> Concursos y Mineducación</a></li>
+  </ul>
+</li>
+<li><a href="index.html#calendario" class="nav__link">Calendario</a></li>
+<li><a href="index.html#noticias" class="nav__link">Noticias</a></li>
+<li><a href="index.html#contacto" class="nav__link">Contacto</a></li>
+<li><a href="index.html#afiliacion" class="nav__link nav__link--cta">Afíliate</a></li>
+</ul></nav>
+<button class="nav__toggle" id="navToggle" aria-label="Menú"><span></span><span></span><span></span></button>
+</div>
+</header>
+
+<!-- HERO HEADER -->
+<section class="section section--dark" style="padding-top: 150px; padding-bottom: 50px;">
+  <div class="container">
+    <div class="section__header reveal" style="margin-bottom: 0;">
+      <span class="section__tag">Herramientas de Oportunidad Laboral</span>
+      <h2 class="section__title">Concursos de Mérito y Sistema Maestro</h2>
+      <p class="section__desc">Simula tus ponderaciones de méritos para el ingreso temporal por Sistema Maestro o calcula tus antecedentes para el concurso de la CNSC.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN SECTION -->
+<section class="section" style="padding-top: 40px;">
+  <div class="container">
+
+    <!-- TABS NAV -->
+    <div class="tabs-nav reveal">
+      <button class="tab-btn active" onclick="switchTab('tab-maestro')"><i data-lucide="graduation-cap"></i> Simulador Sistema Maestro (Mineducación)</button>
+      <button class="tab-btn" onclick="switchTab('tab-cnsc')"><i data-lucide="file-badge"></i> Antecedentes Concurso Nacional (CNSC)</button>
+    </div>
+
+    <!-- TAB 1: SISTEMA MAESTRO -->
+    <div id="tab-maestro" class="tab-content reveal">
+      <div class="dashboard-grid">
+        
+        <!-- FORM MAESTRO -->
+        <div class="form-card">
+          <h3 style="font-size:1.25rem; font-weight:800; color:var(--green-900); margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="settings" style="color:var(--green-600)"></i> Configurar Perfil de Postulante
+          </h3>
+
+          <div class="form-group">
+            <label for="sm-titulo" style="font-weight:700;">Título de Formación Base (Requisito)</label>
+            <select id="sm-titulo" onchange="runMaestroSimulation()">
+              <option value="50">Licenciado o Profesional Universitario Habilitado (50 pts)</option>
+              <option value="40">Tecnólogo en Educación o Normalista Superior (40 pts)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="sm-posgrado" style="font-weight:700;">Posgrado Acreditado (Adicional)</label>
+            <select id="sm-posgrado" onchange="runMaestroSimulation()">
+              <option value="0" selected>Ninguno / En Curso (0 pts)</option>
+              <option value="10">Especialización en Educación (+10 pts)</option>
+              <option value="20">Maestría o Doctorado en Educación (+20 pts)</option>
+            </select>
+            <small style="color:var(--gray-500);display:block;margin-top:4px;">* Ponderado acumulado máximo en Educación: 70 puntos.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="sm-exp-pub" style="font-weight:700;">Años de Experiencia en Colegios Oficiales (Públicos)</label>
+            <input type="number" id="sm-exp-pub" value="0" min="0" max="20" oninput="runMaestroSimulation()">
+            <small style="color:var(--gray-500);display:block;margin-top:4px;">* Otorga 4 puntos por año de servicio (Máximo 20 pts).</small>
+          </div>
+
+          <div class="form-group">
+            <label for="sm-exp-priv" style="font-weight:700;">Años de Experiencia en Colegios Privados</label>
+            <input type="number" id="sm-exp-priv" value="0" min="0" max="20" oninput="runMaestroSimulation()">
+            <small style="color:var(--gray-500);display:block;margin-top:4px;">* Otorga 2 puntos por año de servicio (Máximo 20 pts).</small>
+          </div>
+
+          <div class="form-group">
+            <label for="sm-saber" style="font-weight:700;">Puntaje Pruebas de Estado Saber Pro (ICFES)</label>
+            <select id="sm-saber" onchange="runMaestroSimulation()">
+              <option value="0" selected>Percentil regular o inferior al 60 (0 pts)</option>
+              <option value="5">Percentil alto entre 60 y 79 (+5 pts)</option>
+              <option value="10">Percentil sobresaliente mayor al 80 (+10 pts)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- RESULTS MAESTRO -->
+        <div class="result-card" id="sm-result-card">
+          <h3 style="font-size:1.25rem; font-weight:800; color:var(--green-900); margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="award" style="color:var(--green-600);"></i> Puntaje Simulado de Selección
+          </h3>
+
+          <div class="score-badge" id="sm-score-badge">
+            <div class="score-value" id="sm-score-val">50.0</div>
+            <div class="score-label">PUNTOS TOTALES / 100.00</div>
+          </div>
+
+          <div class="highlight-box">
+            <p style="margin:0;font-size:0.95rem;color:var(--gray-800);line-height:1.5;" id="sm-standing-text">
+              Tu puntaje simulado es de <strong>50 puntos</strong>. Es un puntaje inicial. Para ganar una vacante temporal en Cartago es recomendable acreditar más experiencia pedagógica.
+            </p>
+          </div>
+
+          <h4 style="font-size:1.05rem; font-weight:800; color:var(--gray-800); margin-top:25px; margin-bottom:15px; text-transform:uppercase; letter-spacing:0.5px;">Desglose Técnico de Criterios:</h4>
+          
+          <div style="background-color:var(--gray-50); border: 1px solid var(--gray-200); border-radius:12px; padding:20px; margin-bottom:20px;">
+            <div class="metric-row">
+              <span class="metric-label">Puntaje por Formación Académica:</span>
+              <span class="metric-val" id="sm-val-acad">50.0 pts</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Puntaje por Experiencia Docente:</span>
+              <span class="metric-val" id="sm-val-exp">0.0 pts</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Puntaje por Pruebas Saber Pro (ICFES):</span>
+              <span class="metric-val" id="sm-val-saber">0.0 pts</span>
+            </div>
+          </div>
+
+          <div style="background-color:rgba(37,99,235,0.05); border-left:4px solid #2563eb; padding:15px; border-radius:0 8px 8px 0; margin-top:20px;">
+            <p style="font-size:0.85rem;color:#1e40af;line-height:1.45;margin:0;">
+              * **Nota:** El *Sistema Maestro* es la plataforma del Ministerio de Educación de Colombia para proveer vacantes temporales de docentes oficiales de forma rápida y descentralizada. Solo se preseleccionan los 3 puntajes más altos inscritos en la zona geográfica de la plaza vacante.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 2: CNSC CONCURSO NACIONAL -->
+    <div id="tab-cnsc" class="tab-content reveal" style="display:none;">
+      <div class="dashboard-grid">
+        
+        <!-- FORM CNSC -->
+        <div class="form-card">
+          <h3 style="font-size:1.25rem; font-weight:800; color:var(--green-900); margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="settings" style="color:var(--green-600)"></i> Antecedentes Académicos y Laborales
+          </h3>
+
+          <h4 style="font-size:0.9rem;text-transform:uppercase;color:var(--gray-500);margin-bottom:12px;font-weight:800;border-bottom:1px solid var(--gray-200);padding-bottom:5px;">Educación Adicional (Max 30 Pts)</h4>
+
+          <div class="form-group">
+            <label for="cnsc-t-adicional" style="font-weight:700;">Título Adicional de Pregrado</label>
+            <select id="cnsc-t-adicional" onchange="runCnscSimulation()">
+              <option value="0" selected>Ninguno (0 pts)</option>
+              <option value="10">Licenciatura o Pregrado Profesional Adicional (+10 pts)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="cnsc-posgrado" style="font-weight:700;">Posgrados Adicionales Certificados</label>
+            <select id="cnsc-posgrado" onchange="runCnscSimulation()">
+              <option value="0" selected>Ninguno / En Curso (0 pts)</option>
+              <option value="10">Especialización Universitaria (+10 pts)</option>
+              <option value="20">Maestría Académica (+20 pts)</option>
+              <option value="30">Doctorado Académico (+30 pts)</option>
+            </select>
+          </div>
+
+          <h4 style="font-size:0.9rem;text-transform:uppercase;color:var(--gray-500);margin-top:24px;margin-bottom:12px;font-weight:800;border-bottom:1px solid var(--gray-200);padding-bottom:5px;">Experiencia Adicional (Max 70 Pts)</h4>
+          
+          <div class="form-group">
+            <label for="cnsc-exp-ofi" style="font-weight:700;">Meses de Experiencia Oficial (Pública)</label>
+            <input type="number" id="cnsc-exp-ofi" value="0" min="0" max="150" oninput="runCnscSimulation()">
+            <small style="color:var(--gray-500);display:block;margin-top:4px;">* Acredita aproximadamente 2.5 puntos por mes de servicio.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="cnsc-exp-no-ofi" style="font-weight:700;">Meses de Experiencia No Oficial (Privada/Otros)</label>
+            <input type="number" id="cnsc-exp-no-ofi" value="0" min="0" max="150" oninput="runCnscSimulation()">
+            <small style="color:var(--gray-500);display:block;margin-top:4px;">* Acredita aproximadamente 1.2 puntos por mes de servicio.</small>
+          </div>
+        </div>
+
+        <!-- RESULTS CNSC -->
+        <div class="result-card" id="cnsc-result-card">
+          <h3 style="font-size:1.25rem; font-weight:800; color:var(--green-900); margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="award" style="color:var(--green-600);"></i> Resultados Fase Antecedentes CNSC
+          </h3>
+
+          <div class="score-badge" id="cnsc-score-badge" style="background-color:rgba(59,130,246,0.05); border-color:rgba(59,130,246,0.2);">
+            <div class="score-value" id="cnsc-score-val" style="color:#2563eb">0.0</div>
+            <div class="score-label" style="color:var(--gray-600)">PUNTOS DE VALORACIÓN / 100.00</div>
+          </div>
+
+          <div class="highlight-box" style="border-left-color:#2563eb; background-color:rgba(59,130,246,0.02);">
+            <p style="margin:0;font-size:0.95rem;color:var(--gray-800);line-height:1.5;" id="cnsc-standing-text">
+              Tu puntaje en la etapa de Valoración de Antecedentes es de **0.0 puntos**. Recuerda que esta etapa pondera tu mérito por encima de los requisitos mínimos y define tu posición final en la Lista de Elegibles.
+            </p>
+          </div>
+
+          <h4 style="font-size:1.05rem; font-weight:800; color:var(--gray-800); margin-top:25px; margin-bottom:15px; text-transform:uppercase; letter-spacing:0.5px;">Puntaje por Categoría (CNSC):</h4>
+          
+          <div style="background-color:var(--gray-50); border: 1px solid var(--gray-200); border-radius:12px; padding:20px; margin-bottom:20px;">
+            <div class="metric-row">
+              <span class="metric-label">Puntaje Educación Adicional (Max 30):</span>
+              <span class="metric-val" id="cnsc-val-acad">0.0 pts</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-label">Puntaje Experiencia Adicional (Max 70):</span>
+              <span class="metric-val" id="cnsc-val-exp">0.0 pts</span>
+            </div>
+          </div>
+
+          <div style="background-color:var(--green-50); border-left:4px solid var(--green-600); padding:15px; border-radius:0 8px 8px 0; margin-top:20px;">
+            <p style="font-size:0.85rem;color:var(--green-900);line-height:1.45;margin:0;">
+              * **Consejo Fecode/SUTEV:** En los concursos docentes nacionales organizados por la Comisión Nacional del Servicio Civil (CNSC), la valoración de antecedentes equivale al **20% del peso total** del concurso. Acreditar posgrados y experiencia docente adicional es fundamental para consolidarse en los primeros puestos y asegurar tu plaza en la audiencia de selección.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="container">
+<div class="footer__grid">
+<div class="footer__brand"><a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV" style="height:40px"><div class="header__logo-text" style="color:var(--green-400)">SUTEV Cartago<span style="color:var(--gray-500)">Norte del Valle</span></div></a><p>Sindicato Único de Trabajadores de la Educación del Valle. Subdirectiva Cartago — Filial de FECODE.</p></div>
+<div><div class="footer__title">Navegación</div><ul class="footer__links"><li><a href="index.html#nosotros">Nosotros</a></li><li><a href="index.html#servicios">Servicios</a></li><li><a href="index.html#calendario">Calendario</a></li><li><a href="index.html#noticias">Noticias</a></li><li><a href="index.html#estatutos">Estatutos</a></li></ul></div>
+<div><div class="footer__title">Servicios y Herramientas</div><ul class="footer__links"><li><a href="index.html#reservas">Asesoría Jurídica</a></li><li><a href="index.html#reservas">CEID</a></li><li><a href="index.html#reservas">Bienestar</a></li><li><a href="permisos-docentes.html">Permisos y Licencias de Ley</a></li><li><a href="calculadora-salarial.html">Calculadora Salarial</a></li><li><a href="simulador-pension.html">Simulador de Pensión</a></li><li><a href="derechos-peticion.html">Derechos de Petición</a></li><li><a href="auditor-nomina.html">Auditor de Nómina</a></li><li><a href="escalafon-docente.html">Escalafón y Ascenso</a></li><li><a href="carga-academica.html">Carga Académica 1850</a></li><li><a href="concurso-docente.html">Concursos y Mineducación</a></li></ul></div>
+<div><div class="footer__title">Contacto y Redes</div><ul class="footer__links"><li><a href="index.html#contacto">📍 Casa del Maestro (Cra 4 #16-17)</a></li><li><a href="index.html#contacto">📍 Cartago, Valle del Cauca</a></li><li><a href="https://web.facebook.com/sutevcartago/?locale=es_LA&_rdc=1&_rdr#" target="_blank" style="color: var(--green-400); font-weight: 600;">📘 Facebook Oficial</a></li></ul></div>
+</div>
+<div class="footer__bottom">© 2026 SUTEV Cartago — Subdirectiva Norte del Valle. Todos los derechos reservados.</div>
+</div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (typeof lucide !== 'undefined') {
+  lucide.createIcons();
+}
+
+// Lógica de Tabs
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.style.display = 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  document.getElementById(tabId).style.display = 'block';
+  
+  const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => 
+    b.getAttribute('onclick').includes(tabId)
+  );
+  if (btn) btn.classList.add('active');
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    el.classList.remove('visible');
+  });
+  triggerReveal();
+}
+
+// SIMULADOR SISTEMA MAESTRO
+function runMaestroSimulation() {
+  const baseT = parseFloat(document.getElementById('sm-titulo').value) || 0;
+  const pgT = parseFloat(document.getElementById('sm-posgrado').value) || 0;
+  const expPub = parseFloat(document.getElementById('sm-exp-pub').value) || 0;
+  const expPriv = parseFloat(document.getElementById('sm-exp-priv').value) || 0;
+  const saberT = parseFloat(document.getElementById('sm-saber').value) || 0;
+
+  // Formación Académica (Base + Posgrado, max 70 pts)
+  const acadScore = Math.min(70, baseT + pgT);
+
+  // Experiencia (4 pts por año en público, 2 pts por año en privado, max 20 pts)
+  const expScore = Math.min(20, (expPub * 4) + (expPriv * 2));
+
+  // Saber Pro (max 10 pts)
+  const saberScore = saberT;
+
+  // Suma total (max 100)
+  const totalScore = acadScore + expScore + saberScore;
+
+  // Actualizar UI
+  document.getElementById('sm-score-val').innerText = totalScore.toFixed(1);
+  document.getElementById('sm-val-acad').innerText = acadScore.toFixed(1) + " pts";
+  document.getElementById('sm-val-exp').innerText = expScore.toFixed(1) + " pts";
+  document.getElementById('sm-val-saber').innerText = saberScore.toFixed(1) + " pts";
+
+  // Cambiar color del badge según rango competitivo
+  const badge = document.getElementById('sm-score-badge');
+  const txt = document.getElementById('sm-standing-text');
+  
+  if (totalScore >= 85) {
+    badge.style.backgroundColor = "var(--green-50)";
+    badge.style.borderColor = "var(--green-300)";
+    document.getElementById('sm-score-val').style.color = "var(--green-700)";
+    txt.innerHTML = `Tu puntaje de **${totalScore.toFixed(1)} puntos** es **ALTAMENTE COMPETITIVO**. Tienes un perfil sobresaliente que te ubica con altas probabilidades de quedar preseleccionado (Terna) en las vacantes del Norte del Valle de Cartago.`;
+  } else if (totalScore >= 70) {
+    badge.style.backgroundColor = "#fffbeb";
+    badge.style.borderColor = "#fef3c7";
+    document.getElementById('sm-score-val').style.color = "#d97706";
+    txt.innerHTML = `Tu puntaje de **${totalScore.toFixed(1)} puntos** es **MODERADO**. Eres competitivo, pero para asegurar la preselección en Cartago te recomendamos acumular más experiencia oficial o acreditar un título de posgrado (Maestría) para alcanzar los 70 puntos plenos de formación.`;
+  } else {
+    badge.style.backgroundColor = "#fef2f2";
+    badge.style.borderColor = "#fee2e2";
+    document.getElementById('sm-score-val').style.color = "#b91c1c";
+    txt.innerHTML = `Tu puntaje de **${totalScore.toFixed(1)} puntos** es **INICIAL**. Tu perfil está en fase de crecimiento. Considera concursar en las convocatorias de mérito abierto de la CNSC y acumular experiencia certificada para subir tu posicionamiento en la plataforma del Ministerio.`;
+  }
+
+  // Dar formato negrita al texto
+  txt.innerHTML = txt.innerHTML.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
+
+// SIMULADOR CONCURSO CNSC
+function runCnscSimulation() {
+  const addT = parseFloat(document.getElementById('cnsc-t-adicional').value) || 0;
+  const pgT = parseFloat(document.getElementById('cnsc-posgrado').value) || 0;
+  const expOfi = parseFloat(document.getElementById('cnsc-exp-ofi').value) || 0;
+  const expNoOfi = parseFloat(document.getElementById('cnsc-exp-no-ofi').value) || 0;
+
+  // Educación Adicional (Max 30 pts)
+  const acadScore = Math.min(30, addT + pgT);
+
+  // Experiencia Adicional (Pública: 2.5 pts por mes; Privada/Otros: 1.2 pts por mes; Max 70 pts)
+  const expScore = Math.min(70, (expOfi * 2.5) + (expNoOfi * 1.2));
+
+  // Suma total (max 100)
+  const totalScore = acadScore + expScore;
+
+  // Actualizar UI
+  document.getElementById('cnsc-score-val').innerText = totalScore.toFixed(1);
+  document.getElementById('cnsc-val-acad').innerText = acadScore.toFixed(1) + " pts";
+  document.getElementById('cnsc-val-exp').innerText = expScore.toFixed(1) + " pts";
+
+  const badge = document.getElementById('cnsc-score-badge');
+  const txt = document.getElementById('cnsc-standing-text');
+
+  if (totalScore >= 75) {
+    badge.style.backgroundColor = "rgba(59,130,246,0.05)";
+    badge.style.borderColor = "rgba(59,130,246,0.2)";
+    document.getElementById('cnsc-score-val').style.color = "#2563eb";
+    txt.innerHTML = `Tu valoración de antecedentes estimada es de **${totalScore.toFixed(1)} puntos**. Es un puntaje **EXCELENTE** que te consolidará con ventajas en la Lista de Elegibles tras superar las pruebas escritas obligatorias de aptitudes de la CNSC.`;
+  } else if (totalScore >= 45) {
+    badge.style.backgroundColor = "#fffbeb";
+    badge.style.borderColor = "#fef3c7";
+    document.getElementById('cnsc-score-val').style.color = "#d97706";
+    txt.innerHTML = `Tu valoración de antecedentes estimada es de **${totalScore.toFixed(1)} puntos**. Es un puntaje **INTERMEDIO**. Te permite puntuar bien, pero para consolidarte en los puestos de cabecera de las plazas de Cartago es sumamente valioso acreditar posgrados completos y certificar meses adicionales de docencia oficial.`;
+  } else {
+    badge.style.backgroundColor = "#fef2f2";
+    badge.style.borderColor = "#fee2e2";
+    document.getElementById('cnsc-score-val').style.color = "#b91c1c";
+    txt.innerHTML = `Tu valoración de antecedentes estimada es de **${totalScore.toFixed(1)} puntos**. Es un puntaje **INICIAL**. Tu fuerte en el concurso nacional dependerá enteramente de tu rendimiento en la **Prueba Escrita de Competencias Básicas y Funcionales**, donde deberás apuntar a un percentil sobresaliente para compensar la falta de antecedentes acumulados.`;
+  }
+
+  // Dar formato negrita al texto
+  txt.innerHTML = txt.innerHTML.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
+
+// Iniciar simulaciones con valores por defecto
+runMaestroSimulation();
+runCnscSimulation();
+
+function triggerReveal() {
+  document.querySelectorAll('.reveal').forEach(el => {
+    new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if(e.isIntersecting) el.target.classList.add('visible');
+      });
+    }, {threshold: 0.1}).observe(el);
+  });
+}
+triggerReveal();
+</script>
+
+</body>
+</html>

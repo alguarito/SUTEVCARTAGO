@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUTEV Cartago - Jornada Laboral y Carga Académica</title>
+<meta name="description" content="Planificador interactivo de jornada y auditor de carga académica según el Decreto 1850 de 2002. Verifica tus horas y redacta reclamaciones formales.">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  @media (min-width: 1024px) {
+    .dashboard-grid {
+      grid-template-columns: 450px 1fr;
+    }
+  }
+
+  .form-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .result-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 35px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .tabs-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--gray-200);
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gray-50);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tab-btn:hover {
+    color: var(--green-700);
+    background-color: var(--green-50);
+  }
+
+  .tab-btn.active {
+    color: white;
+    background-color: var(--green-600);
+  }
+
+  /* Gráficos de barras de distribución horaria */
+  .chart-container {
+    margin: 25px 0;
+  }
+
+  .bar-row {
+    margin-bottom: 20px;
+  }
+
+  .bar-label-container {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--gray-700);
+    margin-bottom: 6px;
+  }
+
+  .bar-bg {
+    background-color: var(--gray-200);
+    border-radius: 8px;
+    height: 14px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Colores dinámicos del gráfico */
+  .bar-fill--teaching { background-color: var(--green-600); }
+  .bar-fill--permanence { background-color: #3b82f6; }
+  .bar-fill--home { background-color: #8b5cf6; }
+
+  .audit-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+
+  .audit-badge--success {
+    background-color: var(--green-50);
+    color: var(--green-800);
+    border-left: 5px solid var(--green-600);
+  }
+
+  .audit-badge--warning {
+    background-color: #fffbeb;
+    color: #b45309;
+    border-left: 5px solid #d97706;
+  }
+
+  .audit-badge--danger {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border-left: 5px solid #b91c1c;
+  }
+
+  /* Previsualización del oficio formal en papel A4 */
+  .paper-page {
+    background: white;
+    border: 1px solid var(--gray-300);
+    box-shadow: var(--shadow-lg);
+    padding: 50px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #000;
+    margin: 30px auto;
+    max-width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    border-top: 10px solid var(--green-600);
+  }
+
+  .paper-page.warning-border {
+    border-top: 10px solid #b91c1c;
+  }
+
+  .paper-header {
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 2px double #000;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .paper-content {
+    white-space: pre-wrap;
+    text-align: justify;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  /* Estilos de Impresión */
+  @media print {
+    body * { visibility: hidden; }
+    .paper-page, .paper-page * { visibility: visible; }
+    .paper-page {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      margin: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+<div class="container">
+<a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV"><div class="header__logo-text">SUTEV Cartago<span>Norte del Valle</span></div></a>
+<nav><ul class="nav__list" id="navList">
+<li><a href="index.html" class="nav__link">Inicio</a></li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Nosotros <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="index.html#nosotros" class="nav__dropdown-item"><i data-lucide="users" style="width: 14px; height: 14px;"></i> ¿Quiénes Somos?</a></li>
+    <li><a href="index.html#estatutos" class="nav__dropdown-item"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i> Estatutos del Sindicato</a></li>
+    <li><a href="index.html#galeria" class="nav__dropdown-item"><i data-lucide="image" style="width: 14px; height: 14px;"></i> Galería de Fotos</a></li>
+  </ul>
+</li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Servicios <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+    <ul class="nav__dropdown-menu">
+    <li><a href="index.html#servicios" class="nav__dropdown-item"><i data-lucide="briefcase" style="width: 14px; height: 14px;"></i> Portafolio de Servicios</a></li>
+    <li><a href="permisos-docentes.html" class="nav__dropdown-item"><i data-lucide="scale" style="width: 14px; height: 14px;"></i> Permisos de Ley y Licencias</a></li>
+    <li><a href="calculadora-salarial.html" class="nav__dropdown-item"><i data-lucide="calculator" style="width: 14px; height: 14px;"></i> Calculadora Salarial</a></li>
+    <li><a href="simulador-pension.html" class="nav__dropdown-item"><i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i> Simulador de Pensión</a></li>
+    <li><a href="derechos-peticion.html" class="nav__dropdown-item"><i data-lucide="file-signature" style="width: 14px; height: 14px;"></i> Derechos de Petición</a></li>
+    <li><a href="auditor-nomina.html" class="nav__dropdown-item"><i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> Auditor de Nómina</a></li>
+    <li><a href="escalafon-docente.html" class="nav__dropdown-item"><i data-lucide="graduation-cap" style="width: 14px; height: 14px;"></i> Escalafón y Ascenso</a></li>
+    <li><a href="carga-academica.html" class="nav__dropdown-item"><i data-lucide="calendar-range" style="width: 14px; height: 14px;"></i> Carga Académica 1850</a></li>
+    <li><a href="concurso-docente.html" class="nav__dropdown-item"><i data-lucide="clipboard-check" style="width: 14px; height: 14px;"></i> Concursos y Mineducación</a></li>
+  </ul>
+</li>
+<li><a href="index.html#calendario" class="nav__link">Calendario</a></li>
+<li><a href="index.html#noticias" class="nav__link">Noticias</a></li>
+<li><a href="index.html#contacto" class="nav__link">Contacto</a></li>
+<li><a href="index.html#afiliacion" class="nav__link nav__link--cta">Afíliate</a></li>
+</ul></nav>
+<button class="nav__toggle" id="navToggle" aria-label="Menú"><span></span><span></span><span></span></button>
+</div>
+</header>
+
+<!-- HERO HEADER -->
+<section class="section section--dark" style="padding-top: 150px; padding-bottom: 50px;">
+  <div class="container">
+    <div class="section__header reveal" style="margin-bottom: 0;">
+      <span class="section__tag">Auditoría de Carga Académica</span>
+      <h2 class="section__title">Planificador de Jornada y Carga Laboral</h2>
+      <p class="section__desc">Evalúa tu carga académica semanal de acuerdo con el Decreto 1850 de 2002 y genera reclamaciones formales por sobrecargas horarias.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<section class="section" style="padding-top: 40px;">
+  <div class="container">
+
+    <!-- TABS NAV -->
+    <div class="tabs-nav reveal">
+      <button class="tab-btn active" onclick="switchTab('tab-audit')"><i data-lucide="bar-chart-3"></i> Auditor de Carga Semanal</button>
+      <button class="tab-btn" onclick="switchTab('tab-letter')"><i data-lucide="file-text"></i> Oficio de Reclamación Virtual</button>
+    </div>
+
+    <!-- TAB 1: AUDITOR -->
+    <div id="tab-audit" class="tab-content reveal">
+      <div class="dashboard-grid">
+        
+        <!-- FORM CARD -->
+        <div class="form-card">
+          <h3 style="font-size:1.25rem; font-weight:800; color:var(--green-900); margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="settings" style="color:var(--green-600);"></i> Datos Académicos
+          </h3>
+
+          <div class="form-group">
+            <label for="tipo-nivel" style="font-weight:700;">Nivel de Enseñanza / Cargo</label>
+            <select id="tipo-nivel" onchange="updateDefaultValues()">
+              <option value="secundaria" selected>Básica Secundaria y Media (Bachillerato)</option>
+              <option value="primaria">Básica Primaria</option>
+              <option value="preescolar">Educación Preescolar</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="hours-teaching" style="font-weight:700;">Horas de Clase Directa Semanales (60 mins)</label>
+            <input type="number" id="hours-teaching" value="22" min="0" max="40" oninput="runAudit()">
+            <small style="color:var(--gray-500);display:block;margin-top:4px;">Límites legales: Secundaria (22h), Primaria (20h), Preescolar (18h).</small>
+          </div>
+
+          <div class="form-group">
+            <label for="hours-permanence" style="font-weight:700;">Horas de Permanencia Física en el Colegio (Semanales)</label>
+            <input type="number" id="hours-permanence" value="30" min="0" max="50" oninput="runAudit()">
+            <small style="color:var(--gray-500);display:block;margin-top:4px;">Máximo legal de permanencia: 30 horas semanales (6 horas diarias).</small>
+          </div>
+
+          <div class="form-group">
+            <label for="hours-discipline" style="font-weight:700;">Horas Semanales asignadas a Turnos de Disciplina</label>
+            <input type="number" id="hours-discipline" value="2" min="0" max="15" oninput="runAudit()">
+          </div>
+
+          <div style="background-color:var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 15px; margin-top:20px;">
+            <span style="font-size:0.85rem; color:var(--gray-600); font-weight:700; display:block; margin-bottom:5px;">Complementarias en casa (Calculadas):</span>
+            <strong id="lbl-complementarias-home" style="font-size:1.15rem; color:var(--green-700)">10 horas / semana</strong>
+            <small style="display:block;color:var(--gray-500);font-size:0.75rem;margin-top:4px;">De acuerdo a la ley, completan la jornada de 40 horas dedicadas a calificación, planeación y contacto con padres.</small>
+          </div>
+        </div>
+
+        <!-- RESULTS CARD -->
+        <div class="result-card">
+          <h3 style="font-size:1.25rem; font-weight:800; color:var(--green-900); margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="shield-alert" style="color:var(--green-600);"></i> Resultado de la Auditoría
+          </h3>
+
+          <!-- Badge dinámico de alerta -->
+          <div id="audit-badge" class="audit-badge audit-badge--success">
+            <i data-lucide="check-circle-2" id="audit-badge-icon" style="width:24px;height:24px;"></i>
+            <span id="audit-badge-text">Jornada 100% legal bajo el Decreto 1850</span>
+          </div>
+
+          <!-- Gráfico interactivo -->
+          <div class="chart-container">
+            <h4 style="font-size:0.95rem; font-weight:800; color:var(--gray-800); margin-bottom:15px; text-transform:uppercase; letter-spacing:0.5px;">Distribución Horaria Semanal</h4>
+            
+            <!-- Barra 1 -->
+            <div class="bar-row">
+              <div class="bar-label-container">
+                <span>Horas de Clase Directa (Lectivas)</span>
+                <span id="lbl-chart-teaching">22 / 22 horas</span>
+              </div>
+              <div class="bar-bg">
+                <div class="bar-fill bar-fill--teaching" id="bar-teaching" style="width:100%"></div>
+              </div>
+            </div>
+
+            <!-- Barra 2 -->
+            <div class="bar-row">
+              <div class="bar-label-container">
+                <span>Permanencia en el Establecimiento (Planeación/Reuniones)</span>
+                <span id="lbl-chart-permanence">8 / 8 horas</span>
+              </div>
+              <div class="bar-bg">
+                <div class="bar-fill bar-fill--permanence" id="bar-permanence" style="width:100%"></div>
+              </div>
+            </div>
+
+            <!-- Barra 3 -->
+            <div class="bar-row">
+              <div class="bar-label-container">
+                <span>Actividades Autónomas en Casa (Complementarias)</span>
+                <span id="lbl-chart-home">10 / 10 horas</span>
+              </div>
+              <div class="bar-bg">
+                <div class="bar-fill bar-fill--home" id="bar-home" style="width:100%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Explicación Jurídica Detallada -->
+          <div style="background-color: var(--gray-50); padding:20px; border-radius:8px; border-left: 4px solid var(--green-500); margin-top:25px;">
+            <strong style="display:block; margin-bottom:6px; color:var(--gray-800); font-size:0.92rem; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="scale" style="color:var(--green-600);width:16px;height:16px;"></i> Fundamentación del Decreto 1850 de 2002:
+            </strong>
+            <p id="audit-description" style="font-size:0.88rem; color:var(--gray-700); line-height:1.45; margin:0; text-align:justify;">
+              Tu asignación se ajusta perfectamente a la norma. Eres docente de Secundaria, por lo que tu carga lectiva máxima es de 22 horas semanales. Tus 30 horas de permanencia presencial cumplen rigurosamente el mínimo legal, y dedicas las 10 horas complementarias restantes en casa para completar tu jornada ordinaria de 40 horas semanales.
+            </p>
+          </div>
+
+          <div style="margin-top:25px; display:flex; justify-content:center;">
+            <button onclick="switchTab('tab-letter')" class="btn btn--outline" id="btn-goToLetter" style="display:none; gap:6px; width:100%; justify-content:center;">
+              <i data-lucide="file-signature"></i> Redactar Oficio de Reclamación →
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 2: CARTA -->
+    <div id="tab-letter" class="tab-content reveal" style="display:none;">
+      
+      <div style="background:white; border:1px solid var(--gray-200); border-radius:var(--radius-lg); padding:30px; box-shadow:var(--shadow-md); margin-bottom:30px;">
+        <h3 style="font-size:1.25rem; font-weight:800; color:var(--green-900); margin-bottom:15px; display:flex; align-items:center; gap:8px;">
+          <i data-lucide="pencil-line" style="color:var(--green-600)"></i> Configurar Reclamación Formal
+        </h3>
+        
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:20px;">
+          <div class="form-group">
+            <label for="doc-nombre" style="font-weight:700;">Nombre del Docente</label>
+            <input type="text" id="doc-nombre" value="" placeholder="Ej. Alvaro Cardenas Orozco">
+          </div>
+          <div class="form-group">
+            <label for="doc-cedula" style="font-weight:700;">Cédula de Ciudadanía</label>
+            <input type="text" id="doc-cedula" value="" placeholder="Ej. 16.200.000">
+          </div>
+          <div class="form-group">
+            <label for="doc-rector" style="font-weight:700;">Nombre del Rector(a)</label>
+            <input type="text" id="doc-rector" value="" placeholder="Ej. Mg. Carlos Alberto Restrepo">
+          </div>
+          <div class="form-group">
+            <label for="doc-colegio" style="font-weight:700;">Institución Educativa</label>
+            <input type="text" id="doc-colegio" value="" placeholder="Ej. I.E. Académico">
+          </div>
+        </div>
+
+        <button onclick="updateLetterText()" class="btn btn--primary" style="margin-top:20px; justify-content:center; width:100%;">Generar Vista de Oficio A4</button>
+      </div>
+
+      <!-- Papel A4 Virtual -->
+      <div class="paper-page warning-border" id="paper-letter">
+        <div class="paper-header">
+          ASUNTO: RECLAMACIÓN FORMAL Y AJUSTE DE ASIGNACIÓN ACADÉMICA SEMANAL<br>
+          MARCO DE REFERENCIA: DECRETO 1850 DE 2002 Y DECRETO 1075 DE 2015
+        </div>
+        
+        <div class="paper-content" id="letter-content">
+          <!-- Contenido redactado dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Acciones del Papel -->
+      <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin-top:20px;">
+        <button onclick="copyLetter()" class="btn btn--outline-dark" style="display:inline-flex; align-items:center; gap:8px; padding:12px 24px;">
+          <i data-lucide="copy"></i> Copiar Texto al Portapapeles
+        </button>
+        <button onclick="window.print()" class="btn btn--primary" style="display:inline-flex; align-items:center; gap:8px; padding:12px 24px;">
+          <i data-lucide="printer"></i> Imprimir Oficio de Reclamación (A4)
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="container">
+<div class="footer__grid">
+<div class="footer__brand"><a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV" style="height:40px"><div class="header__logo-text" style="color:var(--green-400)">SUTEV Cartago<span style="color:var(--gray-500)">Norte del Valle</span></div></a><p>Sindicato Único de Trabajadores de la Educación del Valle. Subdirectiva Cartago — Filial de FECODE.</p></div>
+<div><div class="footer__title">Navegación</div><ul class="footer__links"><li><a href="index.html#nosotros">Nosotros</a></li><li><a href="index.html#servicios">Servicios</a></li><li><a href="index.html#calendario">Calendario</a></li><li><a href="index.html#noticias">Noticias</a></li><li><a href="index.html#estatutos">Estatutos</a></li></ul></div>
+<div><div class="footer__title">Servicios y Herramientas</div><ul class="footer__links"><li><a href="index.html#reservas">Asesoría Jurídica</a></li><li><a href="index.html#reservas">CEID</a></li><li><a href="index.html#reservas">Bienestar</a></li><li><a href="permisos-docentes.html">Permisos y Licencias de Ley</a></li><li><a href="calculadora-salarial.html">Calculadora Salarial</a></li><li><a href="simulador-pension.html">Simulador de Pensión</a></li><li><a href="derechos-peticion.html">Derechos de Petición</a></li><li><a href="auditor-nomina.html">Auditor de Nómina</a></li><li><a href="escalafon-docente.html">Escalafón y Ascenso</a></li><li><a href="carga-academica.html">Carga Académica 1850</a></li><li><a href="concurso-docente.html">Concursos y Mineducación</a></li></ul></div>
+<div><div class="footer__title">Contacto y Redes</div><ul class="footer__links"><li><a href="index.html#contacto">📍 Casa del Maestro (Cra 4 #16-17)</a></li><li><a href="index.html#contacto">📍 Cartago, Valle del Cauca</a></li><li><a href="https://web.facebook.com/sutevcartago/?locale=es_LA&_rdc=1&_rdr#" target="_blank" style="color: var(--green-400); font-weight: 600;">📘 Facebook Oficial</a></li></ul></div>
+</div>
+<div class="footer__bottom">© 2026 SUTEV Cartago — Subdirectiva Norte del Valle. Todos los derechos reservados.</div>
+</div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (typeof lucide !== 'undefined') {
+  lucide.createIcons();
+}
+
+// Cargar perfil guardado
+const savedProfile = localStorage.getItem('sutev_docente_perfil');
+if (savedProfile) {
+  try {
+    const prof = JSON.parse(savedProfile);
+    if (prof.nombre) document.getElementById('doc-nombre').value = prof.nombre;
+    if (prof.cedula) document.getElementById('doc-cedula').value = prof.cedula;
+    if (prof.colegio) document.getElementById('doc-colegio').value = prof.colegio;
+  } catch(e) {
+    console.error('Error parsing profile');
+  }
+}
+
+// Lógica de Tabs
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.style.display = 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  document.getElementById(tabId).style.display = 'block';
+  
+  const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => 
+    b.getAttribute('onclick').includes(tabId)
+  );
+  if (btn) btn.classList.add('active');
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    el.classList.remove('visible');
+  });
+  triggerReveal();
+}
+
+function updateDefaultValues() {
+  const lvl = document.getElementById('tipo-nivel').value;
+  const tInput = document.getElementById('hours-teaching');
+  
+  if (lvl === 'secundaria') {
+    tInput.value = 22;
+  } else if (lvl === 'primaria') {
+    tInput.value = 20;
+  } else if (lvl === 'preescolar') {
+    tInput.value = 18;
+  }
+  runAudit();
+}
+
+// Auditoría Matemática
+function runAudit() {
+  const lvl = document.getElementById('tipo-nivel').value;
+  const tHours = parseInt(document.getElementById('hours-teaching').value) || 0;
+  const pHours = parseInt(document.getElementById('hours-permanence').value) || 0;
+  const dHours = parseInt(document.getElementById('hours-discipline').value) || 0;
+
+  // Parámetros legales según Decreto 1850 de 2002
+  let legalLimitTeaching = 22;
+  let labelLvl = "Básica Secundaria y Media";
+  if (lvl === 'primaria') {
+    legalLimitTeaching = 20;
+    labelLvl = "Básica Primaria";
+  } else if (lvl === 'preescolar') {
+    legalLimitTeaching = 18;
+    labelLvl = "Educación Preescolar";
+  }
+
+  // Complementarias autónomas semanales (40 - permanencia obligatoria)
+  const homeHours = Math.max(0, 40 - pHours);
+  document.getElementById('lbl-complementarias-home').innerText = `${homeHours} horas / semana`;
+
+  // Cálculos para el Gráfico
+  const barTeaching = document.getElementById('bar-teaching');
+  const barPermanence = document.getElementById('bar-permanence');
+  const barHome = document.getElementById('bar-home');
+
+  document.getElementById('lbl-chart-teaching').innerText = `${tHours} / ${legalLimitTeaching} horas`;
+  document.getElementById('lbl-chart-permanence').innerText = `${Math.max(0, pHours - tHours)} / ${30 - legalLimitTeaching} horas (Planeación/Reunión)`;
+  document.getElementById('lbl-chart-home').innerText = `${homeHours} / 10 horas`;
+
+  // Porcentajes de barras
+  barTeaching.style.width = Math.min(100, (tHours / legalLimitTeaching) * 100) + '%';
+  barPermanence.style.width = Math.min(100, ((pHours - tHours) / (30 - legalLimitTeaching)) * 100) + '%';
+  barHome.style.width = Math.min(100, (homeHours / 10) * 100) + '%';
+
+  // Lógica del semáforo e interpretación legal
+  const badge = document.getElementById('audit-badge');
+  const badgeIcon = document.getElementById('audit-badge-icon');
+  const badgeText = document.getElementById('audit-badge-text');
+  const desc = document.getElementById('audit-description');
+  const btn = document.getElementById('btn-goToLetter');
+  const paperBorder = document.getElementById('paper-letter');
+
+  let status = "success";
+  let explanation = "";
+
+  if (tHours > legalLimitTeaching && pHours > 30) {
+    status = "danger";
+    explanation = `**¡ALERTA CRÍTICA DE SOBRECARGA DOBLE!** Superas el límite de asignación lectiva de clase (${tHours} horas vs el máximo legal de ${legalLimitTeaching}h) y además excedes las 30 horas semanales presenciales obligatorias de permanencia en el plantel. Esto constituye una violación flagrante del **Decreto 1850 de 2002** y el **Decreto 1075 de 2015**. Las horas extras docentes directas y la permanencia de más de 6 horas diarias obligatorias deben ser concertadas, decretadas y pagadas como **Horas Extras Remuneradas** por la Secretaría de Educación, de lo contrario son ilegales.`;
+  } else if (tHours > legalLimitTeaching) {
+    status = "warning";
+    explanation = `**¡ALERTA DE ASIGNACIÓN LECTIVA EXCESIVA!** Tienes asignadas **${tHours} horas de clase directa**, superando las ${legalLimitTeaching} horas semanales legales máximas para ${labelLvl}. De acuerdo al Artículo 5 del Decreto 1850 de 2002, toda hora dictada por encima de ese límite constituye **hora extra de enseñanza obligatoria** y debe ser pagada de manera adicional en la nómina. No puedes ser obligado a dictarlas sin compensación salarial.`;
+  } else if (pHours > 30) {
+    status = "warning";
+    explanation = `**¡ALERTA DE PERMANENCIA PRESENCIAL EXCESIVA!** Estás obligado a permanecer en la institución educativa **${pHours} horas semanales**, superando el límite máximo legal de **30 horas semanales** (6 horas diarias obligatorias de permanencia). El tiempo restante hasta completar la jornada ordinaria de 40 horas semanales (${homeHours} horas) es de **libre ejecución autónoma fuera del establecimiento**, dedicadas a planeación, calificación o contacto con padres. Exigir tu presencia obligatoria en el plantel por más de 30 horas sin horas extras aprobadas viola el Decreto 1850.`;
+  } else {
+    status = "success";
+    explanation = `**JORNADA Y CARGA LEGALMENTE CUMPLIDAS.** Tu horario respeta estrictamente la ley. Tu asignación de clase directa (${tHours}h) está dentro del límite máximo para ${labelLvl} y tu permanencia presencial en la institución educativa no excede las 30 horas semanales (${pHours}h). Las ${homeHours} horas complementarias semanales restantes quedan a tu libre disposición autónoma fuera de la institución educativa para actividades pedagógicas complementarias.`;
+  }
+
+  // Modificar Badge
+  badge.className = `audit-badge audit-badge--${status}`;
+  paperBorder.className = `paper-page ${status !== 'success' ? 'warning-border' : ''}`;
+  
+  if (status === 'success') {
+    badgeText.innerText = "Jornada 100% legal bajo el Decreto 1850";
+    badgeIcon.setAttribute('data-lucide', 'check-circle-2');
+    btn.style.display = 'none';
+  } else if (status === 'warning') {
+    badgeText.innerText = "Sobrecarga Horaria Detectada - Se Recomienda Ajuste o Pago Adicional";
+    badgeIcon.setAttribute('data-lucide', 'alert-triangle');
+    btn.style.display = 'inline-flex';
+  } else {
+    badgeText.innerText = "¡Violación Crítica de Límites de Asignación y Permanencia!";
+    badgeIcon.setAttribute('data-lucide', 'shield-x');
+    btn.style.display = 'inline-flex';
+  }
+
+  // Formatear texto dinámico con negritas
+  desc.innerHTML = explanation.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+
+  // Regenerar carta de reclamación automáticamente
+  updateLetterText();
+}
+
+function updateLetterText() {
+  const nombre = document.getElementById('doc-nombre').value || "[TU NOMBRE COMPLETO]";
+  const cedula = document.getElementById('doc-cedula').value || "[TU CÉDULA]";
+  const rector = document.getElementById('doc-rector').value || "[NOMBRE DEL RECTOR(A)]";
+  const colegio = document.getElementById('doc-colegio').value || "[INSTITUCIÓN EDUCATIVA]";
+  const lvl = document.getElementById('tipo-nivel').value;
+  const tHours = parseInt(document.getElementById('hours-teaching').value) || 0;
+  const pHours = parseInt(document.getElementById('hours-permanence').value) || 0;
+
+  // Persistir perfil localmente
+  const profile = { nombre, cedula, colegio };
+  localStorage.setItem('sutev_docente_perfil', JSON.stringify(profile));
+
+  let legalLimit = 22;
+  if (lvl === 'primaria') legalLimit = 20;
+  if (lvl === 'preescolar') legalLimit = 18;
+
+  const fechaHoy = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  let cuerpoPeticion = "";
+
+  if (tHours > legalLimit && pHours > 30) {
+    cuerpoPeticion = `Me dirijo a usted con el fin de manifestar mi inconformidad formal y solicitar el reajuste inmediato de mi asignación horaria semanal. Actualmente me encuentro asignado con ${tHours} horas semanales de clase directa y una permanencia física obligatoria de ${pHours} horas semanales en la institución. 
+
+Esta asignación incurre en una doble vulneración al Decreto 1850 de 2002 (compilado en el Decreto 1075 de 2015):
+1. Supera el límite de clase directa obligatoria que para mi nivel de enseñanza está consagrado en un máximo de ${legalLimit} horas semanales.
+2. Excede la permanencia obligatoria máxima de 30 horas semanales (6 horas diarias) dentro de la institución.
+
+En consecuencia, le solicito formalmente:
+a) Ajustar mi carga de aula directa a las ${legalLimit} horas reglamentarias o, en su defecto, expedir el acto administrativo de reconocimiento y tramitar el pago de las ${tHours - legalLimit} horas extras mensuales debidamente dictadas.
+b) Ajustar mi horario de permanencia obligatoria en la institución para que no supere las 30 horas presenciales, dejándome a mi libre y autónoma disposición las 10 horas complementarias restantes para planeación y evaluación fuera del plantel.`;
+  } else if (tHours > legalLimit) {
+    cuerpoPeticion = `Me dirijo a usted con el fin de solicitar formalmente el reajuste de mi asignación horaria semanal. Actualmente me encuentro dictando un total de ${tHours} horas semanales de clase directa.
+
+El Artículo 5 del Decreto 1850 de 2002 establece con toda claridad que para mi nivel de enseñanza básica la asignación lectiva de aula máxima obligatoria es de ${legalLimit} horas semanales. Toda hora de clase directa impartida por encima de este límite legal constituye una hora extra de enseñanza obligatoria.
+
+Por lo anterior, le solicito formalmente:
+a) Reajustar de forma inmediata mi asignación horaria lectiva para ceñirse a las ${legalLimit} horas máximas fijadas por la normatividad nacional.
+b) En caso de no ser factible operativamente dicho reajuste debido a la necesidad institucional del servicio, proceder al reconocimiento administrativo y ordenar el pago retroactivo correspondiente a las ${tHours - legalLimit} horas extras dictadas semanalmente de conformidad con la ley.`;
+  } else if (pHours > 30) {
+    cuerpoPeticion = `Me dirijo a usted con el fin de solicitar respetuosamente el ajuste en el horario presencial obligatorio asignado a mi labor docente en la institución. Actualmente tengo fijada una permanencia física en el plantel de ${pHours} horas semanales.
+
+De acuerdo con el Artículo 7 del Decreto 1850 de 2002, la jornada laboral presencial del docente dentro del establecimiento educativo es de un máximo de 30 horas semanales (equivalentes a 6 horas diarias obligatorias). Las 10 horas complementarias restantes hasta completar las 40 horas ordinarias semanales, deben ser desarrolladas bajo un criterio de autonomía del educador fuera del establecimiento.
+
+Por consiguiente, le solicito formalmente ajustar mi horario de permanencia presencial en el plantel para que no exceda las 30 horas semanales y se respete mi derecho de libre ejecución de las horas complementarias reglamentarias.`;
+  } else {
+    cuerpoPeticion = `Me dirijo a usted de manera respetuosa con el fin de radicar la solicitud formal de mi asignación horaria ordinaria de conformidad con el Decreto 1850 de 2002. Mi asignación actual se encuentra dentro de los límites estables de ${tHours} horas de clase directa y ${pHours} horas semanales de permanencia. Solicito mantener dicha carga balanceada para garantizar la calidad y el normal desarrollo del plan de estudios de la institución.`;
+  }
+
+  const completeText = `Cartago, Valle del Cauca, a ${fechaHoy}
+
+Señor(a):
+${rector} - Rector(a)
+${colegio}
+E. S. D.
+
+
+ASUNTO: PETICIÓN FORMAL DE REAJUSTE DE CARGA ACADÉMICA Y JORNADA PRESENCIAL DE LEY
+REFERENCIA: DECRETO 1850 DE 2002 (COMPILADO EN EL DECRETO 1075 DE 2015)
+
+
+Yo, ${nombre}, identificado(a) con Cédula de Ciudadanía número ${cedula}, en mi condición de docente oficial adscrito a la Institución Educativa a su cargo, me dirijo a usted de manera atenta invocando el Artículo 23 de la Constitución Política de Colombia (Derecho de Petición) y las disposiciones del Decreto 1850 de 2002 para manifestar lo siguiente:
+
+${cuerpoPeticion}
+
+Como fundamento legal de esta solicitud cito:
+- Constitución Política de Colombia, Artículo 23 (Derecho de Petición).
+- Decreto 1850 de 2002, Artículos 5 (Asignación académica lectiva), 7 (Permanencia en la institución) y 9 (Jornada del docente).
+- Decreto 1075 de 2015 (Decreto Único Reglamentario del Sector Educación).
+
+Agradezco su atención oportuna y espero su respuesta por escrito dentro de los términos de la ley en la secretaría del establecimiento.
+
+
+Cordialmente,
+
+
+
+_______________________________
+${nombre}
+C.C. ${cedula}`;
+
+  document.getElementById('letter-content').innerText = completeText;
+}
+
+// Copiar al portapapeles
+function copyLetter() {
+  const text = document.getElementById('letter-content').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('¡Oficio formal copiado al portapapeles exitosamente! Ya puedes pegarlo en Word o enviarlo por correo.');
+  }).catch(e => {
+    console.error('Error al copiar');
+  });
+}
+
+// Inicializar auditor
+runAudit();
+
+function triggerReveal() {
+  document.querySelectorAll('.reveal').forEach(el => {
+    new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if(e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, {threshold: 0.1}).observe(el);
+  });
+}
+triggerReveal();
+</script>
+
+</body>
+</html>

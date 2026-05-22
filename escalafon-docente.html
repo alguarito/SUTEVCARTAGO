@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUTEV Cartago - Escalafón y Desarrollo Profesional</title>
+<meta name="description" content="Asistente interactivo de ascenso, escalafón docente y evaluación de desempeño. Planifica tu crecimiento profesional y calcula tus incrementos salariales.">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  /* Estilos específicos para la Workstation de Escalafón */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  @media (min-width: 1024px) {
+    .dashboard-grid {
+      grid-template-columns: 400px 1fr;
+    }
+  }
+
+  .tabs-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--gray-200);
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gray-500);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tab-btn:hover {
+    color: var(--green-700);
+    background-color: var(--green-50);
+  }
+
+  .tab-btn.active {
+    color: white;
+    background-color: var(--green-600);
+  }
+
+  .form-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .result-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 35px;
+    box-shadow: var(--shadow-md);
+    min-height: 400px;
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+
+  .comparison-table th, .comparison-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .comparison-table th {
+    background-color: var(--green-50);
+    color: var(--green-900);
+    font-weight: 800;
+  }
+
+  .badge-stat {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .badge-stat--remunerated {
+    background-color: var(--green-100);
+    color: var(--green-800);
+  }
+  .badge-stat--non-remunerated {
+    background-color: #fee2e2;
+    color: #b91c1c;
+  }
+
+  .requirement-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+
+  .requirement-list li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+    color: var(--gray-700);
+    line-height: 1.5;
+  }
+
+  .requirement-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--green-100);
+    color: var(--green-700);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 900;
+  }
+
+  .requirement-list li.pending::before {
+    content: "!";
+    background-color: #fef3c7;
+    color: #d97706;
+  }
+
+  /* Checklist de evaluación */
+  .eval-section {
+    margin-bottom: 25px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .eval-header {
+    background-color: var(--gray-50);
+    padding: 15px 20px;
+    font-weight: 800;
+    color: var(--green-900);
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .eval-body {
+    padding: 20px;
+    background: white;
+  }
+
+  .eval-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .eval-item:last-child {
+    border-bottom: none;
+  }
+
+  .eval-checkbox {
+    margin-top: 4px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--green-600);
+    cursor: pointer;
+  }
+
+  .eval-label {
+    font-size: 0.92rem;
+    color: var(--gray-700);
+    line-height: 1.4;
+    cursor: pointer;
+  }
+
+  /* Barra de progreso interactiva */
+  .progress-container {
+    background-color: var(--gray-200);
+    border-radius: 10px;
+    height: 20px;
+    width: 100%;
+    overflow: hidden;
+    margin: 15px 0 25px 0;
+    position: relative;
+  }
+
+  .progress-bar {
+    background-color: var(--green-600);
+    height: 100%;
+    width: 0%;
+    transition: width 0.5s ease-in-out;
+  }
+
+  .progress-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--gray-800);
+    line-height: 20px;
+    pointer-events: none;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
+
+  .highlight-box {
+    background: rgba(16, 185, 129, 0.04);
+    border-left: 4px solid var(--green-600);
+    padding: 15px 20px;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin: 15px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+<div class="container">
+<a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV"><div class="header__logo-text">SUTEV Cartago<span>Norte del Valle</span></div></a>
+<nav><ul class="nav__list" id="navList">
+<li><a href="index.html" class="nav__link">Inicio</a></li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Nosotros <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="index.html#nosotros" class="nav__dropdown-item"><i data-lucide="users" style="width: 14px; height: 14px;"></i> ¿Quiénes Somos?</a></li>
+    <li><a href="index.html#estatutos" class="nav__dropdown-item"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i> Estatutos del Sindicato</a></li>
+    <li><a href="index.html#galeria" class="nav__dropdown-item"><i data-lucide="image" style="width: 14px; height: 14px;"></i> Galería de Fotos</a></li>
+  </ul>
+</li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Servicios <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+    <ul class="nav__dropdown-menu">
+    <li><a href="index.html#servicios" class="nav__dropdown-item"><i data-lucide="briefcase" style="width: 14px; height: 14px;"></i> Portafolio de Servicios</a></li>
+    <li><a href="permisos-docentes.html" class="nav__dropdown-item"><i data-lucide="scale" style="width: 14px; height: 14px;"></i> Permisos de Ley y Licencias</a></li>
+    <li><a href="calculadora-salarial.html" class="nav__dropdown-item"><i data-lucide="calculator" style="width: 14px; height: 14px;"></i> Calculadora Salarial</a></li>
+    <li><a href="simulador-pension.html" class="nav__dropdown-item"><i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i> Simulador de Pensión</a></li>
+    <li><a href="derechos-peticion.html" class="nav__dropdown-item"><i data-lucide="file-signature" style="width: 14px; height: 14px;"></i> Derechos de Petición</a></li>
+    <li><a href="auditor-nomina.html" class="nav__dropdown-item"><i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> Auditor de Nómina</a></li>
+    <li><a href="escalafon-docente.html" class="nav__dropdown-item"><i data-lucide="graduation-cap" style="width: 14px; height: 14px;"></i> Escalafón y Ascenso</a></li>
+    <li><a href="carga-academica.html" class="nav__dropdown-item"><i data-lucide="calendar-range" style="width: 14px; height: 14px;"></i> Carga Académica 1850</a></li>
+    <li><a href="concurso-docente.html" class="nav__dropdown-item"><i data-lucide="clipboard-check" style="width: 14px; height: 14px;"></i> Concursos y Mineducación</a></li>
+  </ul>
+</li>
+<li><a href="index.html#calendario" class="nav__link">Calendario</a></li>
+<li><a href="index.html#noticias" class="nav__link">Noticias</a></li>
+<li><a href="index.html#contacto" class="nav__link">Contacto</a></li>
+<li><a href="index.html#afiliacion" class="nav__link nav__link--cta">Afíliate</a></li>
+</ul></nav>
+<button class="nav__toggle" id="navToggle" aria-label="Menú"><span></span><span></span><span></span></button>
+</div>
+</header>
+
+<!-- HERO HEADER -->
+<section class="section section--dark" style="padding-top: 150px; padding-bottom: 50px;">
+  <div class="container">
+    <div class="section__header reveal" style="margin-bottom: 0;">
+      <span class="section__tag">Crecimiento y Desarrollo Profesional</span>
+      <h2 class="section__title">Escalafón, Ascensos y Evaluación</h2>
+      <p class="section__desc">Audita tus requisitos, simula tu proyección salarial por ascenso o reubicación y prepara tu carpeta de evidencias de evaluación anual.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN APP -->
+<section class="section" style="padding-top: 40px;">
+  <div class="container">
+    
+    <!-- TABS NAVIGATION -->
+    <div class="tabs-nav reveal">
+      <button class="tab-btn active" onclick="switchTab('tab-1278')"><i data-lucide="trending-up"></i> Decreto 1278 (Ascenso / Reubicación)</button>
+      <button class="tab-btn" onclick="switchTab('tab-2277')"><i data-lucide="milestone"></i> Decreto 2277 (Categorías y Créditos)</button>
+      <button class="tab-btn" onclick="switchTab('tab-eval')"><i data-lucide="check-square"></i> Carpeta de Evidencias (Evaluación Anual)</button>
+    </div>
+
+    <!-- TAB CONTENT 1278 -->
+    <div id="tab-1278" class="tab-content reveal">
+      <div class="dashboard-grid">
+        
+        <!-- FORMULARIO 1278 -->
+        <div class="form-card">
+          <h3 class="form-card__title" style="display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:1.25rem;"><i data-lucide="settings" style="color:var(--green-600);"></i> Simular Proyección</h3>
+          
+          <h4 style="font-size:0.9rem;text-transform:uppercase;color:var(--gray-500);margin-bottom:12px;font-weight:800;border-bottom:1px solid var(--gray-200);padding-bottom:5px;">Situación Actual</h4>
+          
+          <div class="form-group">
+            <label for="grado-actual-1278" style="font-weight:700;">Grado Actual</label>
+            <select id="grado-actual-1278" onchange="updateTitleOptions('actual')">
+              <option value="1">Grado 1 (Normalista Superior / Tecnólogo)</option>
+              <option value="2" selected>Grado 2 (Licenciado / Profesional)</option>
+              <option value="3">Grado 3 (Licenciado/Profesional con Posgrado en Educación)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="titulo-actual-1278" style="font-weight:700;">Título Acreditado</label>
+            <select id="titulo-actual-1278">
+              <!-- Cargado dinámicamente -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="nivel-actual-1278" style="font-weight:700;">Nivel Salarial (Letra)</label>
+            <select id="nivel-actual-1278">
+              <option value="A" selected>A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+            </select>
+          </div>
+
+          <h4 style="font-size:0.9rem;text-transform:uppercase;color:var(--gray-500);margin-top:24px;margin-bottom:12px;font-weight:800;border-bottom:1px solid var(--gray-200);padding-bottom:5px;">Meta de Ascenso o Reubicación</h4>
+
+          <div class="form-group">
+            <label for="grado-meta-1278" style="font-weight:700;">Grado Meta</label>
+            <select id="grado-meta-1278" onchange="updateTitleOptions('meta')">
+              <option value="1">Grado 1 (Normalista Superior / Tecnólogo)</option>
+              <option value="2">Grado 2 (Licenciado / Profesional)</option>
+              <option value="3" selected>Grado 3 (Licenciado/Profesional con Posgrado en Educación)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="titulo-meta-1278" style="font-weight:700;">Título Acreditado Meta</label>
+            <select id="titulo-meta-1278">
+              <!-- Cargado dinámicamente -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="nivel-meta-1278" style="font-weight:700;">Nivel Salarial Meta</label>
+            <select id="nivel-meta-1278">
+              <option value="A" selected>A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+            </select>
+          </div>
+
+          <button onclick="calculateProjection1278()" class="btn btn--primary" style="width:100%;margin-top:20px;justify-content:center;">Simular Crecimiento Salarial</button>
+        </div>
+
+        <!-- RESULTADOS 1278 -->
+        <div class="result-card" id="res-1278-card">
+          <div id="res-1278-empty" style="color: var(--gray-500); text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%;">
+            <i data-lucide="bar-chart-3" style="width:64px; height:64px; opacity:0.3; margin:0 auto 16px;"></i>
+            <p style="font-weight:600;font-size:1.1rem;">Selecciona tu situación actual y tu meta para calcular.</p>
+          </div>
+
+          <div id="res-1278-data" style="display:none;">
+            <h3 style="color:var(--green-800); font-size:1.4rem; font-weight:800; margin-bottom:15px; text-align:center; display:flex; align-items:center; gap:8px; justify-content:center;">
+              <i data-lucide="award" style="color:var(--green-600)"></i> Resultado de la Proyección
+            </h3>
+
+            <div class="highlight-box">
+              <p style="margin:0;font-size:0.95rem;color:var(--gray-800);line-height:1.5;">
+                Meta establecida: <strong>Grado <span id="lbl-g-meta"></span> - Nivel <span id="lbl-n-meta"></span> (<span id="lbl-t-meta"></span>)</strong>.
+              </p>
+            </div>
+
+            <!-- Tabla de Incremento -->
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Concepto</th>
+                  <th>Salario Actual</th>
+                  <th>Salario Meta</th>
+                  <th>Incremento</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Asignación Básica</td>
+                  <td id="val-act-base">$0</td>
+                  <td id="val-meta-base">$0</td>
+                  <td style="color:var(--green-700); font-weight:700;" id="val-diff-base">+$0</td>
+                </tr>
+                <tr>
+                  <td>Nivelación Salarial (0.4%)</td>
+                  <td id="val-act-niv">$0</td>
+                  <td id="val-meta-niv">$0</td>
+                  <td id="val-diff-niv">+$0</td>
+                </tr>
+                <tr style="background-color: rgba(16, 185, 129, 0.04); font-weight:800; font-size:1.05rem;">
+                  <td>Total Ingreso Mensual</td>
+                  <td id="val-act-total" style="color:var(--gray-900)">$0</td>
+                  <td id="val-meta-total" style="color:var(--green-700)">$0</td>
+                  <td id="val-diff-total" style="color:var(--green-800); font-size:1.15rem;">+$0</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="text-align: center; margin: 20px 0; background: var(--green-50); padding: 15px; border-radius: var(--radius-md);">
+              <span style="font-size: 1rem; color: var(--green-900); font-weight: 700;">¡Tu salario mensual aumentará en un <strong id="lbl-percentage-increase" style="font-size:1.4rem;color:var(--green-700)">0%</strong>!</span>
+            </div>
+
+            <h4 style="font-size:1.1rem; color:var(--gray-800); font-weight:800; margin-top:25px; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="shield-check" style="color:var(--green-600)"></i> Requisitos Legales Obligatorios:
+            </h4>
+            <ul class="requirement-list" id="req-1278-list">
+              <!-- Creados dinámicamente -->
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB CONTENT 2277 -->
+    <div id="tab-2277" class="tab-content reveal" style="display:none;">
+      <div class="dashboard-grid">
+        
+        <!-- FORMULARIO 2277 -->
+        <div class="form-card">
+          <h3 class="form-card__title" style="display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:1.25rem;"><i data-lucide="settings" style="color:var(--green-600);"></i> Simular Categorías</h3>
+          
+          <div class="form-group">
+            <label for="cat-actual-2277" style="font-weight:700;">Categoría Actual (Escalafón)</label>
+            <select id="cat-actual-2277">
+              <option value="A">Categoría A (Bachiller Pedagógico)</option>
+              <option value="B">Categoría B (Normalista Superior / Tecnólogo)</option>
+              <option value="1" selected>Categoría 1 (Profesional / Licenciado)</option>
+              <option value="2">Categoría 2</option>
+              <option value="3">Categoría 3</option>
+              <option value="4">Categoría 4</option>
+              <option value="5">Categoría 5</option>
+              <option value="6">Categoría 6</option>
+              <option value="7">Categoría 7</option>
+              <option value="8">Categoría 8</option>
+              <option value="9">Categoría 9</option>
+              <option value="10">Categoría 10</option>
+              <option value="11">Categoría 11</option>
+              <option value="12">Categoría 12</option>
+              <option value="13">Categoría 13</option>
+              <option value="14">Categoría 14</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="cat-meta-2277" style="font-weight:700;">Categoría Meta</label>
+            <select id="cat-meta-2277">
+              <option value="1">Categoría 1</option>
+              <option value="2">Categoría 2</option>
+              <option value="3">Categoría 3</option>
+              <option value="4">Categoría 4</option>
+              <option value="5">Categoría 5</option>
+              <option value="6">Categoría 6</option>
+              <option value="7">Categoría 7</option>
+              <option value="8">Categoría 8</option>
+              <option value="9">Categoría 9</option>
+              <option value="10">Categoría 10</option>
+              <option value="11">Categoría 11</option>
+              <option value="12">Categoría 12</option>
+              <option value="13">Categoría 13</option>
+              <option value="14" selected>Categoría 14 (Máxima)</option>
+            </select>
+          </div>
+
+          <button onclick="calculateProjection2277()" class="btn btn--primary" style="width:100%;margin-top:20px;justify-content:center;">Simular Ascenso 2277</button>
+        </div>
+
+        <!-- RESULTADOS 2277 -->
+        <div class="result-card" id="res-2277-card">
+          <div id="res-2277-empty" style="color: var(--gray-500); text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%;">
+            <i data-lucide="bar-chart-3" style="width:64px; height:64px; opacity:0.3; margin:0 auto 16px;"></i>
+            <p style="font-weight:600;font-size:1.1rem;">Selecciona tus categorías para simular el ascenso tradicional.</p>
+          </div>
+
+          <div id="res-2277-data" style="display:none;">
+            <h3 style="color:var(--green-800); font-size:1.4rem; font-weight:800; margin-bottom:15px; text-align:center; display:flex; align-items:center; gap:8px; justify-content:center;">
+              <i data-lucide="award" style="color:var(--green-600)"></i> Proyección Escalafón 2277
+            </h3>
+
+            <div class="highlight-box">
+              <p style="margin:0;font-size:0.95rem;color:var(--gray-800);line-height:1.5;">
+                Ascenso desde la **Categoría <span id="lbl-c-act"></span>** hasta la **Categoría <span id="lbl-c-meta"></span>**.
+              </p>
+            </div>
+
+            <!-- Tabla de Incremento 2277 -->
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Concepto</th>
+                  <th>Salario Actual</th>
+                  <th>Salario Meta</th>
+                  <th>Incremento</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Asignación Básica</td>
+                  <td id="val-act-base-2277">$0</td>
+                  <td id="val-meta-base-2277">$0</td>
+                  <td style="color:var(--green-700); font-weight:700;" id="val-diff-base-2277">+$0</td>
+                </tr>
+                <tr>
+                  <td>Nivelación Salarial (0.4%)</td>
+                  <td id="val-act-niv-2277">$0</td>
+                  <td id="val-meta-niv-2277">$0</td>
+                  <td id="val-diff-niv-2277">+$0</td>
+                </tr>
+                <tr style="background-color: rgba(16, 185, 129, 0.04); font-weight:800; font-size:1.05rem;">
+                  <td>Total Ingreso Mensual</td>
+                  <td id="val-act-total-2277" style="color:var(--gray-900)">$0</td>
+                  <td id="val-meta-total-2277" style="color:var(--green-700)">$0</td>
+                  <td id="val-diff-total-2277" style="color:var(--green-800); font-size:1.15rem;">+$0</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="text-align: center; margin: 20px 0; background: var(--green-50); padding: 15px; border-radius: var(--radius-md);">
+              <span style="font-size: 1rem; color: var(--green-900); font-weight: 700;">¡Tu salario mensual aumentará en un <strong id="lbl-percentage-2277" style="font-size:1.4rem;color:var(--green-700)">0%</strong>!</span>
+            </div>
+
+            <h4 style="font-size:1.1rem; color:var(--gray-800); font-weight:800; margin-top:25px; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="shield-check" style="color:var(--green-600)"></i> Requisitos Legales Acumulados:
+            </h4>
+            <ul class="requirement-list" id="req-2277-list">
+              <!-- Requisitos cargados dinámicamente -->
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB CONTENT EVALUACIÓN ANUAL -->
+    <div id="tab-eval" class="tab-content reveal" style="display:none;">
+      <div class="dashboard-grid" style="grid-template-columns: 1fr;">
+        
+        <div class="result-card" style="min-height: auto;">
+          <h3 style="color:var(--green-900);font-weight:800;font-size:1.4rem;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+            <i data-lucide="folder-check" style="color:var(--green-600);width:28px;height:28px;"></i> Carpeta de Evidencias de Evaluación de Desempeño
+          </h3>
+          <p style="font-size:0.95rem;color:var(--gray-600);line-height:1.5;margin-bottom:20px;">
+            Prepara tu portafolio de evidencias de forma organizada para la evaluación anual de desempeño realizada por el Rector. Selecciona los ítems que ya tienes listos para auditar tu nivel de preparación en tiempo real.
+          </p>
+
+          <!-- Progreso de la Carpeta -->
+          <div style="background:var(--gray-50); border: 1px solid var(--gray-200); border-radius:12px; padding:20px; margin-bottom:30px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-weight:800;color:var(--gray-800);font-size:0.95rem;">
+              <span>Progreso de Evidencias Recopiladas:</span>
+              <span id="progress-percent" style="color:var(--green-700);font-size:1.1rem;">0% (0 / 12)</span>
+            </div>
+            <div class="progress-container">
+              <div class="progress-bar" id="eval-progress-bar"></div>
+              <div class="progress-text" id="eval-progress-text">0% COMPLETADO</div>
+            </div>
+            
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:0.88rem;color:var(--gray-500);font-weight:600;">Estado de Preparación:</span>
+              <strong id="eval-readiness-label" style="font-size:0.95rem;color:#b91c1c;text-transform:uppercase;">Crítico - Sin Evidencias</strong>
+            </div>
+          </div>
+
+          <!-- SECCIONES DE GESTIÓN (ACORDEONES) -->
+          <!-- 1. Gestión Académica -->
+          <div class="eval-section">
+            <div class="eval-header" onclick="toggleAccordion('body-acad')">
+              <span>📚 1. Gestión Académica (Dominio Curricular y Pedagógico)</span>
+              <i data-lucide="chevron-down" id="arrow-acad"></i>
+            </div>
+            <div class="eval-body" id="body-acad">
+              <div class="eval-item">
+                <input type="checkbox" class="eval-checkbox" id="ev-1" onchange="updateEvalProgress()">
+                <label for="ev-1" class="eval-label"><strong>Plan de Área y Aula del año lectivo:</strong> Diseñados de acuerdo con los Lineamientos del MEN e incorporando competencias locales.</label>
+              </div>
+              <div class="eval-item">
+                <input type="checkbox" class="eval-checkbox" id="ev-2" onchange="updateEvalProgress()">
+                <label for="ev-2" class="eval-label"><strong>Planillas de notas y seguimiento académico:</strong> Registro ordenado de valoraciones, asistencias y planes de apoyo pedagógico para estudiantes con dificultades.</label>
+              </div>
+              <div class="eval-item">
+                <input type="checkbox" class="eval-checkbox" id="ev-3" onchange="updateEvalProgress()">
+                <label for="ev-3" class="eval-label"><strong>Material didáctico y evaluaciones escritas:</strong> Guías de aprendizaje, talleres y exámenes aplicados que evidencien didácticas críticas de aula.</label>
+              </div>
+              <div class="eval-item">
+                <input type="checkbox" class="eval-checkbox" id="ev-4" onchange="updateEvalProgress()">
+                <label for="ev-4" class="eval-label"><strong>Evidencias de planes de refuerzo y recuperación:</strong> Actas de reuniones de comisión de evaluación o de talleres especiales dirigidos a estudiantes en nivel bajo.</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Gestión Administrativa -->
+          <div class="eval-section">
+            <div class="eval-header" onclick="toggleAccordion('body-admin')">
+              <span>📁 2. Gestión Administrativa (Procesos Institucionales y Convivencia)</span>
+              <i data-lucide="chevron-down" id="arrow-admin"></i>
+            </div>
+            <div class="eval-body" id="body-admin" style="display:none;">
+              <div class="eval-item">
+                <input type="checkbox" class="eval-checkbox" id="ev-5" onchange="updateEvalProgress()">
+                <label for="ev-5" class="eval-label"><strong>Control de asistencia diario de estudiantes:</strong> Bitácoras de asistencia al día y reportes de inasistencias reiteradas canalizados a orientación.</label>
+              </div>
+              <div class="eval-item">
+                <input type="checkbox" class="eval-checkbox" id="ev-6" onchange="updateEvalProgress()">
+                <label for="ev-6" class="eval-label"><strong>Informes de dirección de grupo (si aplica):</strong> Actas de reuniones de grado, informes de entrega de boletines o actas de compromisos académicos/disciplinarios firmados.</label>
+              </div>
+              <div class="eval-item">
+                <input type="checkbox" class="eval-checkbox" id="ev-7" onchange="updateEvalProgress()">
+                <label for="ev-7" class="eval-label"><strong>Evidencias de proyectos obligatorios transversales:</strong> Informes, fotografías de eventos o cronogramas de actividades lideradas por el docente (Educación Sexual, Medio Ambiente, Democracia, etc.).</label>
+              </div>
+              <div class="eval-item">
+                <input type="checkbox" class="eval-checkbox" id="ev-8" onchange="updateEvalProgress()">
+                <label for="ev-8" class="eval-label"><strong>Actas de participación en comités institucionales:</strong> Evidencia escrita de asistencia y participación activa en Consejo Directivo, Académico, Comisión de Evaluación, etc.</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Gestión Comunitaria -->
+          <div class="eval-section">
+            <div class="eval-header" onclick="toggleAccordion('body-com')">
+              <span>🤝 3. Gestión Comunitaria (Relación con el Entorno y Padres de Familia)</span>
+              <i data-lucide="chevron-down" id="arrow-com"></i>
+            </div>
+            <div class="eval-body" id="body-com" style="display:none;">
+              <div class="eval-item">
+                <input type="checkbox" class="eval-checkbox" id="ev-9" onchange="updateEvalProgress()">
+                <label for="ev-9" class="eval-label"><strong>Actas de atención y citación a padres de familia:</strong> Registro formal con firmas de los acudientes atendidos y los compromisos pedagógicos pactados.</label>
+              </div>
+              <div class="eval-item">
+                <input type="checkbox" class="eval-checkbox" id="ev-10" onchange="updateEvalProgress()">
+                <label for="ev-10" class="eval-label"><strong>Ficha observador del alumno al día:</strong> Registro de anotaciones de convivencia escolar, de acuerdo con la ruta de atención integral (Ley 1620).</label>
+              </div>
+              <div class="eval-item">
+                <input type="checkbox" class="eval-checkbox" id="ev-11" onchange="updateEvalProgress()">
+                <label for="ev-11" class="eval-label"><strong>Proyectos de vinculación comunitaria:</strong> Evidencias de talleres con padres, ferias de la ciencia abiertas al barrio o actividades de articulación con el sector productivo o el SENA.</label>
+              </div>
+              <div class="eval-item">
+                <input type="checkbox" class="eval-checkbox" id="ev-12" onchange="updateEvalProgress()">
+                <label for="ev-12" class="eval-label"><strong>Informes de remisión a orientación escolar:</strong> Fichas de remisión formalizadas de estudiantes dirigidos a Psicología, Trabajo Social u orientación por casos especiales.</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONSEJO FINAL -->
+          <div style="background-color:rgba(37,99,235,0.05); border-left: 4px solid #2563eb; padding: 20px; border-radius:0 8px 8px 0; margin-top:20px;">
+            <h4 style="color:#1e3a8a; font-weight:800; font-size:1rem; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="info" style="color:#2563eb"></i> Recomendaciones para la Evaluación Docente (1278)
+            </h4>
+            <p style="font-size:0.9rem; color:#1e40af; line-height:1.5; margin:0;">
+              Recuerda que la **Evaluación Anual de Desempeño** califica el desempeño de tus funciones sobre 100 puntos. Un promedio de <strong>80 puntos o más</strong> durante 2 años consecutivos es el **requisito indispensable** para presentarte al concurso de Ascenso o Reubicación Salarial (ECDF/SDF). ¡Lleva tu portafolio siempre ordenado por folios y debidamente firmado por los acudientes y coordinadores!
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="container">
+<div class="footer__grid">
+<div class="footer__brand"><a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV" style="height:40px"><div class="header__logo-text" style="color:var(--green-400)">SUTEV Cartago<span style="color:var(--gray-500)">Norte del Valle</span></div></a><p>Sindicato Único de Trabajadores de la Educación del Valle. Subdirectiva Cartago — Filial de FECODE.</p></div>
+<div><div class="footer__title">Navegación</div><ul class="footer__links"><li><a href="index.html#nosotros">Nosotros</a></li><li><a href="index.html#servicios">Servicios</a></li><li><a href="index.html#calendario">Calendario</a></li><li><a href="index.html#noticias">Noticias</a></li><li><a href="index.html#estatutos">Estatutos</a></li></ul></div>
+<div><div class="footer__title">Servicios y Herramientas</div><ul class="footer__links"><li><a href="index.html#reservas">Asesoría Jurídica</a></li><li><a href="index.html#reservas">CEID</a></li><li><a href="index.html#reservas">Bienestar</a></li><li><a href="permisos-docentes.html">Permisos y Licencias de Ley</a></li><li><a href="calculadora-salarial.html">Calculadora Salarial</a></li><li><a href="simulador-pension.html">Simulador de Pensión</a></li><li><a href="derechos-peticion.html">Derechos de Petición</a></li><li><a href="auditor-nomina.html">Auditor de Nómina</a></li><li><a href="escalafon-docente.html">Escalafón y Ascenso</a></li><li><a href="carga-academica.html">Carga Académica 1850</a></li><li><a href="concurso-docente.html">Concursos y Mineducación</a></li></ul></div>
+<div><div class="footer__title">Contacto y Redes</div><ul class="footer__links"><li><a href="index.html#contacto">📍 Casa del Maestro (Cra 4 #16-17)</a></li><li><a href="index.html#contacto">📍 Cartago, Valle del Cauca</a></li><li><a href="https://web.facebook.com/sutevcartago/?locale=es_LA&_rdc=1&_rdr#" target="_blank" style="color: var(--green-400); font-weight: 600;">📘 Facebook Oficial</a></li></ul></div>
+</div>
+<div class="footer__bottom">© 2026 SUTEV Cartago — Subdirectiva Norte del Valle. Todos los derechos reservados.</div>
+</div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+// Inicialización de Iconos Lucide
+if (typeof lucide !== 'undefined') {
+  lucide.createIcons();
+}
+
+// Lógica de Tabs
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.style.display = 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  document.getElementById(tabId).style.display = 'block';
+  
+  // Buscar botón correcto y activarlo
+  const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => 
+    b.getAttribute('onclick').includes(tabId)
+  );
+  if (btn) btn.classList.add('active');
+
+  // Re-iniciar animaciones
+  document.querySelectorAll('.reveal').forEach(el => {
+    el.classList.remove('visible');
+  });
+  triggerReveal();
+}
+
+// Lógica de Acordeones en Evidencias
+function toggleAccordion(id) {
+  const body = document.getElementById(id);
+  const isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'block' : 'none';
+  
+  // Rotación de flecha
+  const suffix = id.split('-')[1];
+  const arrow = document.getElementById('arrow-' + suffix);
+  if (arrow) {
+    arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+    arrow.style.transition = 'transform 0.2s ease';
+  }
+}
+
+// Opciones dinámicas de Títulos en 1278
+const titleOptions = {
+  '1': [
+    { value: 'none', label: 'Normalista Superior o Tecnólogo en Educación' }
+  ],
+  '2': [
+    { value: 'none', label: 'Licenciado o Profesional Universitario sin Posgrado' },
+    { value: 'esp', label: 'Especialista en Educación' },
+    { value: 'mae', label: 'Maestría en Educación' },
+    { value: 'doc', label: 'Doctorado en Educación' }
+  ],
+  '3': [
+    { value: 'mae', label: 'Maestría en Educación' },
+    { value: 'doc', label: 'Doctorado en Educación' }
+  ]
+};
+
+function updateTitleOptions(type) {
+  const gradoSelect = document.getElementById(`grado-${type}-1278`);
+  const tituloSelect = document.getElementById(`titulo-${type}-1278`);
+  const val = gradoSelect.value;
+
+  tituloSelect.innerHTML = '';
+  titleOptions[val].forEach(opt => {
+    const el = document.createElement('option');
+    el.value = opt.value;
+    el.innerText = opt.label;
+    tituloSelect.appendChild(el);
+  });
+}
+
+// Tablas de Salarios (Decreto 0299 del 25 de marzo de 2026)
+const salaries1278 = {
+  '1': {
+    'none': { A: 3036203, B: 3870303, C: 4989102, D: 6184872 }
+  },
+  '2': {
+    'none': { A: 3821274, B: 4992967, C: 5831713, D: 6968892 },
+    'esp': { A: 4153464, B: 5306670, C: 6574267, D: 7780202 },
+    'mae': { A: 4394463, B: 5741913, C: 6706468, D: 8014215 },
+    'doc': { A: 4967653, B: 6490858, C: 7581222, D: 9059548 }
+  },
+  '3': {
+    'mae': { A: 6395544, B: 7572568, C: 9365412, D: 10851730 },
+    'doc': { A: 8484182, B: 9959374, C: 12576133, D: 14436985 }
+  }
+};
+
+const salaries2277 = {
+  'A': 1800860, 'B': 1994953, '1': 2235742, '2': 2317496, '3': 2459305,
+  '4': 2556387, '5': 2717624, '6': 2874688, '7': 3217125, '8': 3533807,
+  '9': 3914723, '10': 4286335, '11': 4894390, '12': 5822164, '13': 6444689, '14': 7339832
+};
+
+// Formateador COP
+const formatCOP = (val) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(val);
+
+// Inicializar selectores
+updateTitleOptions('actual');
+updateTitleOptions('meta');
+
+// Simulador 1278
+function calculateProjection1278() {
+  const gAct = document.getElementById('grado-actual-1278').value;
+  const tAct = document.getElementById('titulo-actual-1278').value;
+  const nAct = document.getElementById('nivel-actual-1278').value;
+
+  const gMeta = document.getElementById('grado-meta-1278').value;
+  const tMeta = document.getElementById('titulo-meta-1278').value;
+  const nMeta = document.getElementById('nivel-meta-1278').value;
+
+  // Obtener salarios base
+  const salActBase = salaries1278[gAct][tAct][nAct];
+  const salMetaBase = salaries1278[gMeta][tMeta][nMeta];
+
+  if (!salActBase || !salMetaBase) {
+    alert('Error al calcular. Por favor verifica las opciones.');
+    return;
+  }
+
+  // Cálculos
+  const nivAct = Math.round(salActBase * 0.004);
+  const nivMeta = Math.round(salMetaBase * 0.004);
+
+  const totAct = salActBase + nivAct;
+  const totMeta = salMetaBase + nivMeta;
+
+  const diffBase = salMetaBase - salActBase;
+  const diffNiv = nivMeta - nivAct;
+  const diffTotal = totMeta - totAct;
+
+  const pct = ((diffTotal / totAct) * 100).toFixed(1);
+
+  // Rellenar tabla
+  document.getElementById('val-act-base').innerText = formatCOP(salActBase);
+  document.getElementById('val-meta-base').innerText = formatCOP(salMetaBase);
+  document.getElementById('val-diff-base').innerText = (diffBase >= 0 ? '+' : '') + formatCOP(diffBase);
+  if (diffBase < 0) document.getElementById('val-diff-base').style.color = '#b91c1c';
+  else document.getElementById('val-diff-base').style.color = 'var(--green-700)';
+
+  document.getElementById('val-act-niv').innerText = formatCOP(nivAct);
+  document.getElementById('val-meta-niv').innerText = formatCOP(nivMeta);
+  document.getElementById('val-diff-niv').innerText = (diffNiv >= 0 ? '+' : '') + formatCOP(diffNiv);
+
+  document.getElementById('val-act-total').innerText = formatCOP(totAct);
+  document.getElementById('val-meta-total').innerText = formatCOP(totMeta);
+  document.getElementById('val-diff-total').innerText = (diffTotal >= 0 ? '+' : '') + formatCOP(diffTotal);
+  if (diffTotal < 0) document.getElementById('val-diff-total').style.color = '#b91c1c';
+  else document.getElementById('val-diff-total').style.color = 'var(--green-800)';
+
+  document.getElementById('lbl-percentage-increase').innerText = (diffTotal >= 0 ? '+' : '') + pct + '%';
+  if (diffTotal < 0) document.getElementById('lbl-percentage-increase').style.color = '#b91c1c';
+  else document.getElementById('lbl-percentage-increase').style.color = 'var(--green-700)';
+
+  document.getElementById('lbl-g-meta').innerText = gMeta;
+  document.getElementById('lbl-n-meta').innerText = nMeta;
+  
+  const textMeta = document.getElementById('titulo-meta-1278').options[document.getElementById('titulo-meta-1278').selectedIndex].text;
+  document.getElementById('lbl-t-meta').innerText = textMeta;
+
+  // Requisitos dinámicos
+  const reqList = document.getElementById('req-1278-list');
+  reqList.innerHTML = '';
+
+  const isAscenso = gMeta > gAct;
+  const isReubicacion = nMeta !== nAct && !isAscenso;
+
+  if (isAscenso) {
+    reqList.innerHTML += `<li><strong>Título Requerido:</strong> Debes acreditar formalmente el título de <strong>${textMeta}</strong> y registrarlo en tu hoja de vida ante el Ente Territorial Certificado.</li>`;
+    reqList.innerHTML += `<li><strong>Tiempo de servicio:</strong> Tener mínimo 3 años de servicio efectivo y continuo en tu grado actual antes de la radicación.</li>`;
+    reqList.innerHTML += `<li><strong>Evaluación de Desempeño Anual:</strong> Haber obtenido calificación sobresaliente o satisfactoria (promedio >= 80) en los dos últimos años anteriores a la convocatoria.</li>`;
+    reqList.innerHTML += `<li><strong>Convocatoria de Ascenso (SDF / SDF IV):</strong> Participar del Concurso nacional de ascenso y reubicación y quedar ubicado en los listados de viabilidad financiera del Ente Territorial.</li>`;
+  } else if (isReubicacion) {
+    reqList.innerHTML += `<li><strong>Tiempo en el Nivel:</strong> Permanecer un mínimo de 3 años continuos en el nivel actual (Letra ${nAct}) antes de poder reubicarte al nivel ${nMeta}.</li>`;
+    reqList.innerHTML += `<li><strong>Evaluaciones de Desempeño:</strong> Promedio superior a 80 puntos en tus dos últimas evaluaciones de desempeño anuales.</li>`;
+    reqList.innerHTML += `<li><strong>Convocatoria Nacional (SDF):</strong> Aprobar o clasificar en la convocatoria del Ministerio de Educación nacional para reubicación salarial (SDF / SDF IV).</li>`;
+  } else if (gMeta === gAct && nMeta === nAct) {
+    reqList.innerHTML += `<li><strong>Sin Cambios:</strong> Has seleccionado la misma categoría y nivel actuales. No se requieren trámites de ascenso.</li>`;
+  } else {
+    reqList.innerHTML += `<li class="pending"><strong>Descenso de Categoría:</strong> Estás simulando una categoría inferior a tu situación real. El estatuto docente resguarda tus derechos adquiridos y no permite el descenso salarial unilateral.</li>`;
+  }
+
+  document.getElementById('res-1278-empty').style.display = 'none';
+  document.getElementById('res-1278-data').style.display = 'block';
+  document.getElementById('res-1278-card').style.animation = 'none';
+  setTimeout(() => {
+    document.getElementById('res-1278-card').style.animation = 'popIn 0.3s ease';
+  }, 10);
+}
+
+// Simulador 2277
+function calculateProjection2277() {
+  const catAct = document.getElementById('cat-actual-2277').value;
+  const catMeta = document.getElementById('cat-meta-2277').value;
+
+  const salActBase = salaries2277[catAct];
+  const salMetaBase = salaries2277[catMeta];
+
+  const nivAct = Math.round(salActBase * 0.004);
+  const nivMeta = Math.round(salMetaBase * 0.004);
+
+  const totAct = salActBase + nivAct;
+  const totMeta = salMetaBase + nivMeta;
+
+  const diffBase = salMetaBase - salActBase;
+  const diffNiv = nivMeta - nivAct;
+  const diffTotal = totMeta - totAct;
+
+  const pct = ((diffTotal / totAct) * 100).toFixed(1);
+
+  document.getElementById('val-act-base-2277').innerText = formatCOP(salActBase);
+  document.getElementById('val-meta-base-2277').innerText = formatCOP(salMetaBase);
+  document.getElementById('val-diff-base-2277').innerText = (diffBase >= 0 ? '+' : '') + formatCOP(diffBase);
+  if (diffBase < 0) document.getElementById('val-diff-base-2277').style.color = '#b91c1c';
+  else document.getElementById('val-diff-base-2277').style.color = 'var(--green-700)';
+
+  document.getElementById('val-act-niv-2277').innerText = formatCOP(nivAct);
+  document.getElementById('val-meta-niv-2277').innerText = formatCOP(nivMeta);
+  document.getElementById('val-diff-niv-2277').innerText = (diffNiv >= 0 ? '+' : '') + formatCOP(diffNiv);
+
+  document.getElementById('val-act-total-2277').innerText = formatCOP(totAct);
+  document.getElementById('val-meta-total-2277').innerText = formatCOP(totMeta);
+  document.getElementById('val-diff-total-2277').innerText = (diffTotal >= 0 ? '+' : '') + formatCOP(diffTotal);
+  if (diffTotal < 0) document.getElementById('val-diff-total-2277').style.color = '#b91c1c';
+  else document.getElementById('val-diff-total-2277').style.color = 'var(--green-800)';
+
+  document.getElementById('lbl-percentage-2277').innerText = (diffTotal >= 0 ? '+' : '') + pct + '%';
+  if (diffTotal < 0) document.getElementById('lbl-percentage-2277').style.color = '#b91c1c';
+  else document.getElementById('lbl-percentage-2277').style.color = 'var(--green-700)';
+
+  document.getElementById('lbl-c-act').innerText = catAct;
+  document.getElementById('lbl-c-meta').innerText = catMeta;
+
+  // Requisitos 2277
+  const reqList = document.getElementById('req-2277-list');
+  reqList.innerHTML = '';
+
+  const actInt = isNaN(catAct) ? (catAct === 'A' ? -1 : 0) : parseInt(catAct);
+  const metaInt = isNaN(catMeta) ? (catMeta === 'A' ? -1 : 0) : parseInt(catMeta);
+
+  if (metaInt > actInt) {
+    reqList.innerHTML += `<li><strong>Años de Servicio Acumulados:</strong> Se requiere un tiempo mínimo de servicio continuo en cada categoría (de 2 a 3 años por paso de nivel). Para saltar de ${catAct} a ${catMeta} debes acumular mínimo ${(metaInt - actInt) * 2} a ${(metaInt - actInt) * 3} años de servicio según tu hoja de servicio en el ente.</li>`;
+    reqList.innerHTML += `<li><strong>Créditos de Capacitación (CEID/MEN):</strong> Acumular los créditos de cursos de capacitación pedagógica aprobados y debidamente certificados por el Comité de Capacitación Docente Departamental o Municipal (normalmente de 2 a 4 créditos de 60 horas por cada ascenso).</li>`;
+    if (metaInt >= 11) {
+      reqList.innerHTML += `<li><strong>Requisito de Título Profesional Universitario:</strong> A partir de la categoría 11 en el estatuto 2277, es obligatorio contar con título profesional universitario en educación (Licenciatura) para continuar ascendiendo.</li>`;
+    }
+    if (metaInt === 14) {
+      reqList.innerHTML += `<li><strong>Trabajo de Investigación Escrito (Categoría 14):</strong> Para ascender al grado 14, se requiere adicionalmente haber publicado un libro sobre temas de educación/ciencia o ser coautor de una obra pedagógica registrada, o acreditar un título de posgrado (Especialización/Maestría/Doctorado) que homologue este requisito.</li>`;
+    }
+  } else if (metaInt === actInt) {
+    reqList.innerHTML += `<li><strong>Sin Cambios:</strong> Has seleccionado la misma categoría actual en el Decreto 2277. No se requieren trámites de ascenso.</li>`;
+  } else {
+    reqList.innerHTML += `<li class="pending"><strong>Restricción de Descenso:</strong> El estatuto 2277 consagra los derechos de inamovilidad y no desmejora salarial adquiridos por el magisterio. No es posible descender de nivel.</li>`;
+  }
+
+  document.getElementById('res-2277-empty').style.display = 'none';
+  document.getElementById('res-2277-data').style.display = 'block';
+  document.getElementById('res-2277-card').style.animation = 'none';
+  setTimeout(() => {
+    document.getElementById('res-2277-card').style.animation = 'popIn 0.3s ease';
+  }, 10);
+}
+
+// Lógica de Progreso de Evaluación Anual
+function updateEvalProgress() {
+  const total = 12;
+  let checked = 0;
+  for(let i = 1; i <= total; i++) {
+    if(document.getElementById('ev-' + i).checked) {
+      checked++;
+    }
+  }
+
+  const pct = Math.round((checked / total) * 100);
+  const bar = document.getElementById('eval-progress-bar');
+  const txt = document.getElementById('eval-progress-text');
+  const label = document.getElementById('progress-percent');
+  const readiness = document.getElementById('eval-readiness-label');
+
+  bar.style.width = pct + '%';
+  txt.innerText = pct + '% COMPLETADO';
+  label.innerText = `${pct}% (${checked} / ${total})`;
+
+  // Actualizar etiqueta de preparación
+  if (pct === 0) {
+    readiness.innerText = 'Crítico - Sin Evidencias';
+    readiness.style.color = '#b91c1c';
+  } else if (pct < 40) {
+    readiness.innerText = 'Insuficiente - Preparación Inicial';
+    readiness.style.color = '#dc2626';
+  } else if (pct < 70) {
+    readiness.innerText = 'Aceptable - Carpeta En Progreso';
+    readiness.style.color = '#d97706';
+  } else if (pct < 95) {
+    readiness.innerText = 'Excelente - Carpeta casi Lista';
+    readiness.style.color = '#2563eb';
+  } else {
+    readiness.innerText = 'Sobresaliente - Carpeta 100% Preparada';
+    readiness.style.color = 'var(--green-700)';
+    readiness.style.animation = 'pulse 1s infinite';
+  }
+}
+
+// Interactivity reveals
+function triggerReveal() {
+  document.querySelectorAll('.reveal').forEach(el => {
+    new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if(e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, {threshold: 0.1}).observe(el);
+  });
+}
+triggerReveal();
+</script>
+
+</body>
+</html>
