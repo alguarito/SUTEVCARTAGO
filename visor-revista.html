@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script>
+    // Capturador de errores global para diagnóstico inmediato en pantalla
+    window.addEventListener('error', function(e) {
+      const errDiv = document.createElement('div');
+      errDiv.style.position = 'fixed';
+      errDiv.style.bottom = '10px';
+      errDiv.style.right = '10px';
+      errDiv.style.maxWidth = '400px';
+      errDiv.style.background = 'rgba(220, 38, 38, 0.95)';
+      errDiv.style.color = 'white';
+      errDiv.style.padding = '16px';
+      errDiv.style.borderRadius = '8px';
+      errDiv.style.zIndex = '999999';
+      errDiv.style.fontFamily = 'monospace';
+      errDiv.style.fontSize = '12px';
+      errDiv.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
+      errDiv.style.border = '1px solid rgba(255,255,255,0.2)';
+      errDiv.innerHTML = `<h4 style="margin:0 0 8px 0;font-size:14px;color:#ffe4e6;">⚠️ Error de Sistema</h4><p style="margin:0 0 8px 0;line-height:1.4;">${e.message}</p><span style="font-size:10px;color:#fca5a5;">${e.filename}:${e.lineno}</span>`;
+      document.body.appendChild(errDiv);
+    });
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revista Voces que Transforman - SUTEV Cartago</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- StPageFlip para pase de hojas físico premium y realista -->
+  <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
+  
+  <!-- Estilos Premium del Visor de Revista -->
+  <style>
+    :root {
+      --green-primary: #1B8C3D;
+      --green-dark: #0A3D1F;
+      --green-light: #22A347;
+      --bg-dark: #111111;
+      --bg-light-dark: #1e1e1e;
+      --glass-bg: rgba(10, 61, 31, 0.9);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.6);
+      --font-family: 'Inter', sans-serif;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-dark);
+      overflow: hidden;
+      font-family: var(--font-family);
+      color: #fff;
+    }
+
+    /* Barra Superior Premium */
+    .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      box-sizing: border-box;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    
+    .top-bar .logo-title-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .top-bar .title {
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .top-bar .badge {
+      background: #E5A93C;
+      color: #111;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .top-bar .action-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-top {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .btn-top:hover {
+      background: var(--green-light);
+      border-color: #39C863;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(27, 140, 61, 0.3);
+    }
+
+    .btn-back-main {
+      background: var(--green-primary);
+      border-color: var(--green-light);
+    }
+    .btn-back-main:hover {
+      background: var(--green-light);
+    }
+
+    /* Vista del Libro 3D */
+    #flipbook-view {
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 130px); /* Deja espacio para control-bar (70px) */
+      background: radial-gradient(circle, #252525 0%, #0d0d0d 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Contenedor del Libro y su escala dinámica UHD */
+    .book-viewport {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book-container {
+      position: relative;
+      width: 1960px; /* Ancho del pliego completo en píxeles CSS (980px * 2) */
+      height: 1266px; /* Alto del pliego completo en píxeles CSS para un rendimiento de canvas fluido a 60fps */
+      transition: transform 0.1s ease-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Estructura del Libro Físico */
+    .book {
+      width: 100%;
+      height: 100%;
+      box-shadow: 0 35px 80px rgba(0, 0, 0, 0.85);
+      border-radius: 6px;
+      background: #111;
+    }
+
+    /* Estilo de las Páginas */
+    .page-face {
+      width: 100%;
+      height: 100%;
+      background: #222;
+      box-shadow: inset 0 0 100px rgba(0,0,0,0.25);
+      overflow: hidden;
+      user-select: none;
+      box-sizing: border-box;
+    }
+
+    .page-face img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      display: block;
+      image-rendering: auto;
+    }
+
+    /* Páginas en blanco o finales */
+    .blank-page {
+      width: 100%;
+      height: 100%;
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .blank-page::before {
+      content: 'SUTEV Cartago';
+      color: rgba(255,255,255,0.1);
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      transform: rotate(-45deg);
+    }
+
+    /* Barra de Controles Inferior (Glassmorphism) */
+    .control-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      box-sizing: border-box;
+      z-index: 1000;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+    }
+
+    .control-bar .section-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .control-bar .section-center {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .control-bar .section-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .page-indicator {
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      letter-spacing: 0.5px;
+      min-width: 150px;
+      text-align: center;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .btn-control {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .btn-control:hover {
+      background: var(--green-light);
+      border-color: #39C863;
+      transform: scale(1.1) translateY(-2px);
+      box-shadow: 0 4px 10px rgba(27, 140, 61, 0.4);
+    }
+
+    .btn-control:active {
+      transform: scale(0.95);
+    }
+
+    .btn-text-control {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+    }
+    .btn-text-control:hover {
+      background: var(--green-light);
+      border-color: #39C863;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(27, 140, 61, 0.4);
+    }
+
+    /* Vista del PDF Plano */
+    #pdf-view {
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 60px);
+      background: #222;
+      display: none;
+    }
+
+    #pdf-view iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Zoom en Modo Libro */
+    .book-viewport.zoomed {
+      overflow: auto;
+      align-items: flex-start;
+      padding: 40px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de Navegación Superior -->
+  <div class="top-bar">
+    <div class="logo-title-area">
+      <div class="title">CEID | Voces que Transforman</div>
+      <span class="badge">Revista Vol. 1</span>
+    </div>
+    
+    <div class="action-buttons">
+      <!-- Botón para alternar vistas -->
+      <button onclick="toggleViewMode()" id="btn-toggle-view" class="btn-top">
+        📄 Vista Plana PDF
+      </button>
+      <a href="assets/docs/voces_que_transforman.pdf" download class="btn-top">
+        ⬇️ Descargar
+      </a>
+      <a href="secretaria-ceid.html" class="btn-top btn-back-main">
+        ← Volver
+      </a>
+    </div>
+  </div>
+
+  <!-- VISTA 1: Libro 3D Interactivo -->
+  <div id="flipbook-view">
+    <div class="book-viewport">
+      <div class="book-container">
+        
+        <!-- Contenedor del Libro para StPageFlip -->
+        <div id="book" class="book"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- VISTA 2: Lector de PDF Plano Nativo -->
+  <div id="pdf-view">
+    <iframe src="assets/docs/voces_que_transforman.pdf">
+      <p>Tu navegador no soporta la visualización de PDFs en línea. 
+         Puedes <a href="assets/docs/voces_que_transforman.pdf" download style="color: #1B8C3D; font-weight: bold; text-decoration: underline;">descargar la revista aquí</a> para leerla.
+      </p>
+    </iframe>
+  </div>
+
+  <!-- Barra de Controles para el Libro 3D -->
+  <div class="control-bar" id="flipbook-controls">
+    <div class="section-left">
+      <button onclick="jumpToFirstPage()" class="btn-control" title="Primera página">⏪</button>
+      <button onclick="turnBack()" class="btn-control" id="btn-prev" title="Página anterior">◀</button>
+    </div>
+    
+    <div class="section-center">
+      <div id="page-indicator" class="page-indicator">Cargando revista...</div>
+    </div>
+    
+    <div class="section-right">
+      <button onclick="turnForward()" class="btn-control" id="btn-next" title="Página siguiente">▶</button>
+      <button onclick="jumpToLastPage()" class="btn-control" title="Última página">⏩</button>
+      <button onclick="toggleZoom()" class="btn-control" id="btn-zoom" title="Acercar / Zoom">🔍</button>
+      <button onclick="toggleFullscreen()" class="btn-control" title="Pantalla completa">🖥️</button>
+    </div>
+  </div>
+
+  <!-- Lógica de Funcionamiento del Libro 3D -->
+  <script>
+    const totalPages = 23;
+    const pages = [];
+    
+    // Poblamos el array de páginas con las imágenes extraídas y un cache buster de tiempo para forzar recarga Ultra 4K
+    const cacheBuster = `?v=${Date.now()}`;
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(`assets/images/revista/pagina_${i}.jpg${cacheBuster}`);
+    }
+    // Añadimos una página vacía/oscura al final para completar las hojas pares
+    pages.push("");
+
+    let pageFlip = null;
+    let isZoomed = false;
+
+    // Generar Hojas dinámicamente
+    function buildBook() {
+      const bookContainer = document.getElementById('book');
+      bookContainer.innerHTML = '';
+      
+      pages.forEach((src, idx) => {
+        const pageDiv = document.createElement('div');
+        pageDiv.className = 'page-face';
+        
+        // Primera y última páginas se configuran como tapa dura
+        if (idx === 0 || idx === pages.length - 1) {
+          pageDiv.setAttribute('data-density', 'hard');
+        } else {
+          pageDiv.setAttribute('data-density', 'soft');
+        }
+        
+        if (src) {
+          pageDiv.innerHTML = `<img src="${src}" alt="Página ${idx + 1}" loading="lazy">`;
+        } else {
+          pageDiv.innerHTML = `<div class="blank-page"></div>`;
+        }
+        
+        bookContainer.appendChild(pageDiv);
+      });
+      
+      // Inicializar St.PageFlip
+      try {
+        pageFlip = new St.PageFlip(bookContainer, {
+          width: 980,      // Ancho base optimizado para evitar sobrecarga de canvas (DPR)
+          height: 1266,    // Alto base optimizado para perfecto rendimiento y fluidez
+          size: "stretch", // Estirar para llenar el contenedor (escalado responsivo)
+          minWidth: 400,
+          minHeight: 516,
+          maxWidth: 2000,
+          maxHeight: 2580,
+          drawShadow: true,
+          showCover: true, // Efecto portada y contraportada con tapas duras
+          usePortrait: true, // Modo retrato dinámico para tablets/móviles
+          flippingTime: 800,
+          mobileScrollSupport: true
+        });
+        
+        pageFlip.loadFromHTML(document.querySelectorAll('.page-face'));
+        
+        // Vincular eventos
+        pageFlip.on('flip', (e) => {
+          updatePageIndicator(e.data);
+          playPageTurnSound();
+        });
+        
+        pageFlip.on('changeOrientation', (e) => {
+          updatePageIndicator(pageFlip.getCurrentPageIndex());
+        });
+        
+        // Indicador inicial
+        updatePageIndicator(0);
+        
+      } catch (err) {
+        console.error("Error al inicializar StPageFlip:", err);
+      }
+      
+      resizeBook();
+    }
+
+    // Lógica para girar hacia ADELANTE (Siguiente Página)
+    function turnForward() {
+      if (pageFlip) {
+        pageFlip.turnToNextPage();
+      }
+    }
+
+    // Lógica para girar hacia ATRÁS (Página Anterior)
+    function turnBack() {
+      if (pageFlip) {
+        pageFlip.turnToPrevPage();
+      }
+    }
+
+    // Saltar a la Primera Página (Portada)
+    function jumpToFirstPage() {
+      if (pageFlip) {
+        pageFlip.turnToPage(0);
+      }
+    }
+
+    // Saltar a la Última Página (Contraportada)
+    function jumpToLastPage() {
+      if (pageFlip) {
+        pageFlip.turnToPage(pages.length - 1);
+      }
+    }
+
+    // Actualiza el indicador visual de las páginas
+    function updatePageIndicator(pageIndex) {
+      const indicator = document.getElementById('page-indicator');
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      
+      if (!pageFlip) return;
+      
+      if (pageIndex === 0) {
+        indicator.textContent = `Portada (Pág. 1 de ${totalPages})`;
+        btnPrev.style.opacity = "0.4";
+        btnPrev.style.pointerEvents = "none";
+        btnNext.style.opacity = "1";
+        btnNext.style.pointerEvents = "auto";
+      } else if (pageIndex === pages.length - 1) {
+        indicator.textContent = "Contraportada";
+        btnPrev.style.opacity = "1";
+        btnPrev.style.pointerEvents = "auto";
+        btnNext.style.opacity = "0.4";
+        btnNext.style.pointerEvents = "none";
+      } else {
+        btnPrev.style.opacity = "1";
+        btnPrev.style.pointerEvents = "auto";
+        btnNext.style.opacity = "1";
+        btnNext.style.pointerEvents = "auto";
+        
+        const orientation = pageFlip.getOrientation();
+        if (orientation === "portrait") {
+          indicator.textContent = `Pág. ${pageIndex + 1} de ${totalPages}`;
+        } else {
+          const leftPage = pageIndex + 1;
+          const rightPage = pageIndex + 2;
+          if (rightPage > totalPages) {
+            indicator.textContent = `Pág. ${leftPage} de ${totalPages}`;
+          } else {
+            indicator.textContent = `Pág. ${leftPage} - ${rightPage} de ${totalPages}`;
+          }
+        }
+      }
+    }
+
+    // Efecto de Sonido Procedural de Pasar Página (Web Audio API)
+    function playPageTurnSound() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        
+        // Crear búfer de ruido blanco (duración: 0.3 segundos)
+        const bufferSize = ctx.sampleRate * 0.3;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        
+        // Filtro de paso de banda para emular fricción del papel
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(700, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(180, ctx.currentTime + 0.3);
+        filter.Q.setValueAtTime(2.5, ctx.currentTime);
+        
+        // Envolvente de volumen (Gain Envelope)
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.001, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+        
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        
+        noise.start();
+      } catch (e) {
+        console.log("Audio deshabilitado por política del navegador:", e);
+      }
+    }
+
+    // Ajuste y Escalado Uniforme Responsivo de la Revista
+    function resizeBook() {
+      const viewport = document.querySelector('.book-viewport');
+      const container = document.querySelector('.book-container');
+      if (!viewport || !container) return;
+      
+      const vw = viewport.clientWidth;
+      const vh = viewport.clientHeight;
+      
+      // Dimensiones fijas optimizadas en las que se basa la escala responsiva
+      const bookWidth = 1960;
+      const bookHeight = 1266;
+      
+      // Margen responsivo de 40px
+      const scaleX = (vw - 40) / bookWidth;
+      const scaleY = (vh - 40) / bookHeight;
+      let scale = Math.min(scaleX, scaleY);
+      
+      // Permitimos agrandar hasta un máximo de 1.1x si hay espacio
+      scale = Math.min(Math.max(scale, 0.15), 1.1);
+      
+      if (isZoomed) {
+        // Multiplicamos por 2.0 para zoom ultra legible aprovechando los 320 DPI
+        container.style.transform = `scale(${scale * 2.0})`;
+      } else {
+        container.style.transform = `scale(${scale})`;
+      }
+    }
+
+    // Alternar Zoom
+    function toggleZoom() {
+      const viewport = document.querySelector('.book-viewport');
+      const btn = document.getElementById('btn-zoom');
+      
+      isZoomed = !isZoomed;
+      if (isZoomed) {
+        viewport.classList.add('zoomed');
+        btn.textContent = '➖';
+        btn.title = "Alejar";
+      } else {
+        viewport.classList.remove('zoomed');
+        btn.textContent = '🔍';
+        btn.title = "Acercar";
+      }
+      resizeBook();
+    }
+
+    // Pantalla Completa (Fullscreen)
+    function toggleFullscreen() {
+      const elem = document.documentElement;
+      if (!document.fullscreenElement) {
+        elem.requestFullscreen().catch(err => {
+          console.log(`Error al activar pantalla completa: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    // Cambiar entre Modo Revista 3D y Vista de PDF Plano
+    function toggleViewMode() {
+      const flipView = document.getElementById('flipbook-view');
+      const flipControls = document.getElementById('flipbook-controls');
+      const pdfView = document.getElementById('pdf-view');
+      const btnToggle = document.getElementById('btn-toggle-view');
+      
+      if (flipView.style.display === 'none') {
+        // Cambiar a Modo Libro 3D
+        flipView.style.display = 'flex';
+        flipControls.style.display = 'flex';
+        pdfView.style.display = 'none';
+        btnToggle.textContent = '📄 Vista Plana PDF';
+        resizeBook();
+      } else {
+        // Cambiar a Vista PDF Plano
+        flipView.style.display = 'none';
+        flipControls.style.display = 'none';
+        pdfView.style.display = 'block';
+        btnToggle.textContent = '📖 Modo Libro 3D';
+      }
+    }
+
+    // Teclas de dirección y Barra Espaciadora para pasar páginas
+    document.addEventListener('keydown', (e) => {
+      const flipView = document.getElementById('flipbook-view');
+      if (flipView && flipView.style.display !== 'none') {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+          e.preventDefault();
+          turnForward();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          turnBack();
+        }
+      }
+    });
+
+    // Eventos y carga inicial
+    window.addEventListener('resize', resizeBook);
+    window.addEventListener('DOMContentLoaded', () => {
+      buildBook();
+    });
+  </script>
+
+</body>
+</html>

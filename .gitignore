@@ -1,0 +1,23 @@
+# Archivos comprimidos y respaldos
+*.zip
+
+# Archivos de Excel o borradores
+*.xlsx
+ceid_info.txt
+estatutos_texto.txt
+
+# Carpetas de diseño o capturas locales (no requeridas en producción)
+IMAGENES/
+
+# Sistema y Metadatos de MacOS
+.DS_Store
+*/.DS_Store
+Thumbs.db
+
+# Configuración o logs del asistente de IA
+task.md
+walkthrough.md
+implementation_plan.md
+decreto_salarial_2026.md
+propuesta_herramientas_valor.md
+propuesta_servicios_alto_valor.md

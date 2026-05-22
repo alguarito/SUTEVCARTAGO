@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUTEV Cartago - Subdirectiva Norte del Valle</title>
+<meta name="description" content="Subdirectiva SUTEV Cartago. Sindicato Único de Trabajadores de la Educación del Valle. Defensa, bienestar y formación docente en el Norte del Valle del Cauca.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+<div class="container">
+<a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV"><div class="header__logo-text">SUTEV Cartago<span>Norte del Valle</span></div></a>
+<nav><ul class="nav__list" id="navList">
+<li><a href="index.html" class="nav__link">Inicio</a></li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Nosotros <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="index.html#nosotros" class="nav__dropdown-item"><i data-lucide="users" style="width: 14px; height: 14px;"></i> ¿Quiénes Somos?</a></li>
+    <li><a href="index.html#estatutos" class="nav__dropdown-item"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i> Estatutos del Sindicato</a></li>
+    <li><a href="index.html#galeria" class="nav__dropdown-item"><i data-lucide="image" style="width: 14px; height: 14px;"></i> Galería de Fotos</a></li>
+  </ul>
+</li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Servicios <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="index.html#servicios" class="nav__dropdown-item"><i data-lucide="briefcase" style="width: 14px; height: 14px;"></i> Portafolio de Servicios</a></li>
+    <li><a href="permisos-docentes.html" class="nav__dropdown-item"><i data-lucide="scale" style="width: 14px; height: 14px;"></i> Permisos de Ley y Licencias</a></li>
+    <li><a href="calculadora-salarial.html" class="nav__dropdown-item"><i data-lucide="calculator" style="width: 14px; height: 14px;"></i> Calculadora Salarial</a></li>
+    <li><a href="simulador-pension.html" class="nav__dropdown-item"><i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i> Simulador de Pensión</a></li>
+    <li><a href="derechos-peticion.html" class="nav__dropdown-item"><i data-lucide="file-signature" style="width: 14px; height: 14px;"></i> Derechos de Petición</a></li>
+    <li><a href="auditor-nomina.html" class="nav__dropdown-item"><i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> Auditor de Nómina</a></li>
+  </ul>
+</li>
+<li><a href="index.html#calendario" class="nav__link">Calendario</a></li>
+<li><a href="index.html#noticias" class="nav__link">Noticias</a></li>
+<li><a href="index.html#contacto" class="nav__link">Contacto</a></li>
+<li><a href="index.html#afiliacion" class="nav__link nav__link--cta">Afíliate</a></li>
+</ul></nav>
+<button class="nav__toggle" id="navToggle" aria-label="Menú"><span></span><span></span><span></span></button>
+</div>
+</header>
+
+<!-- CALCULATOR HEADER -->
+<section class="section section--dark" style="padding-top: 150px; padding-bottom: 50px;">
+  <div class="container">
+    <div class="section__header reveal" style="margin-bottom: 0;">
+      <span class="section__tag">Herramienta Interactiva</span>
+      <h2 class="section__title">Calculadora Salarial y Escalafón</h2>
+      <p class="section__desc">Selecciona tu estatuto y nivel para estimar tu asignación básica mensual y conocer los requisitos de ascenso.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR APP -->
+<section class="section" style="padding-top: 50px;">
+  <div class="container">
+    <div class="calculator-layout">
+      
+      <!-- Formulario -->
+      <div class="form-card reveal">
+        <h3 class="form-card__title" style="display:flex;align-items:center;gap:8px;"><i data-lucide="calculator"></i> Ingresa tus datos</h3>
+        <form id="calcForm">
+          <div class="form-group">
+            <label for="estatuto" style="font-weight:700; color:var(--gray-800);">Estatuto Docente</label>
+            <select id="estatuto" required>
+              <option value="">Selecciona...</option>
+              <option value="1278">Decreto 1278 (Nuevo Estatuto)</option>
+              <option value="2277">Decreto 2277 (Antiguo Estatuto)</option>
+            </select>
+          </div>
+
+          <!-- Campos 1278 -->
+          <div id="fields-1278" style="display:none; margin-top:20px;">
+            <div class="form-group">
+              <label for="categoria1278" style="font-weight:700; color:var(--gray-800);">Grado Escalafón y Formación (Posgrado)</label>
+              <select id="categoria1278">
+                <option value="">Selecciona...</option>
+                <option value="1-none">Grado 1 (Normalista Superior / Tecnólogo en Educación)</option>
+                <option value="2-none">Grado 2 (Licenciado / Profesional Universitario Sin Posgrado)</option>
+                <option value="2-esp">Grado 2 + Especialización</option>
+                <option value="2-mae">Grado 2 + Maestría</option>
+                <option value="2-doc">Grado 2 + Doctorado</option>
+                <option value="3-mae">Grado 3 + Maestría en Educación</option>
+                <option value="3-doc">Grado 3 + Doctorado en Educación</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="nivel1278" style="font-weight:700; color:var(--gray-800);">Nivel Salarial (Letra)</label>
+              <select id="nivel1278">
+                <option value="">Selecciona...</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Campos 2277 -->
+          <div id="fields-2277" style="display:none; margin-top:20px;">
+            <div class="form-group">
+              <label for="grado2277" style="font-weight:700; color:var(--gray-800);">Categoría Escalafón (Nivel A, B, o 1 al 14)</label>
+              <select id="grado2277">
+                <option value="">Selecciona...</option>
+                <option value="A">Categoría A (Bachiller Pedagógico)</option>
+                <option value="B">Categoría B (Normalista Superior / Tecnólogo)</option>
+                <option value="1">Categoría 1 (Profesional / Licenciado)</option>
+                <option value="2">Categoría 2</option>
+                <option value="3">Categoría 3</option>
+                <option value="4">Categoría 4</option>
+                <option value="5">Categoría 5</option>
+                <option value="6">Categoría 6</option>
+                <option value="7">Categoría 7</option>
+                <option value="8">Categoría 8</option>
+                <option value="9">Categoría 9</option>
+                <option value="10">Categoría 10</option>
+                <option value="11">Categoría 11</option>
+                <option value="12">Categoría 12</option>
+                <option value="13">Categoría 13</option>
+                <option value="14">Categoría 14 (Máxima Categoría)</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="button" id="btnCalcular" class="btn btn--primary" style="width:100%; justify-content:center; margin-top:20px;">Calcular Salario</button>
+        </form>
+      </div>
+
+      <!-- Resultados -->
+      <div class="calculator-result reveal" style="background: rgba(16, 185, 129, 0.05); border: 2px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius-lg); padding: 40px; display: flex; flex-direction: column; justify-content: center; min-height: 350px;">
+        <div id="result-empty" style="color: var(--gray-500); text-align: center;">
+          <i data-lucide="bar-chart-3" style="width:48px; height:48px; opacity:0.5; margin-bottom:16px; display:block; margin-left:auto; margin-right:auto;"></i>
+          <p style="font-weight:500;">Ingresa tus datos para ver la estimación salarial.</p>
+        </div>
+        
+        <div id="result-data" style="display:none; text-align: left;">
+          <h4 style="color:var(--green-600); font-size:1.1rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:16px; text-align:center;">Estimación Salarial Completa (2026)</h4>
+          
+          <div style="background: rgba(255,255,255,0.8); border: 1px solid var(--gray-200); border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-100);">
+              <span style="color: var(--gray-700); font-weight: 500;">Asignación Básica Mensual:</span>
+              <strong id="res-salary" style="font-size: 1.3rem; color: var(--gray-900); font-family: var(--font-heading);">$0</strong>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-100);">
+              <span style="color: var(--gray-700); font-weight: 500; display: inline-flex; align-items: center; gap: 4px;">
+                Nivelación Salarial <small style="background:var(--green-50); color:var(--green-700); padding:2px 6px; border-radius:10px; font-size:0.7rem; font-weight:700;">Decreto 0317 (0.4%)</small>:
+              </span>
+              <strong id="res-bonus-nivel" style="font-size: 1.1rem; color: var(--gray-700); font-family: var(--font-heading);">$0</strong>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 2px dashed var(--gray-200);">
+              <span style="color: var(--gray-900); font-weight: 700;">Total Ingreso Mensual:</span>
+              <strong id="res-total-mensual" style="font-size: 1.6rem; color: var(--green-700); font-family: var(--font-heading);">$0</strong>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--gray-700); font-weight: 500; display: inline-flex; align-items: center; gap: 4px;">
+                Bonificación Pedagógica <small style="background:rgba(59,130,246,0.1); color:#2563eb; padding:2px 6px; border-radius:10px; font-size:0.7rem; font-weight:700;">Anual (35%)</small>:
+              </span>
+              <strong id="res-bonus-pedag" style="font-size: 1.2rem; color: #2563eb; font-family: var(--font-heading);">$0</strong>
+            </div>
+            
+            <p style="font-size: 0.72rem; color: var(--gray-500); margin-top: 12px; line-height: 1.4;">
+              * La Bonificación Pedagógica se paga una vez al año al cumplir un año continuo de servicio activo.
+            </p>
+          </div>
+
+          <div style="background: rgba(0,0,0,0.02); padding: 20px; border-radius: 8px; text-align: left; border-left: 4px solid var(--green-500);">
+            <strong style="color:var(--gray-800); display:block; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="award" style="width:16px; height:16px; color:var(--green-600);"></i> Requisitos para Ascenso y Escalafón:
+            </strong>
+            <p id="res-req" style="font-size: 0.92rem; color: var(--gray-700); line-height: 1.5; margin:0; font-weight:500;"></p>
+          </div>
+          
+          <div style="margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
+            <a href="https://fecode.edu.co/wp-content/uploads/2026/03/DECRETO-No.-0299-DEL-25-DE-MARZO-DE-2026.pdf" target="_blank" class="btn btn--outline-dark" style="font-size:0.8rem; padding:8px 16px; display:inline-flex; align-items:center; gap:6px; border-radius:var(--radius-sm); text-decoration:none;">
+              <i data-lucide="file-text" style="width:14px; height:14px;"></i> Ver Decreto 0299 de 2026 (Incremento)
+            </a>
+            <a href="https://fecode.edu.co/wp-content/uploads/2026/03/DECRETO-No.-0317-DEL-25-DE-MARZO-DE-2026.pdf" target="_blank" class="btn btn--outline-dark" style="font-size:0.8rem; padding:8px 16px; display:inline-flex; align-items:center; gap:6px; border-radius:var(--radius-sm); text-decoration:none;">
+              <i data-lucide="file-text" style="width:14px; height:14px;"></i> Ver Decreto 0317 de 2026 (Nivelación)
+            </a>
+          </div>
+
+          <p style="font-size: 0.75rem; color: var(--gray-500); margin-top: 24px; text-align: justify; line-height: 1.4;">
+            * Valores exactos y oficiales de asignación básica de acuerdo con el <strong>Decreto 0299 del 25 de marzo de 2026</strong>. No incluye primas territoriales, horas extras ni deducciones legales de salud, pensión y fondo del magisterio.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+.calculator-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+@media (max-width: 768px) { .calculator-layout { grid-template-columns: 1fr; } }
+@keyframes popIn { from { opacity:0; transform: scale(0.95); } to { opacity:1; transform: scale(1); } }
+</style>
+
+<script>
+const estatutoSelect = document.getElementById('estatuto');
+const fields1278 = document.getElementById('fields-1278');
+const fields2277 = document.getElementById('fields-2277');
+
+const categoriaSelect1278 = document.getElementById('categoria1278');
+
+estatutoSelect.addEventListener('change', (e) => {
+  const is1278 = e.target.value === '1278';
+  const is2277 = e.target.value === '2277';
+  fields1278.style.display = is1278 ? 'block' : 'none';
+  fields2277.style.display = is2277 ? 'block' : 'none';
+  if (!is1278) {
+    categoriaSelect1278.value = '';
+  }
+});
+
+// Tablas de Salarios (Decreto 0299 del 25 de marzo de 2026)
+const salaryTable1278 = {
+  '1': {
+    'none': { A: 3036203, B: 3870303, C: 4989102, D: 6184872 }
+  },
+  '2': {
+    'none': { A: 3821274, B: 4992967, C: 5831713, D: 6968892 },
+    'esp': { A: 4153464, B: 5306670, C: 6574267, D: 7780202 },
+    'mae': { A: 4394463, B: 5741913, C: 6706468, D: 8014215 },
+    'doc': { A: 4967653, B: 6490858, C: 7581222, D: 9059548 }
+  },
+  '3': {
+    'mae': { A: 6395544, B: 7572568, C: 9365412, D: 10851730 },
+    'doc': { A: 8484182, B: 9959374, C: 12576133, D: 14436985 }
+  }
+};
+
+const salaryTable2277 = {
+  'A': 1800860,
+  'B': 1994953,
+  '1': 2235742,
+  '2': 2317496,
+  '3': 2459305,
+  '4': 2556387,
+  '5': 2717624,
+  '6': 2874688,
+  '7': 3217125,
+  '8': 3533807,
+  '9': 3914723,
+  '10': 4286335,
+  '11': 4894390,
+  '12': 5822164,
+  '13': 6444689,
+  '14': 7339832
+};
+
+document.getElementById('btnCalcular').addEventListener('click', () => {
+  const est = estatutoSelect.value;
+  let salary = 0;
+  let reqs = '';
+
+  if (est === '1278') {
+    const catVal = categoriaSelect1278.value;
+    const nivel = document.getElementById('nivel1278').value;
+    
+    if (!catVal || !nivel) {
+      alert('Por favor selecciona tu Grado/Formación y el Nivel Salarial.');
+      return;
+    }
+    
+    const parts = catVal.split('-');
+    const grado = parts[0];
+    const titulo = parts[1];
+    
+    try {
+      salary = salaryTable1278[grado][titulo][nivel];
+    } catch(e) {
+      alert('Error al calcular el salario con las opciones seleccionadas.');
+      return;
+    }
+
+    reqs = `Para ascender a un grado superior (ej. de Grado 1 a 2, o de 2 a 3) se requiere acreditar el título académico correspondiente (Licenciado/Profesional para Grado 2, Maestría/Doctorado para Grado 3), haber cumplido 3 años de servicio efectivo y aprobar la evaluación de práctica pedagógica y competencias (SDF). Para reubicarse de nivel salarial (dentro del mismo grado, ej. de A a B, B a C, C a D) se requiere cumplir 3 años en el nivel actual y aprobar la evaluación de competencias de ley.`;
+
+  } else if (est === '2277') {
+    const cat = document.getElementById('grado2277').value;
+    if (!cat) {
+      alert('Por favor selecciona tu categoría en el escalafón.');
+      return;
+    }
+    
+    salary = salaryTable2277[cat];
+    
+    if (cat === '14') {
+      reqs = 'Has alcanzado la máxima categoría del escalafón docente del Decreto 2277 de 1979.';
+    } else if (['A', 'B'].includes(cat)) {
+      reqs = 'Para ascender a la Categoría 1 debes acreditar título profesional universitario de Licenciado o profesional con programa de pedagogía, además de cumplir con los tiempos mínimos de servicio requeridos por el estatuto.';
+    } else {
+      reqs = 'Para ascender a la siguiente categoría necesitas cumplir el tiempo mínimo de permanencia exigido en tu categoría actual (normalmente de 2 a 3 años según el nivel) y acumular los créditos de capacitación exigidos dictados o avalados por el Ministerio de Educación / CEID.';
+    }
+  } else {
+    alert('Por favor selecciona un estatuto docente.');
+    return;
+  }
+
+  // Cálculos adicionales
+  const bonusNivel = Math.round(salary * 0.004); // Decreto 0317 de 2026 (0.4% adicional)
+  const totalMensual = salary + bonusNivel;
+  const bonusPedag = Math.round(salary * 0.35); // Bonificación Pedagógica 2026 (35%)
+
+  // Mostrar resultados
+  document.getElementById('result-empty').style.display = 'none';
+  const dataPane = document.getElementById('result-data');
+  dataPane.style.display = 'block';
+  dataPane.style.animation = 'none';
+  setTimeout(() => {
+    dataPane.style.animation = 'popIn 0.4s ease';
+  }, 10);
+
+  const formatCOP = (val) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(val);
+
+  document.getElementById('res-salary').innerText = formatCOP(salary);
+  document.getElementById('res-bonus-nivel').innerText = formatCOP(bonusNivel);
+  document.getElementById('res-total-mensual').innerText = formatCOP(totalMensual);
+  document.getElementById('res-bonus-pedag').innerText = formatCOP(bonusPedag);
+  document.getElementById('res-req').innerText = reqs;
+});
+
+// Re-init reveal
+document.querySelectorAll('.reveal').forEach(el => {
+  new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.12}).observe(el);
+});
+</script>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="container">
+<div class="footer__grid">
+<div class="footer__brand"><a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV" style="height:40px"><div class="header__logo-text" style="color:var(--green-400)">SUTEV Cartago<span style="color:var(--gray-500)">Norte del Valle</span></div></a><p>Sindicato Único de Trabajadores de la Educación del Valle. Subdirectiva Cartago — Filial de FECODE.</p></div>
+<div><div class="footer__title">Navegación</div><ul class="footer__links"><li><a href="index.html#nosotros">Nosotros</a></li><li><a href="index.html#servicios">Servicios</a></li><li><a href="index.html#calendario">Calendario</a></li><li><a href="index.html#noticias">Noticias</a></li><li><a href="index.html#estatutos">Estatutos</a></li></ul></div>
+<div><div class="footer__title">Servicios y Herramientas</div><ul class="footer__links"><li><a href="index.html#reservas">Asesoría Jurídica</a></li><li><a href="index.html#reservas">CEID</a></li><li><a href="index.html#reservas">Bienestar</a></li><li><a href="permisos-docentes.html">Permisos y Licencias de Ley</a></li><li><a href="calculadora-salarial.html">Calculadora Salarial</a></li><li><a href="simulador-pension.html">Simulador de Pensión</a></li><li><a href="derechos-peticion.html">Derechos de Petición</a></li><li><a href="auditor-nomina.html">Auditor de Nómina</a></li></ul></div>
+<div><div class="footer__title">Contacto y Redes</div><ul class="footer__links"><li><a href="index.html#contacto">📍 Casa del Maestro (Cra 4 #16-17)</a></li><li><a href="index.html#contacto">📍 Cartago, Valle del Cauca</a></li><li><a href="https://web.facebook.com/sutevcartago/?locale=es_LA&_rdc=1&_rdr#" target="_blank" style="color: var(--green-400); font-weight: 600;">📘 Facebook Oficial</a></li></ul></div>
+</div>
+<div class="footer__bottom">© 2026 SUTEV Cartago — Subdirectiva Norte del Valle. Todos los derechos reservados.</div>
+</div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+</script>
+</body>
+</html>

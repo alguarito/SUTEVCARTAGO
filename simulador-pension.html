@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de Pensión - SUTEV Cartago</title>
+<meta name="description" content="Simulador Pensional para Docentes de Colombia. Calcula tus tiempos de servicio y requisitos para acceder a la pensión de jubilación del FOMAG (1278 y 2277).">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  .sim-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: start; }
+  @media (max-width: 768px) { .sim-layout { grid-template-columns: 1fr; } }
+  
+  .progress-container { margin-bottom: 24px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; color: var(--gray-700); margin-bottom: 8px; }
+  .progress-bar { width: 100%; height: 12px; background: rgba(0,0,0,0.05); border-radius: 10px; overflow: hidden; position: relative; }
+  .progress-fill { height: 100%; background: var(--green-500); border-radius: 10px; transition: width 1s ease-out; width: 0%; }
+  
+  .status-badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; margin-bottom: 16px; }
+  .status-success { background: rgba(16, 185, 129, 0.1); color: var(--green-600); border: 1px solid rgba(16, 185, 129, 0.2); }
+  .status-warning { background: rgba(245, 158, 11, 0.1); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.2); }
+  
+  .info-card { background: var(--white); border: 1px solid var(--gray-200); padding: 20px; border-radius: var(--radius-md); margin-top: 20px; }
+  .info-card h4 { color: var(--green-700); font-size: 1rem; margin-bottom: 10px; display:flex; align-items:center; gap:8px;}
+  .info-card p { font-size: 0.9rem; color: var(--gray-600); margin: 0; line-height: 1.5; }
+  
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+<div class="container">
+<a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV"><div class="header__logo-text">SUTEV Cartago<span>Norte del Valle</span></div></a>
+<nav><ul class="nav__list" id="navList">
+<li><a href="index.html" class="nav__link">Inicio</a></li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Nosotros <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="index.html#nosotros" class="nav__dropdown-item"><i data-lucide="users" style="width: 14px; height: 14px;"></i> ¿Quiénes Somos?</a></li>
+    <li><a href="index.html#estatutos" class="nav__dropdown-item"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i> Estatutos del Sindicato</a></li>
+    <li><a href="index.html#galeria" class="nav__dropdown-item"><i data-lucide="image" style="width: 14px; height: 14px;"></i> Galería de Fotos</a></li>
+  </ul>
+</li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Servicios <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="index.html#servicios" class="nav__dropdown-item"><i data-lucide="briefcase" style="width: 14px; height: 14px;"></i> Portafolio de Servicios</a></li>
+    <li><a href="permisos-docentes.html" class="nav__dropdown-item"><i data-lucide="scale" style="width: 14px; height: 14px;"></i> Permisos de Ley y Licencias</a></li>
+    <li><a href="calculadora-salarial.html" class="nav__dropdown-item"><i data-lucide="calculator" style="width: 14px; height: 14px;"></i> Calculadora Salarial</a></li>
+    <li><a href="simulador-pension.html" class="nav__dropdown-item"><i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i> Simulador de Pensión</a></li>
+    <li><a href="derechos-peticion.html" class="nav__dropdown-item"><i data-lucide="file-signature" style="width: 14px; height: 14px;"></i> Derechos de Petición</a></li>
+    <li><a href="auditor-nomina.html" class="nav__dropdown-item"><i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> Auditor de Nómina</a></li>
+  </ul>
+</li>
+<li><a href="index.html#calendario" class="nav__link">Calendario</a></li>
+<li><a href="index.html#noticias" class="nav__link">Noticias</a></li>
+<li><a href="index.html#contacto" class="nav__link">Contacto</a></li>
+<li><a href="index.html#afiliacion" class="nav__link nav__link--cta">Afíliate</a></li>
+</ul></nav>
+<button class="nav__toggle" id="navToggle" aria-label="Menú"><span></span><span></span><span></span></button>
+</div>
+</header>
+
+<!-- HERO SECCION -->
+<section class="section section--dark" style="padding-top: 150px; padding-bottom: 50px;">
+  <div class="container">
+    <div class="section__header reveal" style="margin-bottom: 0;">
+      <span class="section__tag">Servicio de Consulta Legal</span>
+      <h2 class="section__title">Simulador de Pensión Magisterio</h2>
+      <p class="section__desc">Ingresa tus fechas para realizar un análisis de tus requisitos pensionales bajo los Decretos 2277 y 1278 con el FOMAG.</p>
+    </div>
+  </div>
+</section>
+
+<!-- APP SIMULADOR -->
+<section class="section" style="padding-top: 50px; background-color: var(--gray-50);">
+  <div class="container">
+    <div class="sim-layout">
+      
+      <!-- Panel de Formulario -->
+      <div class="form-card reveal">
+        <h3 class="form-card__title" style="display:flex;align-items:center;gap:8px;"><i data-lucide="calendar-clock"></i> Datos del Docente</h3>
+        <p style="font-size:0.85rem; color:var(--gray-500); margin-bottom:20px;">Ingresa tus fechas con la mayor precisión posible. Este sistema no requiere que especifiques tu estatuto, el sistema lo calculará según tu fecha de vinculación.</p>
+        
+        <form id="simForm">
+          <div class="form-group">
+            <label for="fechaNacimiento" style="font-weight:700; color:var(--gray-800);">Fecha de Nacimiento</label>
+            <input type="date" id="fechaNacimiento" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="fechaVinculacion" style="font-weight:700; color:var(--gray-800);">Fecha de Vinculación Oficial (Posesión)</label>
+            <input type="date" id="fechaVinculacion" required>
+            <div style="font-size: 0.75rem; color: var(--gray-500); margin-top: 6px;">Fecha en la que ingresaste oficialmente al Magisterio Público.</div>
+          </div>
+          
+          <!-- Opcional: Tiempos no laborados -->
+          <div class="form-group">
+            <label for="diasNoLaborados" style="font-weight:700; color:var(--gray-800);">Días NO laborados (Licencias no remuneradas, etc.)</label>
+            <input type="number" id="diasNoLaborados" placeholder="0" min="0">
+            <div style="font-size: 0.75rem; color: var(--gray-500); margin-top: 6px;">Déjalo en blanco o en 0 si has trabajado de corrido.</div>
+          </div>
+
+          <button type="button" id="btnSimular" class="btn btn--primary" style="width:100%; justify-content:center; margin-top:10px;">Generar Análisis Pensional</button>
+        </form>
+      </div>
+
+      <!-- Panel de Resultados -->
+      <div class="form-card reveal" style="background:var(--white);">
+        
+        <div id="result-empty" style="text-align:center; padding: 40px 20px; color: var(--gray-400);">
+          <i data-lucide="shield-check" style="width:64px; height:64px; opacity:0.3; margin-bottom:16px;"></i>
+          <h3 style="color:var(--gray-500); font-size:1.2rem;">Tu Análisis Aparecerá Aquí</h3>
+          <p style="font-size:0.9rem;">Calcularemos con exactitud tu edad actual, tiempo de servicio y fechas de cumplimiento de requisitos de Ley.</p>
+        </div>
+        
+        <div id="result-data" style="display:none; animation: fadeUp 0.5s ease;">
+          <div id="statusBadge" class="status-badge status-warning">Analizando...</div>
+          
+          <h3 style="font-size: 1.8rem; color: var(--gray-900); margin-bottom: 5px; font-weight:800;" id="res-estatuto">Estatuto 0000</h3>
+          <p style="font-size: 0.95rem; color: var(--gray-600); margin-bottom: 24px; border-bottom: 1px solid var(--gray-200); padding-bottom: 20px;" id="res-summary">Resumen del régimen aplicado.</p>
+          
+          <!-- Progreso Edad -->
+          <div class="progress-container">
+            <div class="progress-label">
+              <span>Edad Requerida: <span id="lbl-edad-req">55</span> años</span>
+              <span id="lbl-edad-act" style="color:var(--green-600);">0 años</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="bar-edad"></div>
+            </div>
+          </div>
+          
+          <!-- Progreso Tiempo -->
+          <div class="progress-container">
+            <div class="progress-label">
+              <span>Tiempo de Servicio: <span id="lbl-tiempo-req">20</span> años</span>
+              <span id="lbl-tiempo-act" style="color:var(--green-600);">0 años</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="bar-tiempo"></div>
+            </div>
+          </div>
+
+          <!-- Fechas Clave -->
+          <div style="background: rgba(0,0,0,0.02); border-radius: 8px; padding: 20px; margin-top: 30px;">
+            <h4 style="font-size:0.9rem; text-transform:uppercase; color:var(--gray-500); letter-spacing:1px; margin-bottom:12px;">Fechas Proyectadas</h4>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+              <div>
+                <div style="font-size:0.8rem; color:var(--gray-600);">Fecha Cumplimiento Edad</div>
+                <div style="font-weight:700; color:var(--gray-900);" id="date-edad">--</div>
+              </div>
+              <div>
+                <div style="font-size:0.8rem; color:var(--gray-600);">Fecha Cumplimiento Tiempo</div>
+                <div style="font-weight:700; color:var(--gray-900);" id="date-tiempo">--</div>
+              </div>
+            </div>
+            <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--gray-200);">
+              <div style="font-size:0.8rem; color:var(--gray-600);">Fecha Estimada de Pensión (Se cumplen ambos)</div>
+              <div style="font-size:1.2rem; font-weight:800; color:var(--green-600);" id="date-pension">--</div>
+            </div>
+          </div>
+
+          <!-- Advertencia Legal -->
+          <div class="info-card">
+            <h4><i data-lucide="scale"></i> Marco Jurídico</h4>
+            <p id="res-legal-text">La información detallada sobre la pensión.</p>
+          </div>
+          
+          <p style="font-size: 0.7rem; color: var(--gray-400); margin-top: 24px; text-align:justify;">* IMPORTANTE: Esta es una simulación basada en algoritmos genéricos y la normatividad general. El cálculo final oficial y vinculante lo realiza única y exclusivamente la Fiduprevisora / FOMAG mediante acto administrativo. Asesórate con nuestra Secretaría de Asuntos Laborales y Jurídicos de SUTEV para trámites reales.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="container">
+<div class="footer__grid">
+<div class="footer__brand"><a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV" style="height:40px"><div class="header__logo-text" style="color:var(--green-400)">SUTEV Cartago<span style="color:var(--gray-500)">Norte del Valle</span></div></a><p>Sindicato Único de Trabajadores de la Educación del Valle. Subdirectiva Cartago — Filial de FECODE.</p></div>
+<div><div class="footer__title">Navegación</div><ul class="footer__links"><li><a href="index.html#nosotros">Nosotros</a></li><li><a href="index.html#servicios">Servicios</a></li><li><a href="index.html#calendario">Calendario</a></li><li><a href="index.html#noticias">Noticias</a></li><li><a href="index.html#estatutos">Estatutos</a></li></ul></div>
+<div><div class="footer__title">Servicios y Herramientas</div><ul class="footer__links"><li><a href="index.html#reservas">Asesoría Jurídica</a></li><li><a href="index.html#reservas">CEID</a></li><li><a href="index.html#reservas">Bienestar</a></li><li><a href="permisos-docentes.html">Permisos y Licencias de Ley</a></li><li><a href="calculadora-salarial.html">Calculadora Salarial</a></li><li><a href="simulador-pension.html">Simulador de Pensión</a></li><li><a href="derechos-peticion.html">Derechos de Petición</a></li><li><a href="auditor-nomina.html">Auditor de Nómina</a></li></ul></div>
+</div>
+<div class="footer__bottom">© 2026 SUTEV Cartago — Subdirectiva Norte del Valle. Todos los derechos reservados.</div>
+</div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+
+  document.getElementById('btnSimular').addEventListener('click', () => {
+    const dNac = new Date(document.getElementById('fechaNacimiento').value);
+    const dVin = new Date(document.getElementById('fechaVinculacion').value);
+    const dNoLab = parseInt(document.getElementById('diasNoLaborados').value) || 0;
+
+    if(isNaN(dNac.getTime()) || isNaN(dVin.getTime())) {
+      alert("Por favor ingresa ambas fechas correctamente.");
+      return;
+    }
+
+    const today = new Date();
+    
+    // Validaciones lógicas básicas
+    if (dNac >= today) return alert("La fecha de nacimiento no puede ser futura.");
+    if (dVin >= today) return alert("La fecha de vinculación no puede ser futura.");
+    if (dVin <= dNac) return alert("La fecha de vinculación debe ser posterior a tu nacimiento.");
+
+    // Corte del decreto 2277 y 1278 (26 de junio de 2003)
+    // El 27 de junio ya es 1278.
+    const corte1278 = new Date('2003-06-26T23:59:59');
+    
+    const is2277 = dVin <= corte1278;
+    
+    // Requisitos
+    const reqEdad = is2277 ? 55 : 57;
+    const reqTiempoAnios = is2277 ? 20 : 25; // Asumimos 25 años para 1278 (1300 semanas) y 20 para 2277.
+
+    // Cálculos de Edad Actual
+    let diffEdadMilis = today - dNac;
+    let edadAniosAct = diffEdadMilis / (1000 * 60 * 60 * 24 * 365.25);
+    
+    // Cálculo de Tiempo de Servicio Actual (restando días no laborados)
+    let diffTiempoMilis = today - dVin;
+    let diasTrabajados = (diffTiempoMilis / (1000 * 60 * 60 * 24)) - dNoLab;
+    let tiempoAniosAct = diasTrabajados / 365.25;
+    
+    if (tiempoAniosAct < 0) tiempoAniosAct = 0;
+
+    // Calcular Fechas Proyectadas
+    let fCumpleEdad = new Date(dNac);
+    fCumpleEdad.setFullYear(fCumpleEdad.getFullYear() + reqEdad);
+    
+    // Para fecha de tiempo, sumamos reqTiempoAnios a la fecha de vinculación + días no laborados
+    let fCumpleTiempo = new Date(dVin);
+    fCumpleTiempo.setFullYear(fCumpleTiempo.getFullYear() + reqTiempoAnios);
+    fCumpleTiempo.setDate(fCumpleTiempo.getDate() + dNoLab);
+
+    let fPension = new Date(Math.max(fCumpleEdad.getTime(), fCumpleTiempo.getTime()));
+
+    // Progreso
+    let porcEdad = Math.min((edadAniosAct / reqEdad) * 100, 100);
+    let porcTiempo = Math.min((tiempoAniosAct / reqTiempoAnios) * 100, 100);
+
+    // Formatear resultados
+    document.getElementById('result-empty').style.display = 'none';
+    document.getElementById('result-data').style.display = 'block';
+    
+    // Inyectar datos
+    document.getElementById('res-estatuto').innerText = is2277 ? "Docente Decreto 2277" : "Docente Decreto 1278";
+    document.getElementById('res-summary').innerText = is2277 
+      ? "Al estar vinculado antes del 27 de junio de 2003, te aplica la pensión de jubilación del régimen anterior a la Ley 812."
+      : "Al estar vinculado posterior al 26 de junio de 2003, tu régimen asimila las reglas de Prima Media (Ley 100).";
+
+    document.getElementById('lbl-edad-req').innerText = reqEdad;
+    document.getElementById('lbl-edad-act').innerText = edadAniosAct.toFixed(1) + " años";
+    document.getElementById('lbl-tiempo-req').innerText = reqTiempoAnios;
+    document.getElementById('lbl-tiempo-act').innerText = tiempoAniosAct.toFixed(1) + " años";
+
+    setTimeout(() => {
+      document.getElementById('bar-edad').style.width = porcEdad + '%';
+      document.getElementById('bar-tiempo').style.width = porcTiempo + '%';
+    }, 100);
+
+    const formatDate = (d) => d.toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
+    
+    document.getElementById('date-edad').innerText = formatDate(fCumpleEdad);
+    document.getElementById('date-tiempo').innerText = formatDate(fCumpleTiempo);
+    
+    const cumpleTodo = (edadAniosAct >= reqEdad) && (tiempoAniosAct >= reqTiempoAnios);
+    const statusBadge = document.getElementById('statusBadge');
+    
+    if (cumpleTodo) {
+      statusBadge.className = 'status-badge status-success';
+      statusBadge.innerText = '¡Cumples los requisitos pensionales!';
+      document.getElementById('date-pension').innerText = "Ya cumplidos (" + formatDate(fPension) + ")";
+    } else {
+      statusBadge.className = 'status-badge status-warning';
+      statusBadge.innerText = 'Aún no cumples requisitos';
+      document.getElementById('date-pension').innerText = formatDate(fPension);
+    }
+
+    // Texto Legal
+    const tLegal = is2277 
+      ? "En el régimen 2277, tu pensión equivaldrá al 75% del promedio del salario devengado durante el último año de servicio. Además, tienes derecho a compatibilidad salarial: puedes pensionarte y seguir trabajando y recibiendo salario hasta tu edad de retiro forzoso (70 años)."
+      : "En el régimen 1278, tu pensión se liquida sobre el promedio salarial de los últimos 10 años (aprox. 65% base). Existe incompatibilidad con el salario, por lo que para gozar de la pensión deberás renunciar a tu plaza. Edad de retiro forzoso: 70 años.";
+    
+    document.getElementById('res-legal-text').innerText = tLegal;
+
+  });
+</script>
+</body>
+</html>

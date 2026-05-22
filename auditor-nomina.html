@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auditor de Nómina y Horas Extras - SUTEV Cartago</title>
+<meta name="description" content="Auditoría de desprendibles de pago y liquidación de horas extras para docentes del Magisterio bajo decretos salariales de 2026. Genera reclamaciones jurídicas automáticas ante diferencias salariales.">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  /* ==========================================
+     ESTILOS PREMIUM PARA EL AUDITOR DE NÓMINA
+     ========================================== */
+  
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(20, 122, 53, 0.15);
+    --danger-red: #ef4444;
+    --danger-bg: rgba(239, 68, 68, 0.08);
+    --warning-orange: #f59e0b;
+    --warning-bg: rgba(245, 158, 11, 0.08);
+    --success-green: #10b981;
+    --success-bg: rgba(16, 185, 129, 0.08);
+  }
+
+  .auditor-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
+    gap: 35px;
+    align-items: start;
+    margin-bottom: 60px;
+  }
+
+  @media (max-width: 992px) {
+    .auditor-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Formulario a la izquierda */
+  .auditor-column-form {
+    min-width: 0;
+  }
+
+  .form-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 35px;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .form-card__title {
+    font-size: 1.4rem;
+    color: var(--green-900);
+    font-weight: 800;
+    margin-bottom: 24px;
+    border-bottom: 1.5px solid var(--green-100);
+    padding-bottom: 12px;
+  }
+
+  .form-section-title {
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--green-800);
+    font-weight: 800;
+    margin: 28px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px dashed var(--gray-200);
+    padding-bottom: 8px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 8px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    transition: var(--transition);
+    background: var(--white);
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--green-600);
+    box-shadow: 0 0 0 4px rgba(27, 140, 61, 0.12);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 576px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Checkbox Estilo */
+  .checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    padding: 12px;
+    background: var(--green-50);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--green-100);
+  }
+
+  .checkbox-group input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--green-700);
+    cursor: pointer;
+  }
+
+  .checkbox-group label {
+    margin: 0;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--green-900);
+    font-size: 0.88rem;
+  }
+
+  /* Columna de Resultados a la derecha */
+  .auditor-column-dashboard {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .dashboard-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 35px;
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Comparador Visual */
+  .comparison-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .comparison-visualizer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 30px;
+    background: var(--gray-50);
+    padding: 24px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+  }
+
+  .bar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--gray-800);
+  }
+
+  .bar-outer {
+    width: 100%;
+    height: 24px;
+    background: var(--gray-200);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+  }
+
+  .bar-inner {
+    height: 100%;
+    border-radius: 12px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .bar-inner--paid {
+    background: linear-gradient(90deg, var(--warning-orange), #ea580c);
+  }
+
+  .bar-inner--legal {
+    background: linear-gradient(90deg, var(--green-500), var(--green-700));
+  }
+
+  /* Alertas Gremiales */
+  .union-alert {
+    padding: 20px;
+    border-radius: var(--radius-md);
+    margin-bottom: 24px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .union-alert--danger {
+    background: var(--danger-bg);
+    border: 1.5px solid rgba(239, 68, 68, 0.2);
+    color: #b91c1c;
+  }
+
+  .union-alert--success {
+    background: var(--success-bg);
+    border: 1.5px solid rgba(16, 185, 129, 0.2);
+    color: var(--green-800);
+  }
+
+  .union-alert__icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .union-alert__title {
+    font-weight: 800;
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+  }
+
+  .union-alert__desc {
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  /* Tabla de Desglose Financiero */
+  .breakdown-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  .breakdown-table th {
+    background: var(--green-900);
+    color: var(--white);
+    text-align: left;
+    padding: 12px 16px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .breakdown-table th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+  .breakdown-table th:last-child { border-radius: 0 var(--radius-sm) 0 0; }
+
+  .breakdown-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--gray-200);
+    font-size: 0.9rem;
+    color: var(--gray-800);
+  }
+
+  .breakdown-table tr:hover td {
+    background: var(--gray-50);
+  }
+
+  .breakdown-table tr.total-row td {
+    font-weight: 800;
+    background: var(--green-50);
+    border-top: 2px solid var(--green-600);
+    border-bottom: 2px solid var(--green-600);
+    color: var(--green-900);
+  }
+
+  .breakdown-table tr.deduction-row td {
+    color: #b91c1c;
+  }
+
+  .breakdown-table tr.net-row td {
+    font-weight: 950;
+    background: rgba(16, 185, 129, 0.08);
+    border-top: 2px solid var(--success-green);
+    border-bottom: 3px double var(--success-green);
+    color: var(--green-900);
+    font-size: 1.05rem;
+  }
+
+  /* Hoja Virtual A4 para Petición */
+  .workstation-column-preview {
+    min-width: 0;
+  }
+
+  .preview-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--green-900);
+    color: var(--white);
+    padding: 14px 24px;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .toolbar-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-action {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: var(--white);
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-action:hover {
+    background: var(--white);
+    color: var(--green-900);
+    transform: translateY(-1px);
+  }
+
+  .paper-page {
+    background: var(--white);
+    padding: 50px;
+    box-shadow: var(--shadow-xl);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    border-top: 5px solid var(--green-700);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.88rem;
+    color: #111;
+    line-height: 1.6;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-height: 297mm; /* Proporción A4 */
+    position: relative;
+    overflow-wrap: break-word;
+  }
+
+  .paper-header {
+    border-bottom: 2px solid #333;
+    padding-bottom: 12px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .paper-header__sindical {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--green-800);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .paper-header__sindical span {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--gray-600);
+    font-weight: 500;
+  }
+
+  .paper-body {
+    white-space: pre-wrap;
+    text-align: justify;
+  }
+
+  /* Animación */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* CSS específico para impresión física */
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    #printable-paper-area, #printable-paper-area * {
+      visibility: visible;
+    }
+    #printable-paper-area {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      box-shadow: none;
+      padding: 0;
+      border: none;
+      font-size: 11pt !important;
+      line-height: 1.5 !important;
+    }
+    .preview-toolbar, .header, .footer, .auditor-column-form, .dashboard-card, .section--dark {
+      display: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+<div class="container">
+<a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV"><div class="header__logo-text">SUTEV Cartago<span>Norte del Valle</span></div></a>
+<nav><ul class="nav__list" id="navList">
+<li><a href="index.html" class="nav__link">Inicio</a></li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Nosotros <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="index.html#nosotros" class="nav__dropdown-item"><i data-lucide="users" style="width: 14px; height: 14px;"></i> ¿Quiénes Somos?</a></li>
+    <li><a href="index.html#estatutos" class="nav__dropdown-item"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i> Estatutos del Sindicato</a></li>
+    <li><a href="index.html#galeria" class="nav__dropdown-item"><i data-lucide="image" style="width: 14px; height: 14px;"></i> Galería de Fotos</a></li>
+  </ul>
+</li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Servicios <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="index.html#servicios" class="nav__dropdown-item"><i data-lucide="briefcase" style="width: 14px; height: 14px;"></i> Portafolio de Servicios</a></li>
+    <li><a href="permisos-docentes.html" class="nav__dropdown-item"><i data-lucide="scale" style="width: 14px; height: 14px;"></i> Permisos de Ley y Licencias</a></li>
+    <li><a href="calculadora-salarial.html" class="nav__dropdown-item"><i data-lucide="calculator" style="width: 14px; height: 14px;"></i> Calculadora Salarial</a></li>
+    <li><a href="simulador-pension.html" class="nav__dropdown-item"><i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i> Simulador de Pensión</a></li>
+    <li><a href="derechos-peticion.html" class="nav__dropdown-item"><i data-lucide="file-signature" style="width: 14px; height: 14px;"></i> Derechos de Petición</a></li>
+  </ul>
+</li>
+<li><a href="index.html#calendario" class="nav__link">Calendario</a></li>
+<li><a href="index.html#noticias" class="nav__link">Noticias</a></li>
+<li><a href="index.html#contacto" class="nav__link">Contacto</a></li>
+<li><a href="index.html#afiliacion" class="nav__link nav__link--cta">Afíliate</a></li>
+</ul></nav>
+<button class="nav__toggle" id="navToggle" aria-label="Menú"><span></span><span></span><span></span></button>
+</div>
+</header>
+
+<!-- HERO SECCION -->
+<section class="section section--dark" style="padding-top: 140px; padding-bottom: 50px;">
+  <div class="container">
+    <div class="section__header reveal" style="margin-bottom: 0;">
+      <span class="section__tag">Auditoría Financiera y Defensa Laboral</span>
+      <h1 class="section__title" style="color:var(--white);">Auditor de Nómina y Horas Extras</h1>
+      <p class="section__desc">Compara tu desprendible de pago mensual con la asignación básica y horas extras ordenadas por los Decretos Oficiales de 2026. Identifica deudas a tu favor y genera tu reclamación formal al instante.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN CONTENEDORA PRINCIPAL -->
+<section class="section" style="padding-top: 50px; background-color: var(--gray-50);">
+  <div class="container">
+    
+    <!-- Alerta Informativa Inicial -->
+    <div class="helper-alert reveal" style="margin-bottom: 30px;">
+      <i data-lucide="info" style="width: 22px; height: 22px; color: var(--green-700);"></i>
+      <div>
+        <strong>¿Cómo auditar tu salario?</strong> Completa tus datos de escalafón y las horas extras del mes en el panel izquierdo. Introduce el valor neto que la Secretaría de Educación te pagó en tu desprendible de pago. El auditor calculará el valor legal exacto del Decreto 0299 y 0317 de 2026 y te indicará si existe algún déficit por reclamar.
+      </div>
+    </div>
+
+    <!-- LAYOUT PRINCIPAL -->
+    <div class="auditor-layout">
+      
+      <!-- COLUMNA IZQUIERDA: FORMULARIO -->
+      <div class="auditor-column-form reveal">
+        <div class="form-card">
+          <h3 class="form-card__title"><i data-lucide="clipboard-list" style="vertical-align: middle; margin-right: 8px;"></i> Formulario de Auditoría</h3>
+          
+          <form id="auditorForm">
+            
+            <!-- ACORDEÓN: DATOS DE PERFIL UNIFICADOS -->
+            <div style="background: rgba(0,0,0,0.02); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 24px;">
+              <strong style="color: var(--green-900); font-size: 0.92rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="toggleProfileSection()">
+                <span><i data-lucide="user" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i> Datos de Perfil (Guardados Localmente)</span>
+                <i data-lucide="chevron-down" id="profile-chevron" style="width: 16px; height: 16px; transition: var(--transition);"></i>
+              </strong>
+              
+              <div id="profile-fields-container" style="margin-top: 15px; display: none;">
+                <div class="form-group">
+                  <label for="aud-nombre">Nombre Completo del Docente</label>
+                  <input type="text" id="aud-nombre" placeholder="Ej: María José Restrepo">
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="aud-cedula">Cédula de Ciudadanía</label>
+                    <input type="text" id="aud-cedula" placeholder="Ej: 1112456789">
+                  </div>
+                  <div class="form-group">
+                    <label for="aud-celular">Celular de Contacto</label>
+                    <input type="text" id="aud-celular" placeholder="Ej: 3157894512">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="aud-ie">Institución Educativa (Sede)</label>
+                  <input type="text" id="aud-ie" placeholder="Ej: I.E. Académico - Sede Principal">
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="aud-jornada">Jornada Laboral</label>
+                    <select id="aud-jornada">
+                      <option value="Única">Única</option>
+                      <option value="Mañana">Mañana</option>
+                      <option value="Tarde">Tarde</option>
+                      <option value="Nocturna">Nocturna</option>
+                      <option value="Completa">Completa</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="aud-ente">Ente Territorial Destinatario</label>
+                    <select id="aud-ente">
+                      <option value="Secretaría de Educación Municipal de Cartago">Cartago (Secretaría Municipal)</option>
+                      <option value="Secretaría de Educación Departamental del Valle del Cauca">Valle del Cauca (Secretaría Departamental)</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="aud-direccion">Dirección Física de Notificación</label>
+                    <input type="text" id="aud-direccion" placeholder="Ej: Calle 16 # 4-15 B/ El Centro">
+                  </div>
+                  <div class="form-group">
+                    <label for="aud-email">Correo Electrónico</label>
+                    <input type="email" id="aud-email" placeholder="Ej: maria.docente@gmail.com">
+                  </div>
+                </div>
+                <button type="button" class="btn btn--outline-dark" style="padding: 8px 16px; font-size: 0.8rem; border-radius: var(--radius-sm);" onclick="saveProfileDirect()">
+                  <i data-lucide="save" style="width: 14px; height: 14px;"></i> Guardar Cambios de Perfil
+                </button>
+              </div>
+            </div>
+
+            <!-- SECCIÓN: DATOS DE NOMINA -->
+            <span class="form-section-title"><i data-lucide="calculator" style="width: 16px; height: 16px;"></i> Escalafón y Régimen Docente</span>
+            
+            <div class="form-group">
+              <label for="aud-estatuto">Estatuto Docente</label>
+              <select id="aud-estatuto" required>
+                <option value="">Selecciona tu Estatuto...</option>
+                <option value="1278">Decreto 1278 (Nuevo Estatuto - Grados 1, 2, 3)</option>
+                <option value="2277">Decreto 2277 (Antiguo Estatuto - Categorías A, B, 1 al 14)</option>
+              </select>
+            </div>
+
+            <!-- Campos 1278 -->
+            <div id="aud-fields-1278" style="display:none; animation: fadeIn 0.3s ease;">
+              <div class="form-group">
+                <label for="aud-categoria1278">Grado Escalafón y Formación (Posgrado)</label>
+                <select id="aud-categoria1278">
+                  <option value="">Selecciona...</option>
+                  <option value="1-none">Grado 1 (Normalista Superior / Tecnólogo en Educación)</option>
+                  <option value="2-none">Grado 2 (Licenciado / Profesional Universitario Sin Posgrado)</option>
+                  <option value="2-esp">Grado 2 + Especialización</option>
+                  <option value="2-mae">Grado 2 + Maestría</option>
+                  <option value="2-doc">Grado 2 + Doctorado</option>
+                  <option value="3-mae">Grado 3 + Maestría en Educación</option>
+                  <option value="3-doc">Grado 3 + Doctorado en Educación</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="aud-nivel1278">Nivel Salarial (Letra)</label>
+                <select id="aud-nivel1278">
+                  <option value="">Selecciona...</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                  <option value="D">D</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Campos 2277 -->
+            <div id="aud-fields-2277" style="display:none; animation: fadeIn 0.3s ease;">
+              <div class="form-group">
+                <label for="aud-grado2277">Categoría en el Escalafón (A, B, o 1 al 14)</label>
+                <select id="aud-grado2277">
+                  <option value="">Selecciona...</option>
+                  <option value="A">Categoría A (Bachiller Pedagógico)</option>
+                  <option value="B">Categoría B (Normalista Superior / Tecnólogo)</option>
+                  <option value="1">Categoría 1 (Licenciado / Profesional)</option>
+                  <option value="2">Categoría 2</option>
+                  <option value="3">Categoría 3</option>
+                  <option value="4">Categoría 4</option>
+                  <option value="5">Categoría 5</option>
+                  <option value="6">Categoría 6</option>
+                  <option value="7">Categoría 7</option>
+                  <option value="8">Categoría 8</option>
+                  <option value="9">Categoría 9</option>
+                  <option value="10">Categoría 10</option>
+                  <option value="11">Categoría 11</option>
+                  <option value="12">Categoría 12</option>
+                  <option value="13">Categoría 13</option>
+                  <option value="14">Categoría 14 (Máxima Categoría)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="checkbox-group">
+              <input type="checkbox" id="aud-difícil">
+              <label for="aud-difícil">¿Trabajas en Institución Rural o Zona de Difícil Acceso? (+15% Dec. 521/2010)</label>
+            </div>
+
+            <!-- SECCIÓN: HORAS EXTRAS Y VALOR RECIBIDO -->
+            <span class="form-section-title"><i data-lucide="clock" style="width: 16px; height: 16px;"></i> Horas Extras y Pago Efectivo</span>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="aud-horas-diurnas">Horas Extras Diurnas al Mes</label>
+                <input type="number" id="aud-horas-diurnas" min="0" max="100" value="0" placeholder="Ej: 8">
+              </div>
+              <div class="form-group">
+                <label for="aud-horas-nocturnas">Horas Extras Nocturnas al Mes</label>
+                <input type="number" id="aud-horas-nocturnas" min="0" max="100" value="0" placeholder="Ej: 0">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="aud-pagado" style="color: #c2410c;">Neto Recibido en tu Desprendible de Pago ($)</label>
+              <div style="position: relative;">
+                <span style="position: absolute; left: 14px; top: 12px; font-weight: bold; color: var(--gray-600);">$</span>
+                <input type="number" id="aud-pagado" min="0" placeholder="Ej: 3450000" style="padding-left: 28px; font-weight: 700; border-color: var(--warning-orange);" required>
+              </div>
+              <span style="font-size: 0.72rem; color: var(--gray-500); display: block; margin-top: 4px;">Introduce el valor neto final que fue transferido a tu cuenta bancaria para este período mensual.</span>
+            </div>
+
+            <button type="button" id="btnAuditar" class="btn btn--primary" style="width:100%; justify-content:center; margin-top:20px; font-size:1.05rem; padding:16px;">
+              <i data-lucide="shield-alert" style="width: 20px; height: 20px;"></i> Realizar Auditoría de Nómina
+            </button>
+            
+          </form>
+        </div>
+      </div>
+
+      <!-- COLUMNA DERECHA: DASHBOARD Y HOJA VIRTUAL -->
+      <div class="auditor-column-dashboard">
+        
+        <!-- DASHBOARD INICIAL / DE RESULTADOS -->
+        <div class="dashboard-card reveal">
+          
+          <div id="db-empty" style="color: var(--gray-500); text-align: center; padding: 40px 0;">
+            <i data-lucide="bar-chart-3" style="width:64px; height:64px; opacity:0.3; margin-bottom:20px; display:block; margin-left:auto; margin-right:auto; color: var(--green-700);"></i>
+            <h4 style="font-weight:700; color: var(--gray-800); margin-bottom:8px; font-size:1.15rem;">Esperando Datos de Nómina</h4>
+            <p style="font-size:0.9rem; max-width:400px; margin:0 auto;">Introduce tu desprendible y datos de escalafón a la izquierda para iniciar el análisis automático.</p>
+          </div>
+
+          <div id="db-results" style="display: none; animation: fadeIn 0.4s ease;">
+            
+            <div class="comparison-header">
+              <h4 style="color: var(--green-900); font-size: 1.3rem; font-weight: 800; font-family: var(--font-heading); margin-bottom: 6px;">Resultado del Contraste Legal (2026)</h4>
+              <p style="font-size:0.88rem; color: var(--gray-600);">Auditoría matemática contrastando los Decretos 0299 y 0317 de 2026 frente a tu pago efectivo.</p>
+            </div>
+
+            <!-- COMPARADOR GRÁFICO -->
+            <div class="comparison-visualizer">
+              <div class="bar-container">
+                <div class="bar-label">
+                  <span>Lo que te pagó la Entidad Territorial (Neto):</span>
+                  <span id="label-val-paid" style="color: var(--warning-orange); font-weight: bold;">$0</span>
+                </div>
+                <div class="bar-outer">
+                  <div class="bar-inner bar-inner--paid" id="bar-paid" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <div class="bar-container" style="margin-top: 10px;">
+                <div class="bar-label">
+                  <span>Lo que la Ley ordena (Neto Mínimo Obligatorio):</span>
+                  <span id="label-val-legal" style="color: var(--green-700); font-weight: bold;">$0</span>
+                </div>
+                <div class="bar-outer">
+                  <div class="bar-inner bar-inner--legal" id="bar-legal" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ALERTA GREMIAL REACTIVA -->
+            <div id="union-alert-box" class="union-alert union-alert--danger">
+              <div class="union-alert__icon" id="union-alert-icon-container">
+                <i data-lucide="alert-triangle" style="width: 28px; height: 28px;"></i>
+              </div>
+              <div>
+                <div class="union-alert__title" id="union-alert-title-text">Diferencia Salarial Detectada</div>
+                <div class="union-alert__desc" id="union-alert-desc-text">Se ha detectado un déficit en tu liquidación mensual. Tienes derecho a reclamar la suma pendiente mediante Derecho de Petición.</div>
+              </div>
+            </div>
+
+            <!-- TABLA DE DESGLOSE FINANCIERO -->
+            <h4 style="color: var(--green-900); font-size: 1.05rem; font-weight: 800; font-family: var(--font-heading); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="file-spreadsheet" style="color: var(--green-700); width: 18px; height: 18px;"></i> Desglose Detallado de Rubros
+            </h4>
+            
+            <table class="breakdown-table">
+              <thead>
+                <tr>
+                  <th>Concepto Remunerativo</th>
+                  <th style="text-align: right;">Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Asignación Básica Mensual <small>(Decreto 0299)</small></td>
+                  <td id="td-base" style="text-align: right; font-weight: 600;">$0</td>
+                </tr>
+                <tr>
+                  <td>Nivelación Salarial Especial <small>(Decreto 0317 - 0.4%)</small></td>
+                  <td id="td-nivel" style="text-align: right; font-weight: 600;">$0</td>
+                </tr>
+                <tr>
+                  <td>Bonificación Zona de Difícil Acceso <small>(Decreto 521 - 15%)</small></td>
+                  <td id="td-difícil" style="text-align: right; font-weight: 600;">$0</td>
+                </tr>
+                <tr>
+                  <td>Liquidación de Horas Extras Mensuales (<span id="td-horas-cant">0</span> hs)</td>
+                  <td id="td-horas-val" style="text-align: right; font-weight: 600;">$0</td>
+                </tr>
+                <tr class="total-row">
+                  <td>Total Devengado Mensual Legal</td>
+                  <td id="td-total-devengado" style="text-align: right; font-weight: 800;">$0</td>
+                </tr>
+                <tr class="deduction-row">
+                  <td>Deducción: Salud FOMAG <small>(4%)</small></td>
+                  <td id="td-ded-salud" style="text-align: right;">-$0</td>
+                </tr>
+                <tr class="deduction-row">
+                  <td>Deducción: Pensión Especial Magisterio <small>(8%)</small></td>
+                  <td id="td-ded-pension" style="text-align: right;">-$0</td>
+                </tr>
+                <tr class="deduction-row">
+                  <td>Deducción: Cuota Gremial SUTEV <small>(1%)</small></td>
+                  <td id="td-ded-sindicato" style="text-align: right;">-$0</td>
+                </tr>
+                <tr class="net-row">
+                  <td>Neto Legal que debiste recibir</td>
+                  <td id="td-neto-legal" style="text-align: right;">$0</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="margin-top: 24px; text-align: justify; font-size: 0.75rem; color: var(--gray-500); line-height: 1.4;">
+              * Valores liquidados con absoluta precisión fiscal de acuerdo con las normativas expedidas por el Gobierno Nacional de Colombia el 25 de marzo de 2026. Este desglose tiene valor de auditoría interna gremial pero no sustituye al desprendible oficial expedido por el sistema Humano.
+            </div>
+
+            <!-- BOTÓN DE ENTRADA A ACCIÓN -->
+            <div id="btn-reclamar-container" style="margin-top: 30px; display: none; text-align: center;">
+              <a href="#workstation-column-preview-section" class="btn btn--primary" style="justify-content: center; font-size: 1rem; padding: 16px 36px; box-shadow: var(--shadow-md);">
+                <i data-lucide="file-signature" style="width: 20px; height: 20px;"></i> Redactar Derecho de Petición Automático
+              </a>
+            </div>
+            
+          </div>
+        </div>
+
+        <!-- WORKSTATION PREVIEW DE LA HOJA VIRTUAL A4 (SOLO VISIBLE CUANDO DEBE RECLAMARSE) -->
+        <div class="workstation-column-preview reveal" id="workstation-column-preview-section" style="display: none; animation: fadeIn 0.4s ease;">
+          <div class="preview-toolbar">
+            <span style="display:inline-flex; align-items:center; gap:8px;"><i data-lucide="eye" style="width:16px;height:16px;"></i> Borrador Reclamación Salarial</span>
+            <div class="toolbar-actions">
+              <button class="btn-action" onclick="copyReclamacionText()"><i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copiar Texto</button>
+              <button class="btn-action" onclick="printReclamacion()"><i data-lucide="printer" style="width: 14px; height: 14px;"></i> Imprimir Reclamación</button>
+            </div>
+          </div>
+          
+          <div class="paper-page" id="printable-paper-area">
+            <div class="paper-header">
+              <div class="paper-header__sindical">
+                SUTEV Cartago
+                <span>Subdirectiva Norte del Valle - Filial FECODE</span>
+              </div>
+              <img src="LOGO.png" alt="SUTEV Logo" style="height: 38px;">
+            </div>
+            <div class="paper-body" id="reclamacion-text-content">
+              <!-- El escrito se generará por Javascript -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="container">
+<div class="footer__grid">
+<div class="footer__brand"><a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV" style="height:40px"><div class="header__logo-text" style="color:var(--green-400)">SUTEV Cartago<span style="color:var(--gray-500)">Norte del Valle</span></div></a><p>Sindicato Único de Trabajadores de la Educación del Valle. Subdirectiva Cartago — Filial de FECODE.</p></div>
+<div><div class="footer__title">Navegación</div><ul class="footer__links"><li><a href="index.html#nosotros">Nosotros</a></li><li><a href="index.html#servicios">Servicios</a></li><li><a href="index.html#calendario">Calendario</a></li><li><a href="index.html#noticias">Noticias</a></li><li><a href="index.html#estatutos">Estatutos</a></li></ul></div>
+<div><div class="footer__title">Servicios y Herramientas</div><ul class="footer__links"><li><a href="index.html#reservas">Asesoría Jurídica</a></li><li><a href="index.html#reservas">CEID</a></li><li><a href="index.html#reservas">Bienestar</a></li><li><a href="permisos-docentes.html">Permisos y Licencias de Ley</a></li><li><a href="calculadora-salarial.html">Calculadora Salarial</a></li><li><a href="simulador-pension.html">Simulador de Pensión</a></li><li><a href="derechos-peticion.html">Derechos de Petición</a></li><li><a href="auditor-nomina.html" style="font-weight: bold; color: var(--green-400);">Auditor de Nómina</a></li></ul></div>
+<div><div class="footer__title">Contacto y Redes</div><ul class="footer__links"><li><a href="index.html#contacto">📍 Casa del Maestro (Cra 4 #16-17)</a></li><li><a href="index.html#contacto">📍 Cartago, Valle del Cauca</a></li><li><a href="https://web.facebook.com/sutevcartago/?locale=es_LA&_rdc=1&_rdr#" target="_blank" style="color: var(--green-400); font-weight: 600;">📘 Facebook Oficial</a></li></ul></div>
+</div>
+<div class="footer__bottom">© 2026 SUTEV Cartago — Subdirectiva Norte del Valle. Todos los derechos reservados.</div>
+</div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+</script>
+
+<script>
+  /* ==========================================
+     LÓGICA DEL AUDITOR DE NÓMINA - SUTEV CARTAGO
+     ========================================== */
+  
+  // Elementos HTML del Formulario
+  const estatutoSelect = document.getElementById('aud-estatuto');
+  const fields1278 = document.getElementById('aud-fields-1278');
+  const fields2277 = document.getElementById('aud-fields-2277');
+  
+  const categoriaSelect1278 = document.getElementById('aud-categoria1278');
+  const nivelSelect1278 = document.getElementById('aud-nivel1278');
+  const gradoSelect2277 = document.getElementById('aud-grado2277');
+  const dificilCheckbox = document.getElementById('aud-difícil');
+  const horasDiurnasInput = document.getElementById('aud-horas-diurnas');
+  const horasNocturnasInput = document.getElementById('aud-horas-nocturnas');
+  const pagadoInput = document.getElementById('aud-pagado');
+  const btnAuditar = document.getElementById('btnAuditar');
+  
+  // Elementos de Resultados
+  const dbEmpty = document.getElementById('db-empty');
+  const dbResults = document.getElementById('db-results');
+  const labelValPaid = document.getElementById('label-val-paid');
+  const labelValLegal = document.getElementById('label-val-legal');
+  const barPaid = document.getElementById('bar-paid');
+  const barLegal = document.getElementById('bar-legal');
+  
+  // Alerta y Escrito
+  const alertBox = document.getElementById('union-alert-box');
+  const alertIconContainer = document.getElementById('union-alert-icon-container');
+  const alertTitleText = document.getElementById('union-alert-title-text');
+  const alertDescText = document.getElementById('union-alert-desc-text');
+  const btnReclamarContainer = document.getElementById('btn-reclamar-container');
+  const workstationPreview = document.getElementById('workstation-column-preview-section');
+  const reclamacionTextContent = document.getElementById('reclamacion-text-content');
+  
+  // Datos Generales de Auditoría
+  let auditCalculations = {};
+
+  // Tablas de Salarios Oficiales (Incremento Decreto 0299 del 25 de marzo de 2026 - 7% Retroactivo)
+  const salaryTable1278 = {
+    '1': {
+      'none': { A: 3036203, B: 3870303, C: 4989102, D: 6184872 }
+    },
+    '2': {
+      'none': { A: 3821274, B: 4992967, C: 5831713, D: 6968892 },
+      'esp': { A: 4153464, B: 5306670, C: 6574267, D: 7780202 },
+      'mae': { A: 4394463, B: 5741913, C: 6706468, D: 8014215 },
+      'doc': { A: 4967653, B: 6490858, C: 7581222, D: 9059548 }
+    },
+    '3': {
+      'mae': { A: 6395544, B: 7572568, C: 9365412, D: 10851730 },
+      'doc': { A: 8484182, B: 9959374, C: 12576133, D: 14436985 }
+    }
+  };
+
+  const salaryTable2277 = {
+    'A': 1800860,
+    'B': 1994953,
+    '1': 2235742,
+    '2': 2317496,
+    '3': 2459305,
+    '4': 2556387,
+    '5': 2717624,
+    '6': 2874688,
+    '7': 3217125,
+    '8': 3533807,
+    '9': 3914723,
+    '10': 4286335,
+    '11': 4894390,
+    '12': 5822164,
+    '13': 6444689,
+    '14': 7339832
+  };
+
+  // Activación Dinámica de Campos de Acuerdo al Estatuto Seleccionado
+  estatutoSelect.addEventListener('change', (e) => {
+    const is1278 = e.target.value === '1278';
+    const is2277 = e.target.value === '2277';
+    fields1278.style.display = is1278 ? 'block' : 'none';
+    fields2277.style.display = is2277 ? 'block' : 'none';
+    
+    // Validadores y limpiezas
+    if (!is1278) {
+      categoriaSelect1278.value = '';
+      nivelSelect1278.value = '';
+    }
+    if (!is2277) {
+      gradoSelect2277.value = '';
+    }
+  });
+
+  // Toggle de la Sección de Perfil del Docente
+  function toggleProfileSection() {
+    const container = document.getElementById('profile-fields-container');
+    const chevron = document.getElementById('profile-chevron');
+    if (container.style.display === 'none') {
+      container.style.display = 'block';
+      chevron.style.transform = 'rotate(180deg)';
+    } else {
+      container.style.display = 'none';
+      chevron.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  // Carga e Inicialización del Perfil desde LocalStorage (Clave Sincronizada)
+  function loadProfileFromStorage() {
+    const saved = localStorage.getItem('sutev_docente_perfil');
+    if (saved) {
+      try {
+        const profile = JSON.parse(saved);
+        if (profile.nombre) document.getElementById('aud-nombre').value = profile.nombre;
+        if (profile.cedula) document.getElementById('aud-cedula').value = profile.cedula;
+        if (profile.celular) document.getElementById('aud-celular').value = profile.celular;
+        if (profile.ie) document.getElementById('aud-ie').value = profile.ie;
+        if (profile.jornada) document.getElementById('aud-jornada').value = profile.jornada;
+        if (profile.ente) document.getElementById('aud-ente').value = profile.ente;
+        if (profile.direccion) document.getElementById('aud-direccion').value = profile.direccion;
+        if (profile.email) document.getElementById('aud-email').value = profile.email;
+      } catch (e) {
+        console.error("Error al cargar perfil unificado", e);
+      }
+    }
+  }
+
+  // Guardar Cambios Manuales Directos de Perfil en LocalStorage
+  function saveProfileDirect() {
+    const profile = {
+      nombre: document.getElementById('aud-nombre').value.trim(),
+      cedula: document.getElementById('aud-cedula').value.trim(),
+      celular: document.getElementById('aud-celular').value.trim(),
+      ie: document.getElementById('aud-ie').value.trim(),
+      jornada: document.getElementById('aud-jornada').value,
+      ente: document.getElementById('aud-ente').value,
+      direccion: document.getElementById('aud-direccion').value.trim(),
+      email: document.getElementById('aud-email').value.trim()
+    };
+
+    if (!profile.nombre || !profile.cedula) {
+      showToast("⚠️ El nombre y la cédula son obligatorios para guardar tu perfil.");
+      return;
+    }
+
+    const existing = localStorage.getItem('sutev_docente_perfil');
+    let mergedProfile = {};
+    if (existing) {
+      try {
+        mergedProfile = JSON.parse(existing);
+      } catch (e) {}
+    }
+    const newProfile = { ...mergedProfile, ...profile };
+    localStorage.setItem('sutev_docente_perfil', JSON.stringify(newProfile));
+    showToast("✅ Perfil guardado y sincronizado exitosamente.");
+    
+    // Si la reclamación ya se está visualizando, la actualizamos reactivamente
+    if (workstationPreview.style.display !== 'none') {
+      updateLetterPreview();
+    }
+  }
+
+  // Utilidad de formateo a Moneda Colombiana COP
+  const formatCOP = (val) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(val);
+
+  // LÓGICA DE AUDITORÍA Y CÁLCULOS MATEMÁTICOS DE LEY
+  btnAuditar.addEventListener('click', () => {
+    // 1. Guardar perfil automáticamente en cada clic para asegurar consistencia
+    const profile = {
+      nombre: document.getElementById('aud-nombre').value.trim(),
+      cedula: document.getElementById('aud-cedula').value.trim(),
+      celular: document.getElementById('aud-celular').value.trim(),
+      ie: document.getElementById('aud-ie').value.trim(),
+      jornada: document.getElementById('aud-jornada').value,
+      ente: document.getElementById('aud-ente').value,
+      direccion: document.getElementById('aud-direccion').value.trim(),
+      email: document.getElementById('aud-email').value.trim()
+    };
+    if (profile.nombre && profile.cedula) {
+      const existing = localStorage.getItem('sutev_docente_perfil');
+      let mergedProfile = {};
+      if (existing) {
+        try {
+          mergedProfile = JSON.parse(existing);
+        } catch (e) {}
+      }
+      const newProfile = { ...mergedProfile, ...profile };
+      localStorage.setItem('sutev_docente_perfil', JSON.stringify(newProfile));
+    }
+
+    // 2. Capturar y Validar Inputs de Nómina
+    const est = estatutoSelect.value;
+    const pagadoVal = parseFloat(pagadoInput.value);
+    
+    if (!est) {
+      alert("Por favor selecciona tu Estatuto Docente.");
+      return;
+    }
+    if (isNaN(pagadoVal) || pagadoVal < 0) {
+      alert("Por favor ingresa un valor válido y mayor a cero en el campo 'Neto Recibido'.");
+      return;
+    }
+
+    let baseSalary = 0;
+    let extraHourRate = 0;
+    let levelLabel = '';
+    
+    if (est === '1278') {
+      const catVal = categoriaSelect1278.value;
+      const nivel = nivelSelect1278.value;
+      
+      if (!catVal || !nivel) {
+        alert("Por favor selecciona tu Grado/Formación y Nivel Salarial (Letra).");
+        return;
+      }
+      
+      const parts = catVal.split('-');
+      const grado = parts[0];
+      const titulo = parts[1];
+      
+      try {
+        baseSalary = salaryTable1278[grado][titulo][nivel];
+      } catch (e) {
+        alert("Error al mapear las tablas oficiales de 1278. Por favor revisa tu selección.");
+        return;
+      }
+      
+      // Determinar valor exacto de la Hora Extra 1278 por Título de Formación (Art. 10 Decreto 0299)
+      if (grado === '1') {
+        extraHourRate = 15617; // Normalista Superior
+        levelLabel = "Normalista Superior (Grado 1)";
+      } else if (grado === '2') {
+        if (titulo === 'none') { extraHourRate = 20960; levelLabel = "Licenciado / Profesional (Grado 2)"; }
+        else if (titulo === 'esp') { extraHourRate = 21365; levelLabel = "Grado 2 + Especialización"; }
+        else if (titulo === 'mae') { extraHourRate = 27412; levelLabel = "Grado 2 + Maestría"; }
+        else if (titulo === 'doc') { extraHourRate = 36356; levelLabel = "Grado 2 + Doctorado"; }
+      } else if (grado === '3') {
+        if (titulo === 'mae') { extraHourRate = 27412; levelLabel = "Grado 3 + Maestría en Educación"; }
+        else if (titulo === 'doc') { extraHourRate = 36356; levelLabel = "Grado 3 + Doctorado en Educación"; }
+      }
+      
+    } else if (est === '2277') {
+      const cat = gradoSelect2277.value;
+      if (!cat) {
+        alert("Por favor selecciona tu Categoría en el Escalafón 2277.");
+        return;
+      }
+      
+      baseSalary = salaryTable2277[cat];
+      levelLabel = `Categoría ${cat} (Estatuto 2277)`;
+      
+      // Determinar valor de la Hora Extra 2277 por Grupos de Categoría (Art. 10 Decreto 0299)
+      if (['A', 'B', '1', '2', '3', '4', '5'].includes(cat)) {
+        extraHourRate = 13629;
+      } else if (['6', '7', '8'].includes(cat)) {
+        extraHourRate = 18263;
+      } else if (['9', '10', '11'].includes(cat)) {
+        extraHourRate = 18851;
+      } else if (['12', '13', '14'].includes(cat)) {
+        extraHourRate = 22498;
+      }
+    }
+
+    // 3. Cálculos Dinámicos de Asignaciones y Bonos
+    const nivelacion = Math.round(baseSalary * 0.004); // Decreto 0317 de 2026 (0.4% nivelación especial)
+    const dificilBonus = dificilCheckbox.checked ? Math.round(baseSalary * 0.15) : 0; // Decreto 521 de 2010 (15% rural)
+    
+    // Liquidar Horas Extras
+    const cantDiurnas = parseInt(horasDiurnasInput.value) || 0;
+    const cantNocturnas = parseInt(horasNocturnasInput.value) || 0;
+    const cantHorasTotal = cantDiurnas + cantNocturnas;
+    const horasExtrasVal = cantHorasTotal * extraHourRate;
+    
+    // Total Devengado
+    const totalDevengado = baseSalary + nivelacion + dificilBonus + horasExtrasVal;
+    
+    // Deducciones de Ley Obligatorias
+    // Aportes de Salud y Pensión (se liquidan sobre el básico + asignaciones, i.e., base + nivelación + difícil)
+    const baseSeguridadSocial = baseSalary + nivelacion + dificilBonus;
+    const dedSalud = Math.round(baseSeguridadSocial * 0.04);
+    const dedPension = Math.round(baseSeguridadSocial * 0.08);
+    const dedSindicato = Math.round(baseSalary * 0.01); // Cuota SUTEV (1% del sueldo básico)
+    const totalDeducciones = dedSalud + dedPension + dedSindicato;
+    
+    // Neto Legal Mandatorio
+    const netoLegal = totalDevengado - totalDeducciones;
+    
+    // Diferencia Financiera (Saldo Insoluto)
+    const diferencia = netoLegal - pagadoVal;
+
+    // 4. Guardar datos en la variable global para el Derecho de Petición
+    auditCalculations = {
+      estatuto: est,
+      base: baseSalary,
+      nivelacion: nivelacion,
+      dificil: dificilBonus,
+      horasCant: cantHorasTotal,
+      horasVal: horasExtrasVal,
+      horasTarifa: extraHourRate,
+      devengado: totalDevengado,
+      salud: dedSalud,
+      pension: dedPension,
+      sindicato: dedSindicato,
+      deducciones: totalDeducciones,
+      netoLegal: netoLegal,
+      netoPaid: pagadoVal,
+      diferencia: diferencia,
+      escalafónText: levelLabel,
+      fechaAuditoria: new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' })
+    };
+
+    // 5. Renderizar Resultados en el Dashboard
+    dbEmpty.style.display = 'none';
+    dbResults.style.display = 'block';
+    
+    // Actualizar Textos
+    document.getElementById('td-base').innerText = formatCOP(baseSalary);
+    document.getElementById('td-nivel').innerText = formatCOP(nivelacion);
+    document.getElementById('td-difícil').innerText = formatCOP(dificilBonus);
+    document.getElementById('td-horas-cant').innerText = cantHorasTotal;
+    document.getElementById('td-horas-val').innerText = formatCOP(horasExtrasVal);
+    document.getElementById('td-total-devengado').innerText = formatCOP(totalDevengado);
+    document.getElementById('td-ded-salud').innerText = `-${formatCOP(dedSalud)}`;
+    document.getElementById('td-ded-pension').innerText = `-${formatCOP(dedPension)}`;
+    document.getElementById('td-ded-sindicato').innerText = `-${formatCOP(dedSindicato)}`;
+    document.getElementById('td-neto-legal').innerText = formatCOP(netoLegal);
+    
+    labelValPaid.innerText = formatCOP(pagadoVal);
+    labelValLegal.innerText = formatCOP(netoLegal);
+
+    // Ajustar Ancho de las Barras del Comparador Gráfico
+    let pctPaid = 100;
+    let pctLegal = 100;
+    if (netoLegal > 0) {
+      if (pagadoVal < netoLegal) {
+        pctPaid = (pagadoVal / netoLegal) * 100;
+        pctLegal = 100;
+      } else {
+        pctPaid = 100;
+        pctLegal = (netoLegal / pagadoVal) * 100;
+      }
+    }
+    barPaid.style.width = `${pctPaid}%`;
+    barLegal.style.width = `${pctLegal}%`;
+
+    // 6. Gestionar Alertas y Derecho de Petición Reactivamente
+    if (diferencia > 0) {
+      // DÉFICIT DETECTADO (Se requiere Reclamación)
+      alertBox.className = "union-alert union-alert--danger";
+      alertIconContainer.innerHTML = `<i data-lucide="alert-triangle" style="width: 28px; height: 28px;"></i>`;
+      alertTitleText.innerText = "Diferencia Salarial Detectada a tu Favor";
+      alertDescText.innerHTML = `La Secretaría de Educación te está pagando <strong>${formatCOP(diferencia)} menos</strong> de lo establecido por Ley para la vigencia de 2026. Tienes el derecho constitucional e irrevocable de exigir este saldo insoluto.`;
+      
+      // Mostrar Botones y Hoja Virtual A4
+      btnReclamarContainer.style.display = 'block';
+      workstationPreview.style.display = 'block';
+      
+      // Renderizar el Borrador del Escrito
+      updateLetterPreview();
+      
+      showToast("⚠️ Se han detectado deudas salariales pendientes en tu nómina.");
+    } else {
+      // PAGO LEGAL / NO DÉFICIT
+      alertBox.className = "union-alert union-alert--success";
+      alertIconContainer.innerHTML = `<i data-lucide="shield-check" style="width: 28px; height: 28px;"></i>`;
+      alertTitleText.innerText = "Nómina Auditada Correctamente (Cumplimiento de Ley)";
+      alertDescText.innerHTML = `¡Felicitaciones! El pago neto reportado de <strong>${formatCOP(pagadoVal)}</strong> coincide plenamente o supera los valores mandatorios de los decretos salariales de 2026. Tu remuneración se ajusta a lo establecido por FECODE y la Ley.`;
+      
+      // Ocultar Controles de Reclamación
+      btnReclamarContainer.style.display = 'none';
+      workstationPreview.style.display = 'none';
+      
+      showToast("✅ Nómina conforme. No se detectan diferencias salariales.");
+    }
+
+    // Volver a iniciar iconos
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  });
+
+  // REDACTOR JURÍDICO DE LA RECLAMACIÓN EN LA HOJA A4 VIRTUAL
+  function updateLetterPreview() {
+    // Cargar datos de contacto del perfil
+    const nombre = document.getElementById('aud-nombre').value.trim() || "[Nombre Completo del Docente]";
+    const cedula = document.getElementById('aud-cedula').value.trim() || "[Cédula de Ciudadanía]";
+    const celular = document.getElementById('aud-celular').value.trim() || "[Número de Celular]";
+    const ie = document.getElementById('aud-ie').value.trim() || "[Institución Educativa / Escuela]";
+    const jornada = document.getElementById('aud-jornada').value || "[Jornada]";
+    const ente = document.getElementById('aud-ente').value || "[Secretaría de Educación]";
+    const direccion = document.getElementById('aud-direccion').value.trim() || "[Dirección de Notificación]";
+    const email = document.getElementById('aud-email').value.trim() || "[Correo Electrónico]";
+    
+    const fecha = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
+    
+    // Mapeo de valores
+    const base = formatCOP(auditCalculations.base);
+    const nivelacion = formatCOP(auditCalculations.nivelacion);
+    const dificil = formatCOP(auditCalculations.dificil);
+    const horasCant = auditCalculations.horasCant;
+    const horasVal = formatCOP(auditCalculations.horasVal);
+    const deducciones = formatCOP(auditCalculations.deducciones);
+    const netoLegal = formatCOP(auditCalculations.netoLegal);
+    const netoPaid = formatCOP(auditCalculations.netoPaid);
+    const diferencia = formatCOP(auditCalculations.diferencia);
+    const escalafon = auditCalculations.escalafónText;
+
+    const bodyText = `Cartago, Valle del Cauca, ${fecha}
+
+Señor(a):
+LÍDER DE PRESTACIONES Y NÓMINA / SECRETARIO(A) DE EDUCACIÓN
+${ente.toUpperCase()}
+La Ciudad.
+
+
+ASUNTO: DERECHO DE PETICIÓN EN INTERÉS PARTICULAR (ARTÍCULO 23 CONSTITUCIÓN POLÍTICA Y LEY 1755 DE 2015) - RECLAMACIÓN POR DISCREPANCIA EN LIQUIDACIÓN DE NÓMINA, PAGO DE RETROACTIVOS Y AJUSTE DE ASIGNACIÓN BÁSICA VIGENCIA 2026.
+
+
+Yo, ${nombre}, identificado(a) con Cédula de Ciudadanía No. ${cedula}, docente de aula en servicio activo adscrito(a) a la Institución Educativa ${ie} en la jornada ${jornada}, afiliado(a) activo(a) a la Asociación Sindical Único de Trabajadores de la Educación del Valle - SUTEV Subdirectiva Cartago, en uso de mis derechos constitucionales, de forma respetuosa acudo ante su Despacho para radicar el presente DERECHO DE PETICIÓN, fundado en los siguientes hechos y peticiones:
+
+HECHOS FUNDAMENTADORES:
+
+PRIMERO: De acuerdo con mi nombramiento en carrera docente y registro oficial, me encuentro escalafonado(a) en el nivel salarial: ${escalafon}.
+
+SEGUNDO: El Gobierno Nacional, producto del acuerdo colectivo con la Federación Colombiana de Educadores (FECODE), expidió el Decreto No. 0299 del 25 de marzo de 2026, el cual fijó con efectos fiscales retroactivos a partir del 1 de enero de 2026 el incremento salarial general del 7% para los docentes del Magisterio. Adicionalmente, el Decreto No. 0317 del 25 de marzo de 2026 estableció un ajuste adicional de nivelación salarial equivalente al 0.4% de la asignación básica.
+
+TERCERO: Realizada la auditoría pormenorizada de mi asignación básica mensual reglamentaria, se colige que los montos mandatorios fijados por el marco legal vigente de 2026 son los siguientes:
+  a. Asignación Básica Mensual Legal (Decreto 0299): ${base}
+  b. Nivelación Salarial Especial (0.4% - Decreto 0317): ${nivelacion}
+  c. Bonificación Zona de Difícil Acceso (15% - Decreto 521 de 2010): ${dificil}
+  d. Liquidación de Horas Extras dictadas (${horasCant} horas extras a tarifa legal de $${auditCalculations.horasTarifa.toLocaleString()} c/u): ${horasVal}
+  * TOTAL DEVENGADO LEGAL OBLIGATORIO: ${formatCOP(auditCalculations.devengado)}
+  * TOTAL DEDUCCIONES LEGALES (Salud 4%, Pensión 8%, Cuota Sindical 1%): ${deducciones}
+  * NETO MÍNIMO OBLIGATORIO QUE DEBÍ RECIBIR EN EL PERÍODO: ${netoLegal}
+
+CUARTO: No obstante lo anterior, la Secretaría de Educación de la Entidad Territorial procedió a transferirme para el respectivo período mensual la suma neta de tan solo ${netoPaid}, lo que configura una diferencia salarial no pagada (saldo insoluto) a mi favor equivalente a: ${diferencia}.
+
+QUINTO: Esta dilación o error en la liquidación vulnera el principio de irrenunciabilidad a los beneficios mínimos establecidos en las normas laborales (Art. 53 Constitución Política) y me causa un perjuicio financiero directo sobre mi sustento familiar, constituyendo un enriquecimiento sin causa por parte de la administración pública.
+
+PETICIONES:
+
+PRIMERA: Solicito de forma respetuosa y perentoria se proceda a realizar la reliquidación inmediata de mi nómina mensual ordinaria de conformidad con los Decretos Nacionales 0299 y 0317 del 25 de marzo de 2026 y la bonificación correspondiente al Decreto 521 de 2010.
+
+SEGUNDA: Se me reconozca y pague en forma inmediata el saldo neto no liquidado de este mes equivalente a la suma de ${diferencia}, junto con la totalidad de los valores retroactivos correspondientes a los meses anteriores de la vigencia 2026 que presenten idéntica discrepancia en la liquidación básica o de horas extras.
+
+TERCERA: Solicito se emita y envíe a mi correo electrónico un reporte desglosado de nómina donde consten las fórmulas operadas para liquidar mis horas extras durante el presente año fiscal, con indicación del valor unitario liquidado.
+
+FUNDAMENTOS DE DERECHO:
+
+Este derecho de petición se fundamenta en las siguientes disposiciones:
+* Artículo 23 de la Constitución Política de Colombia (Garantía fundamental de formular peticiones respetuosas y obtener respuesta de fondo).
+* Ley 1755 de 2015 (Regulación y plazos de 15 días hábiles para resolver peticiones generales en interés particular).
+* Decreto No. 0299 del 25 de marzo de 2026 del Ministerio de Educación Nacional.
+* Decreto No. 0317 del 25 de marzo de 2026 del Ministerio de Educación Nacional.
+* Decreto No. 521 de 2010 sobre Bonificación de Zonas de Difícil Acceso.
+* Artículo 53 de la Constitución Política (Principios mínimos de estabilidad, pago oportuno e irrenunciabilidad).
+
+ANEXOS / PRUEBAS:
+
+Adjunto para los fines pertinentes las siguientes pruebas:
+1. Copia de mi Cédula de Ciudadanía.
+2. Copia del desprendible de pago emitido por el sistema para el período auditado.
+
+NOTIFICACIONES:
+
+Recibo notificaciones en los siguientes datos:
+Dirección física: ${direccion}
+Teléfono celular: ${celular}
+Correo electrónico: ${email}
+
+
+Atentamente,
+
+
+____________________________________
+${nombre}
+C.C. ${cedula}
+Docente Afiliado(a) a SUTEV Cartago
+Subdirectiva Norte del Valle`;
+
+    reclamacionTextContent.innerText = bodyText;
+  }
+
+  // Copiar Texto del Derecho de Petición al Portapapeles
+  function copyReclamacionText() {
+    const el = document.getElementById('reclamacion-text-content');
+    if (!el) return;
+    
+    navigator.clipboard.writeText(el.innerText).then(() => {
+      showToast("📋 Texto de la reclamación copiado al portapapeles exitosamente.");
+    }).catch(err => {
+      console.error("Error al copiar texto", err);
+      showToast("❌ Error al copiar al portapapeles.");
+    });
+  }
+
+  // Imprimir Reclamación Física (A4)
+  function printReclamacion() {
+    window.print();
+  }
+
+  // Inicializar Página al Cargar
+  document.addEventListener('DOMContentLoaded', () => {
+    loadProfileFromStorage();
+  });
+</script>
+
+</body>
+</html>

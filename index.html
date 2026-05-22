@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUTEV Cartago - Subdirectiva Norte del Valle</title>
+<meta name="description" content="Subdirectiva SUTEV Cartago. Sindicato Único de Trabajadores de la Educación del Valle. Defensa, bienestar y formación docente en el Norte del Valle del Cauca.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+<div class="container">
+<a href="#inicio" class="header__logo"><img src="LOGO.png" alt="SUTEV"><div class="header__logo-text">SUTEV Cartago<span>Norte del Valle</span></div></a>
+<nav><ul class="nav__list" id="navList">
+<li><a href="#inicio" class="nav__link">Inicio</a></li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Nosotros <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="#nosotros" class="nav__dropdown-item"><i data-lucide="users" style="width: 14px; height: 14px;"></i> ¿Quiénes Somos?</a></li>
+    <li><a href="#estatutos" class="nav__dropdown-item"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i> Estatutos del Sindicato</a></li>
+    <li><a href="#galeria" class="nav__dropdown-item"><i data-lucide="image" style="width: 14px; height: 14px;"></i> Galería de Fotos</a></li>
+  </ul>
+</li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Servicios <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="#servicios" class="nav__dropdown-item"><i data-lucide="briefcase" style="width: 14px; height: 14px;"></i> Portafolio de Servicios</a></li>
+    <li><a href="permisos-docentes.html" class="nav__dropdown-item"><i data-lucide="scale" style="width: 14px; height: 14px;"></i> Permisos de Ley y Licencias</a></li>
+    <li><a href="calculadora-salarial.html" class="nav__dropdown-item"><i data-lucide="calculator" style="width: 14px; height: 14px;"></i> Calculadora Salarial</a></li>
+    <li><a href="simulador-pension.html" class="nav__dropdown-item"><i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i> Simulador de Pensión</a></li>
+    <li><a href="derechos-peticion.html" class="nav__dropdown-item"><i data-lucide="file-signature" style="width: 14px; height: 14px;"></i> Derechos de Petición</a></li>
+    <li><a href="auditor-nomina.html" class="nav__dropdown-item"><i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> Auditor de Nómina</a></li>
+  </ul>
+</li>
+<li><a href="#calendario" class="nav__link">Calendario</a></li>
+<li><a href="#noticias" class="nav__link">Noticias</a></li>
+<li><a href="#contacto" class="nav__link">Contacto</a></li>
+<li><a href="#afiliacion" class="nav__link nav__link--cta">Afíliate</a></li>
+</ul></nav>
+<button class="nav__toggle" id="navToggle" aria-label="Menú"><span></span><span></span><span></span></button>
+</div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+<div class="hero__bg"></div>
+<div class="hero__overlay"></div>
+<div class="hero__particles"></div>
+<div class="container">
+<div class="hero__content">
+<div class="hero__badge">Subdirectiva Norte del Valle</div>
+<h1>Defendemos la <span class="highlight">educación pública</span> y los derechos del magisterio</h1>
+<p class="hero__subtitle">Somos la voz de las y los educadores del Norte del Valle del Cauca. Juntos construimos dignidad, bienestar y futuro desde la Casa del Maestro en Cartago.</p>
+<div class="hero__actions">
+<a href="#afiliacion" class="btn btn--primary">Únete al sindicato →</a>
+<a href="#servicios" class="btn btn--outline">Conoce nuestros servicios</a>
+</div>
+</div>
+<div class="stats-bar">
+<div class="stat-item"><div class="stat-item__number" data-count="18" data-suffix="">0</div><div class="stat-item__label">Cargos directivos</div></div>
+<div class="stat-item"><div class="stat-item__number" data-count="8" data-suffix="">0</div><div class="stat-item__label">Municipios del Norte</div></div>
+<div class="stat-item"><div class="stat-item__number" data-count="50" data-suffix="+">0</div><div class="stat-item__label">Años de lucha</div></div>
+<div class="stat-item"><div class="stat-item__number" data-count="550" data-suffix="+">0</div><div class="stat-item__label">Afiliados activos</div></div>
+</div>
+</div>
+</section>
+
+<!-- NOSOTROS -->
+<section class="section" id="nosotros">
+<div class="container">
+<div class="section__header reveal"><span class="section__tag">¿Quiénes somos?</span><h2 class="section__title">Subdirectiva SUTEV Cartago</h2><p class="section__desc">Filial del Sindicato Único de Trabajadores de la Educación del Valle, representamos y defendemos a los docentes, directivos y personal administrativo de la educación pública en el Norte del Valle del Cauca.</p></div>
+<div class="about__grid">
+<div class="about__image reveal"><img src="assets/images/asamblea.png" alt="Asamblea SUTEV Cartago"></div>
+<div class="about__content reveal">
+<p>SUTEV Cartago es la subdirectiva que agrupa a las y los educadores de los municipios del Norte del Valle del Cauca: Cartago, Ansermanuevo, Alcalá, Ulloa, El Águila, El Cairo, Argelia y Toro. Desde nuestra sede en la <strong>Casa del Maestro</strong> (Carrera 4 entre calles 16 y 17), lideramos la defensa de los derechos laborales, prestacionales y profesionales del magisterio.</p>
+<p>Como filial de FECODE, articulamos la lucha nacional por una educación pública de calidad, digna y al servicio de las comunidades. Nuestro compromiso es con cada docente, con cada escuela y con el territorio.</p>
+<div class="about__values">
+<div class="value-item"><span class="value-item__icon"><i data-lucide="scale"></i></span><span class="value-item__text">Defensa de derechos</span></div>
+<div class="value-item"><span class="value-item__icon"><i data-lucide="library"></i></span><span class="value-item__text">Formación docente</span></div>
+<div class="value-item"><span class="value-item__icon"><i data-lucide="handshake"></i></span><span class="value-item__text">Unidad sindical</span></div>
+<div class="value-item"><span class="value-item__icon"><i data-lucide="sprout"></i></span><span class="value-item__text">Bienestar integral</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- TERRITORIO (MAPA INTERACTIVO) -->
+<section class="section section--dark territory-section" id="territorio">
+  <div class="container">
+    <div class="section__header reveal">
+      <span class="section__tag">Nuestra Presencia</span>
+      <h2 class="section__title">8 Municipios, 1 Solo Sindicato</h2>
+      <p class="section__desc">Con sede central en Cartago, organizamos y defendemos a los maestros de toda la zona norte del Valle del Cauca.</p>
+    </div>
+    
+    <div class="territory__layout reveal">
+      <!-- Left side: List of municipalities -->
+      <div class="territory__list">
+        <div class="territory-item active" data-mun="cartago" onmouseover="activateNode('cartago')">
+          <div class="t-icon"><i data-lucide="map-pin"></i></div>
+          <div class="t-info"><h3>Cartago</h3><p>Sede Principal SUTEV</p></div>
+        </div>
+        <div class="territory-item" data-mun="ansermanuevo" onmouseover="activateNode('ansermanuevo')">
+          <div class="t-icon"><i data-lucide="users"></i></div>
+          <div class="t-info"><h3>Ansermanuevo</h3><p>Comité Municipal</p></div>
+        </div>
+        <div class="territory-item" data-mun="alcala" onmouseover="activateNode('alcala')">
+          <div class="t-icon"><i data-lucide="users"></i></div>
+          <div class="t-info"><h3>Alcalá</h3><p>Comité Municipal</p></div>
+        </div>
+        <div class="territory-item" data-mun="ulloa" onmouseover="activateNode('ulloa')">
+          <div class="t-icon"><i data-lucide="users"></i></div>
+          <div class="t-info"><h3>Ulloa</h3><p>Comité Municipal</p></div>
+        </div>
+        <div class="territory-item" data-mun="argelia" onmouseover="activateNode('argelia')">
+          <div class="t-icon"><i data-lucide="users"></i></div>
+          <div class="t-info"><h3>Argelia</h3><p>Comité Municipal</p></div>
+        </div>
+        <div class="territory-item" data-mun="toro" onmouseover="activateNode('toro')">
+          <div class="t-icon"><i data-lucide="users"></i></div>
+          <div class="t-info"><h3>Toro</h3><p>Comité Municipal</p></div>
+        </div>
+        <div class="territory-item" data-mun="aguila" onmouseover="activateNode('aguila')">
+          <div class="t-icon"><i data-lucide="users"></i></div>
+          <div class="t-info"><h3>El Águila</h3><p>Comité Municipal</p></div>
+        </div>
+        <div class="territory-item" data-mun="cairo" onmouseover="activateNode('cairo')">
+          <div class="t-icon"><i data-lucide="users"></i></div>
+          <div class="t-info"><h3>El Cairo</h3><p>Comité Municipal</p></div>
+        </div>
+      </div>
+
+      <!-- Right side: Real Geographic Map -->
+      <div class="territory__map" style="padding: 0;">
+        <div id="territory-map" style="width: 100%; height: 100%; min-height: 450px; border-radius: 0 var(--radius-xl) var(--radius-xl) 0;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section class="section section--gray" id="servicios">
+<div class="container">
+<div class="section__header reveal"><span class="section__tag">Servicios</span><h2 class="section__title">Lo que hacemos por ti</h2><p class="section__desc">Brindamos acompañamiento integral a nuestros afiliados en las áreas jurídica, educativa y de bienestar.</p></div>
+<div class="services__grid">
+<div class="service-card reveal">
+<div class="service-card__image"><img src="assets/images/services-legal.png" alt="Asesoría Jurídica"></div>
+<div class="service-card__body"><div class="service-card__icon"><i data-lucide="scale"></i></div><h3 class="service-card__title">Asesoría Jurídica</h3><p class="service-card__text">Acompañamiento legal en derechos laborales, prestacionales, régimen disciplinario, pensiones, cesantías, tutelas y reclamaciones administrativas para docentes de los estatutos 2277 y 1278.</p><a href="#reservas" class="service-card__link">Agenda tu cita →</a></div>
+</div>
+<div class="service-card reveal">
+<div class="service-card__image"><img src="assets/images/services-education.png" alt="CEID"></div>
+<div class="service-card__body"><div class="service-card__icon"><i data-lucide="graduation-cap"></i></div><h3 class="service-card__title">Capacitación CEID</h3><p class="service-card__text">El Centro de Estudios e Investigaciones Docentes ofrece formación continua en pedagogía crítica, innovación educativa, investigación en el aula y actualización curricular.</p><a href="#reservas" class="service-card__link">Inscríbete →</a></div>
+</div>
+<div class="service-card reveal">
+<div class="service-card__image"><img src="assets/images/services-welfare.png" alt="Bienestar"></div>
+<div class="service-card__body"><div class="service-card__icon"><i data-lucide="heart-handshake"></i></div><h3 class="service-card__title">Bienestar Docente</h3><p class="service-card__text">Actividades culturales, deportivas, recreativas y de salud para los afiliados y sus familias. Jornadas de integración, encuentros deportivos y espacios de crecimiento personal.</p><a href="#calendario" class="service-card__link">Ver actividades →</a></div>
+</div>
+</div>
+
+<!-- SECCIÓN DE HERRAMIENTAS DIGITALES -->
+<div style="margin-top: 60px;">
+  <div class="section__header reveal" style="margin-bottom: 35px; text-align: center;">
+    <span class="section__tag">Consultas Autónomas</span>
+    <h3 style="font-size: 1.8rem; color: var(--green-900); font-weight: 800; font-family: var(--font-heading); margin-bottom: 8px;">Herramientas Digitales para el Docente</h3>
+    <p style="font-size: 1rem; color: var(--gray-600); max-width: 700px; margin: 8px auto 0;">Simula tus condiciones laborales, pensiones y consulta tus permisos con total rigurosidad y facilidad desde cualquier dispositivo.</p>
+  </div>
+  
+  <div class="services__grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; margin-top: 20px;">
+    
+    <!-- CARD 1: PERMISOS DE LEY -->
+    <div class="service-card reveal" style="display: flex; flex-direction: column; height: 100%;">
+      <div class="service-card__image" style="background: linear-gradient(135deg, var(--green-600), var(--green-900)); display: flex; align-items: center; justify-content: center; height: 180px;">
+        <i data-lucide="scale" style="width: 64px; height: 64px; color: white; opacity: 0.95;"></i>
+      </div>
+      <div class="service-card__body" style="display: flex; flex-direction: column; flex-grow: 1;">
+        <div class="service-card__icon" style="color: var(--green-600); margin-bottom: 12px;"><i data-lucide="scale"></i></div>
+        <h3 class="service-card__title" style="font-size: 1.25rem; font-weight: 800; color: var(--green-900); margin-bottom: 10px;">Permisos de Ley y Licencias</h3>
+        <p class="service-card__text" style="flex-grow: 1; font-size: 0.9rem; line-height: 1.5; color: var(--gray-600); margin-bottom: 24px;">Consulta la normatividad de 10 ausencias reglamentarias del Magisterio y genera tu oficio de solicitud pre-diligenciado para radicar ante el Rector o Secretaría de Educación.</p>
+        <a href="permisos-docentes.html" class="btn btn--primary" style="display: inline-flex; justify-content: center; align-items: center; gap: 8px; width: 100%; text-decoration: none; padding: 12px;">Abrir Consultor →</a>
+      </div>
+    </div>
+
+    <!-- CARD 2: CALCULADORA SALARIAL -->
+    <div class="service-card reveal" style="display: flex; flex-direction: column; height: 100%;">
+      <div class="service-card__image" style="background: linear-gradient(135deg, var(--green-700), var(--black)); display: flex; align-items: center; justify-content: center; height: 180px;">
+        <i data-lucide="calculator" style="width: 64px; height: 64px; color: white; opacity: 0.95;"></i>
+      </div>
+      <div class="service-card__body" style="display: flex; flex-direction: column; flex-grow: 1;">
+        <div class="service-card__icon" style="color: var(--green-600); margin-bottom: 12px;"><i data-lucide="calculator"></i></div>
+        <h3 class="service-card__title" style="font-size: 1.25rem; font-weight: 800; color: var(--green-900); margin-bottom: 10px;">Calculadora Salarial (2026)</h3>
+        <p class="service-card__text" style="flex-grow: 1; font-size: 0.9rem; line-height: 1.5; color: var(--gray-600); margin-bottom: 24px;">Estima tu asignación básica mensual bajo los decretos actualizados de 2026, incluyendo nivelaciones salariales, bonificaciones pedagógicas y requisitos exactos de escalafón.</p>
+        <a href="calculadora-salarial.html" class="btn btn--primary" style="display: inline-flex; justify-content: center; align-items: center; gap: 8px; width: 100%; text-decoration: none; padding: 12px;">Abrir Calculadora →</a>
+      </div>
+    </div>
+
+    <!-- CARD 3: SIMULADOR DE PENSIÓN -->
+    <div class="service-card reveal" style="display: flex; flex-direction: column; height: 100%;">
+      <div class="service-card__image" style="background: linear-gradient(135deg, var(--green-500), var(--green-800)); display: flex; align-items: center; justify-content: center; height: 180px;">
+        <i data-lucide="shield-check" style="width: 64px; height: 64px; color: white; opacity: 0.95;"></i>
+      </div>
+      <div class="service-card__body" style="display: flex; flex-direction: column; flex-grow: 1;">
+        <div class="service-card__icon" style="color: var(--green-600); margin-bottom: 12px;"><i data-lucide="calendar-clock"></i></div>
+        <h3 class="service-card__title" style="font-size: 1.25rem; font-weight: 800; color: var(--green-900); margin-bottom: 10px;">Simulador de Pensión Magisterio</h3>
+        <p class="service-card__text" style="flex-grow: 1; font-size: 0.9rem; line-height: 1.5; color: var(--gray-600); margin-bottom: 24px;">Calcula tu tiempo de servicio, proyecta tu edad de jubilación según los decretos 2277 y 1278 y conoce la normatividad de pensión compatible con el FOMAG.</p>
+        <a href="simulador-pension.html" class="btn btn--primary" style="display: inline-flex; justify-content: center; align-items: center; gap: 8px; width: 100%; text-decoration: none; padding: 12px;">Abrir Simulador →</a>
+      </div>
+    </div>
+
+    <!-- CARD 4: DERECHOS DE PETICIÓN -->
+    <div class="service-card reveal" style="display: flex; flex-direction: column; height: 100%;">
+      <div class="service-card__image" style="background: linear-gradient(135deg, var(--green-800), var(--green-500)); display: flex; align-items: center; justify-content: center; height: 180px;">
+        <i data-lucide="file-signature" style="width: 64px; height: 64px; color: white; opacity: 0.95;"></i>
+      </div>
+      <div class="service-card__body" style="display: flex; flex-direction: column; flex-grow: 1;">
+        <div class="service-card__icon" style="color: var(--green-600); margin-bottom: 12px;"><i data-lucide="file-signature"></i></div>
+        <h3 class="service-card__title" style="font-size: 1.25rem; font-weight: 800; color: var(--green-900); margin-bottom: 10px;">Derechos de Petición Express</h3>
+        <p class="service-card__text" style="flex-grow: 1; font-size: 0.9rem; line-height: 1.5; color: var(--gray-600); margin-bottom: 24px;">Redacta de forma autónoma tus reclamaciones jurídicas válidas ante COSMITET por salud, el FOMAG por cesantías, y la Secretaría por ascenso.</p>
+        <a href="derechos-peticion.html" class="btn btn--primary" style="display: inline-flex; justify-content: center; align-items: center; gap: 8px; width: 100%; text-decoration: none; padding: 12px;">Abrir Asistente →</a>
+      </div>
+    </div>
+
+    <!-- CARD 5: AUDITOR DE NÓMINA -->
+    <div class="service-card reveal" style="display: flex; flex-direction: column; height: 100%;">
+      <div class="service-card__image" style="background: linear-gradient(135deg, var(--green-900), var(--green-600)); display: flex; align-items: center; justify-content: center; height: 180px;">
+        <i data-lucide="shield-alert" style="width: 64px; height: 64px; color: white; opacity: 0.95;"></i>
+      </div>
+      <div class="service-card__body" style="display: flex; flex-direction: column; flex-grow: 1;">
+        <div class="service-card__icon" style="color: var(--green-600); margin-bottom: 12px;"><i data-lucide="shield-alert"></i></div>
+        <h3 class="service-card__title" style="font-size: 1.25rem; font-weight: 800; color: var(--green-900); margin-bottom: 10px;">Auditor de Nómina y Extras</h3>
+        <p class="service-card__text" style="flex-grow: 1; font-size: 0.9rem; line-height: 1.5; color: var(--gray-600); margin-bottom: 24px;">Audita tu desprendible de pago mensual frente a las asignaciones oficiales de 2026. Calcula horas extras diurnas y nocturnas y reclama diferencias salariales.</p>
+        <a href="auditor-nomina.html" class="btn btn--primary" style="display: inline-flex; justify-content: center; align-items: center; gap: 8px; width: 100%; text-decoration: none; padding: 12px;">Abrir Auditor →</a>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+</div>
+</section>
+
+<!-- JUNTA DIRECTIVA -->
+<section class="section section--dark" id="junta">
+<div class="container">
+<div class="section__header reveal"><span class="section__tag">Gobierno</span><h2 class="section__title">Junta Directiva</h2><p class="section__desc">18 cargos elegidos democráticamente para representar y dirigir la subdirectiva.</p></div>
+<div class="junta-split-view reveal">
+  <div class="junta-list" id="juntaList"></div>
+  <div class="junta-preview" id="juntaPreview">
+    <!-- El contenido del preview se generará por JS -->
+  </div>
+</div>
+</div>
+</section>
+
+<!-- CALENDARIO -->
+<section class="section" id="calendario">
+<div class="container">
+<div class="section__header reveal"><span class="section__tag">Agenda</span><h2 class="section__title">Calendario de Eventos</h2><p class="section__desc">Asambleas, capacitaciones, jornadas deportivas y asesorías programadas.</p></div>
+<div class="calendar-wrapper reveal">
+<div class="calendar__header"><div class="calendar__nav"><button class="calendar__nav-btn" id="calPrev">‹</button><button class="calendar__nav-btn" id="calNext">›</button></div><div class="calendar__month" id="calendarMonth"></div></div>
+<div class="calendar__grid" id="calendarGrid"></div>
+<div class="calendar__events" id="calendarEvents"></div>
+</div>
+</div>
+</section>
+
+<!-- NOTICIAS -->
+<section class="section section--gray" id="noticias">
+<div class="container">
+<div class="section__header reveal"><span class="section__tag">Actualidad</span><h2 class="section__title">Noticias y Comunicados</h2><p class="section__desc">Mantente informado sobre las últimas acciones sindicales y novedades educativas.</p></div>
+<div class="news__grid">
+<div class="news-card reveal"><div class="news-card__image" style="background: linear-gradient(135deg, var(--green-700), var(--green-900)); display:flex;align-items:center;justify-content:center;"><i data-lucide="megaphone" style="width: 48px; height: 48px; color: white;"></i><span class="news-card__tag">Comunicado</span></div><div class="news-card__body"><div class="news-card__date">Mayo 2026</div><h3 class="news-card__title">Pliego de solicitudes 2026</h3><p class="news-card__excerpt">SUTEV presenta el pliego unificado de solicitudes ante la Secretaría de Educación departamental.</p></div></div>
+<div class="news-card reveal"><div class="news-card__image" style="background: linear-gradient(135deg, var(--green-600), var(--green-800)); display:flex;align-items:center;justify-content:center;"><i data-lucide="library-big" style="width: 48px; height: 48px; color: white;"></i><span class="news-card__tag">Educación</span></div><div class="news-card__body"><div class="news-card__date">Mayo 2026</div><h3 class="news-card__title">Jornada de capacitación CEID</h3><p class="news-card__excerpt">Nuevos talleres de formación docente en pedagogía crítica e innovación educativa.</p></div></div>
+<div class="news-card reveal"><div class="news-card__image" style="background: linear-gradient(135deg, var(--green-500), var(--green-700)); display:flex;align-items:center;justify-content:center;"><i data-lucide="activity" style="width: 48px; height: 48px; color: white;"></i><span class="news-card__tag">Bienestar</span></div><div class="news-card__body"><div class="news-card__date">Mayo 2026</div><h3 class="news-card__title">Encuentro deportivo Norte del Valle</h3><p class="news-card__excerpt">Convocatoria para los juegos deportivos interdisciplinarios del magisterio.</p></div></div>
+</div>
+</div>
+</section>
+
+<!-- REVISTA CEID -->
+<section class="magazine-showcase" id="revista">
+  <div class="container">
+    <div class="magazine-grid">
+      <div class="magazine-content reveal">
+        <div class="magazine-badge">Nueva Publicación Oficial</div>
+        <h2 class="magazine-title">Voces que Transforman</h2>
+        <p class="magazine-desc">La primera revista institucional del CEID SUTEV Cartago. Un compendio de pensamiento crítico, experiencias pedagógicas de aula, debate sindical y construcción de saberes desde nuestro territorio norte caucano.</p>
+        <div class="magazine-actions">
+          <a href="visor-revista.html" class="btn btn--primary" style="display:inline-flex; align-items:center; gap:8px;"><i data-lucide="book-open" style="width:18px;height:18px;"></i> Leer en Línea</a>
+          <a href="assets/docs/voces_que_transforman.pdf" download class="btn btn--outline" style="display:inline-flex; align-items:center; gap:8px;"><i data-lucide="download" style="width:18px;height:18px;"></i> Descargar PDF</a>
+        </div>
+      </div>
+      <div class="magazine-3d-wrapper reveal">
+        <div class="magazine-book">
+          <img src="assets/images/portada_revista.png" alt="Portada Voces que Transforman" class="magazine-cover">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÍA -->
+<section class="section" id="galeria">
+<div class="container">
+<div class="section__header reveal"><span class="section__tag">Memoria</span><h2 class="section__title">Galería</h2><p class="section__desc">Momentos que reflejan nuestra unidad y compromiso con la educación.</p></div>
+<div class="gallery__grid reveal">
+<div class="gallery__item"><img src="assets/images/asamblea.png" alt="Asamblea General"></div>
+<div class="gallery__item"><img src="assets/images/danzas.png" alt="Grupo de Danzas Tradicionales"></div>
+<div class="gallery__item"><img src="assets/images/disfraces.png" alt="Integración y Bienestar"></div>
+<div class="gallery__item"><img src="assets/images/voleibol.png" alt="Torneo de Voleibol"></div>
+</div>
+</div>
+</section>
+
+<!-- RESERVAS -->
+<section class="section section--gray" id="reservas">
+<div class="container">
+<div class="section__header reveal"><span class="section__tag">Reservas</span><h2 class="section__title">Agenda tu Servicio</h2><p class="section__desc">Inscríbete en asesorías jurídicas y talleres del CEID.</p></div>
+<div class="form-section">
+<div class="form-card reveal">
+<h3 class="form-card__title">📋 Reservar Servicio</h3>
+<p class="form-card__desc">Selecciona el servicio, la fecha y completa tus datos.</p>
+<form id="reservationForm">
+<div class="form-group"><label for="res-servicio">Servicio</label><select name="servicio" id="res-servicio" required><option value="">Selecciona...</option><option value="Asesoría Jurídica">Asesoría Jurídica</option><option value="Capacitación CEID">Capacitación CEID</option><option value="Bienestar">Bienestar</option></select></div>
+<div class="form-row"><div class="form-group"><label for="res-nombre">Nombre completo</label><input type="text" name="nombre" id="res-nombre" required></div><div class="form-group"><label for="res-cedula">Cédula</label><input type="text" name="cedula" id="res-cedula" required></div></div>
+<div class="form-row"><div class="form-group"><label for="res-email">Correo</label><input type="email" name="email" id="res-email" required></div><div class="form-group"><label for="res-fecha">Fecha deseada</label><input type="date" name="fecha" id="res-fecha" required></div></div>
+<div class="form-group"><label for="res-detalle">Detalle de la consulta</label><textarea name="detalle" id="res-detalle" rows="3"></textarea></div>
+<button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Reservar cita</button>
+</form>
+</div>
+<div class="form-card reveal" id="afiliacion">
+<h3 class="form-card__title">✊ Formulario de Afiliación</h3>
+<p class="form-card__desc">Únete al sindicato y fortalece la defensa de tus derechos.</p>
+<form id="affiliationForm">
+<div class="form-row"><div class="form-group"><label for="af-nombre">Nombre completo</label><input type="text" name="nombre" id="af-nombre" required></div><div class="form-group"><label for="af-cedula">Cédula</label><input type="text" name="cedula" id="af-cedula" required></div></div>
+<div class="form-row"><div class="form-group"><label for="af-tel">Teléfono</label><input type="tel" name="telefono" id="af-tel" required></div><div class="form-group"><label for="af-email">Correo</label><input type="email" name="email" id="af-email" required></div></div>
+<div class="form-row"><div class="form-group"><label for="af-ie">Institución Educativa</label><input type="text" name="ie" id="af-ie" required></div><div class="form-group"><label for="af-mun">Municipio</label><select name="municipio" id="af-mun" required><option value="">Selecciona...</option><option>Cartago</option><option>Ansermanuevo</option><option>Alcalá</option><option>Ulloa</option><option>El Águila</option><option>El Cairo</option><option>Argelia</option><option>Toro</option></select></div></div>
+<div class="form-group"><label for="af-estatuto">Estatuto</label><select name="estatuto" id="af-estatuto" required><option value="">Selecciona...</option><option>Decreto 2277</option><option>Decreto 1278</option></select></div>
+<button type="submit" class="btn btn--dark" style="width:100%;justify-content:center;">Enviar solicitud de afiliación</button>
+</form>
+</div>
+</div>
+</div>
+</section>
+
+<!-- CONTACTO -->
+<section class="section section--dark" id="contacto">
+<div class="container">
+<div class="section__header reveal"><span class="section__tag">Contacto</span><h2 class="section__title">Escríbenos</h2><p class="section__desc">Estamos para servirte. Visítanos o envíanos tu mensaje.</p></div>
+<div class="contact__grid">
+<div class="reveal">
+<div class="contact-info__item"><div class="contact-info__icon"><i data-lucide="map-pin"></i></div><div><div class="contact-info__label">Dirección</div><div class="contact-info__text">Casa del Maestro, Cra 4 entre calles 16 y 17, Cartago, Valle</div></div></div>
+<div class="contact-info__item"><div class="contact-info__icon"><i data-lucide="phone"></i></div><div><div class="contact-info__label">Teléfono</div><div class="contact-info__text">Por definir</div></div></div>
+<div class="contact-info__item"><div class="contact-info__icon"><i data-lucide="mail"></i></div><div><div class="contact-info__label">Correo</div><div class="contact-info__text">Por definir</div></div></div>
+<div class="contact-info__item"><div class="contact-info__icon"><i data-lucide="clock"></i></div><div><div class="contact-info__label">Horario</div><div class="contact-info__text">Lunes a Viernes: 8:00 AM - 12:00 M / 2:00 PM - 6:00 PM</div></div></div>
+<div class="contact-info__item"><div class="contact-info__icon" style="background:#1877F2; border-color:#1877F2;"><i data-lucide="facebook" style="color:white; fill:white;"></i></div><div><div class="contact-info__label">Redes Sociales</div><div class="contact-info__text"><a href="https://web.facebook.com/sutevcartago/?locale=es_LA&_rdc=1&_rdr#" target="_blank" style="color: var(--green-400); font-weight: bold; text-decoration: none;">Fanpage Oficial SUTEV</a></div></div></div>
+</div>
+<div class="form-card reveal" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);">
+<form id="contactForm">
+<div class="form-row"><div class="form-group"><label style="color:rgba(255,255,255,0.7)" for="ct-nombre">Nombre</label><input type="text" id="ct-nombre" name="nombre" required style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);color:#fff"></div><div class="form-group"><label style="color:rgba(255,255,255,0.7)" for="ct-email">Correo</label><input type="email" id="ct-email" name="email" required style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);color:#fff"></div></div>
+<div class="form-group"><label style="color:rgba(255,255,255,0.7)" for="ct-msg">Mensaje</label><textarea id="ct-msg" name="mensaje" rows="4" required style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);color:#fff"></textarea></div>
+<button type="submit" class="btn btn--primary" style="width:100%;justify-content:center;">Enviar mensaje</button>
+</form>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ESTATUTOS -->
+<section class="section" id="estatutos">
+<div class="container">
+<div class="section__header reveal"><span class="section__tag">Documento Oficial</span><h2 class="section__title">Estatutos del SUTEV</h2><p class="section__desc">Consulta de forma interactiva nuestro marco legal y normativo.</p></div>
+<div class="estatutos-wrapper reveal" style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); background: #fff; height: 700px; position: relative;">
+<iframe src="ESTATUTOS%202026.pdf" width="100%" height="100%" style="border: none; border-radius: var(--radius-lg);">
+  <p>Tu navegador no soporta la visualización de PDFs. <a href="ESTATUTOS%202026.pdf" download style="color: var(--green-600); font-weight: bold;">Descarga los estatutos aquí</a>.</p>
+</iframe>
+</div>
+<div style="text-align: center; margin-top: 1.5rem;" class="reveal">
+  <a href="ESTATUTOS%202026.pdf" download class="btn btn--outline-dark" style="display:inline-flex; align-items:center; gap:8px;"><i data-lucide="download" style="width:18px;height:18px;"></i> Descargar PDF de los Estatutos</a>
+</div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="container">
+<div class="footer__grid">
+<div class="footer__brand"><a href="#inicio" class="header__logo"><img src="LOGO.png" alt="SUTEV" style="height:40px"><div class="header__logo-text" style="color:var(--green-400)">SUTEV Cartago<span style="color:var(--gray-500)">Norte del Valle</span></div></a><p>Sindicato Único de Trabajadores de la Educación del Valle. Subdirectiva Cartago — Filial de FECODE.</p></div>
+<div><div class="footer__title">Navegación</div><ul class="footer__links"><li><a href="#nosotros">Nosotros</a></li><li><a href="#servicios">Servicios</a></li><li><a href="#calendario">Calendario</a></li><li><a href="#noticias">Noticias</a></li><li><a href="#estatutos">Estatutos</a></li></ul></div>
+<div><div class="footer__title">Servicios y Herramientas</div><ul class="footer__links"><li><a href="#reservas">Asesoría Jurídica</a></li><li><a href="#reservas">CEID</a></li><li><a href="#reservas">Bienestar</a></li><li><a href="permisos-docentes.html">Permisos y Licencias de Ley</a></li><li><a href="calculadora-salarial.html">Calculadora Salarial</a></li><li><a href="simulador-pension.html">Simulador de Pensión</a></li><li><a href="derechos-peticion.html">Derechos de Petición</a></li><li><a href="auditor-nomina.html">Auditor de Nómina</a></li></ul></div>
+<div><div class="footer__title">Contacto y Redes</div><ul class="footer__links"><li><a href="#contacto">📍 Casa del Maestro (Cra 4 #16-17)</a></li><li><a href="#contacto">📍 Cartago, Valle del Cauca</a></li><li><a href="https://web.facebook.com/sutevcartago/?locale=es_LA&_rdc=1&_rdr#" target="_blank" style="color: var(--green-400); font-weight: 600;">📘 Facebook Oficial</a></li></ul></div>
+</div>
+<div class="footer__bottom">© 2026 SUTEV Cartago — Subdirectiva Norte del Valle. Todos los derechos reservados.</div>
+</div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox__close" id="lightboxClose">✕</button>
+  <img id="lightboxImg" src="" alt="" style="display:none;">
+  <div class="cargo-modal" id="cargoModal" style="display:none;">
+    <div class="cargo-modal__badge">Funciones Estatutarias</div>
+    <div class="cargo-modal__avatar" id="cargoIni"></div>
+    <h3 class="cargo-modal__title" id="cargoTitle"></h3>
+    <div class="cargo-modal__name" id="cargoName">Titular por definir</div>
+    <div class="cargo-modal__desc" id="cargoDesc"></div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+// Render Junta Directiva
+const cargos = [
+  {cargo:'Presidencia',ini:'P',desc:'Representación legal y política del sindicato. Convoca y preside las asambleas y reuniones de junta directiva, suscribe contratos y lidera la ejecución de las políticas sindicales.', url:'secretaria-presidencia.html'},
+  {cargo:'Vicepresidencia',ini:'VP',desc:'Reemplaza a la Presidencia en sus ausencias y apoya activamente en la coordinación, organización y gestión general de la subdirectiva.', url:'secretaria-vicepresidencia.html'},
+  {cargo:'Secretaría General',ini:'SG',desc:'Responsable del archivo, correspondencia y la administración general del sindicato. Coordina el registro de afiliados y dirige a la Secretaría de Actas.', url:'secretaria-general.html'},
+  {cargo:'Tesorería',ini:'T',desc:'Administra el patrimonio del sindicato, recauda las cuotas, rinde informes financieros y elabora el proyecto de presupuesto de la subdirectiva.', url:'secretaria-tesoreria.html'},
+  {cargo:'Fiscalía',ini:'F',desc:'Ejerce control y vigilancia sobre la gestión administrativa y financiera de la junta. Revisa las cuentas y vela por el estricto cumplimiento de los estatutos.', url:'secretaria-fiscalia.html'},
+  {cargo:'Sec. Asuntos Laborales y Jurídicos',ini:'SJ',desc:'Atiende los reclamos laborales, brinda asesoría jurídica a los afiliados y tramita las quejas por violación de derechos ante las autoridades competentes.', url:'secretaria-laboral.html'},
+  {cargo:'Sec. Organización y Ed. Sindical',ini:'SO',desc:'Promueve la afiliación, organiza las bases sindicales y coordina los programas de formación política y sindical para fortalecer la conciencia de clase.', url:'secretaria-organizacion.html'},
+  {cargo:'Sec. Prensa y Comunicaciones',ini:'SP',desc:'Dirige los órganos de difusión del sindicato, maneja la imagen institucional y mantiene informados a los afiliados sobre la actualidad del gremio.', url:'secretaria-prensa.html'},
+  {cargo:'Sec. de Cultura, Deporte y Bienestar',ini:'SC',desc:'Organiza eventos culturales, jornadas deportivas y fomenta el bienestar integral, la recreación y la integración de los maestros y sus familias.', url:'secretaria-cultura.html'},
+  {cargo:'Sec. de Género, Igualdad e Inclusión',ini:'SG',desc:'Promueve políticas de equidad de género, lucha contra todo tipo de discriminación y defiende los derechos de la mujer y las minorías en el magisterio.', url:'secretaria-genero.html'},
+  {cargo:'Sec. de Salud',ini:'SS',desc:'Vigila la correcta prestación del servicio médico-asistencial del FOMAG, atiende reclamos de salud y lidera campañas de salud ocupacional.', url:'secretaria-salud.html'},
+  {cargo:'Sec. de Asuntos Educativos y CEID',ini:'SE',desc:'Lidera el Centro de Estudios e Investigaciones Docentes, fomenta la pedagogía crítica, la investigación educativa y el debate sobre el sistema escolar.', url: 'secretaria-ceid.html', name: 'Álvaro Cárdenas Orozco', img: 'ALVARO%20CARDENAS%20OROZCO.png'},
+  {cargo:'Sec. Derechos Humanos y Paz',ini:'DH',desc:'Denuncia amenazas, acompaña a docentes en situación de riesgo, promueve la cultura de paz escolar y defiende los derechos fundamentales del magisterio.', url:'secretaria-derechoshumanos.html'},
+  {cargo:'Sec. Trabajadores de la Edu. y Etnoeducadores',ini:'ST',desc:'Asuntos Intergremiales y Cooperativos y Etnoeducadores.', url:'secretaria-trabajadores.html'},
+  {cargo:'Sec. de Institutos Técnicos, Nocturnas y 1278',ini:'SI',desc:'Atención a docentes 1278, representación de institutos técnicos y mediación de conflictos en jornadas nocturnas.', url:'secretaria-institutos.html'},
+  {cargo:'Sec. de Seguridad Social, Territoriales y Pensionados',ini:'SS',desc:'Estudio y trámite de servicios prestacionales, apoyo a docentes territoriales y bienestar para pensionados.', url:'secretaria-seguridadsocial.html'},
+  {cargo:'Sec. de Municipios Certificados y Asuntos de Cali',ini:'SM',desc:'Defensa de la Educación Pública, representación en municipios certificados y coordinación de los Asuntos de Cali.', url:'secretaria-municipios.html'},
+  {cargo:'Sec. de Actas',ini:'SA',desc:'Gestión de actas, registro de asistencia y apoyo directo a la Secretaría General en el archivo y control documental.', url:'secretaria-actas.html'}
+];
+const grid = document.getElementById('juntaGrid');
+
+// Funciones del Modal
+const lightbox = document.getElementById('lightbox');
+const lClose = document.getElementById('lightboxClose');
+const lImg = document.getElementById('lightboxImg');
+const cModal = document.getElementById('cargoModal');
+
+window.openCargoModal = function(index) {
+  const c = cargos[index];
+  
+  if(c.url) {
+    window.location.href = c.url;
+    return;
+  }
+  
+  document.getElementById('cargoIni').innerText = c.ini;
+  document.getElementById('cargoTitle').innerText = c.cargo;
+  document.getElementById('cargoDesc').innerText = c.desc;
+  document.getElementById('cargoName').innerText = c.name || 'Titular por definir';
+  
+  lImg.style.display = 'none';
+  cModal.style.display = 'block';
+  lightbox.classList.add('active');
+};
+
+lClose.addEventListener('click', () => { lightbox.classList.remove('active'); });
+lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('active'); });
+
+const juntaList = document.getElementById('juntaList');
+const juntaPreview = document.getElementById('juntaPreview');
+
+const updatePreview = (index) => {
+  const c = cargos[index];
+  const titular = c.name || 'Titular por definir';
+  const avatarHtml = c.img ? `<img src="assets/images/${c.img}" alt="${titular}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` : c.ini;
+  
+  // Actualizar clases activas en la lista
+  document.querySelectorAll('.junta-list-item').forEach((el, i) => {
+    el.classList.toggle('active', i === index);
+  });
+
+  juntaPreview.innerHTML = `
+    <div class="preview-card">
+      <div class="preview-avatar">${avatarHtml}</div>
+      <div class="preview-role">${c.cargo}</div>
+      <div class="preview-name">${titular}</div>
+      <div class="preview-desc">${c.desc}</div>
+      <a href="${c.url || '#'}" class="btn btn--primary" style="margin-top: 20px;" onclick="if(!'${c.url}') openCargoModal(${index});">Ver Secretaría Completa →</a>
+    </div>
+  `;
+};
+
+cargos.forEach((c, i) => {
+  const item = document.createElement('div');
+  item.className = 'junta-list-item';
+  const titular = c.name || 'Titular por definir';
+  const avatarHtml = c.img ? `<img src="assets/images/${c.img}" alt="${titular}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` : c.ini;
+  item.innerHTML = `<span class="item-ini" style="padding:0; overflow:hidden;">${avatarHtml}</span> <span class="item-cargo">${c.cargo}</span>`;
+  item.onclick = () => updatePreview(i);
+  item.onmouseenter = () => updatePreview(i);
+  juntaList.appendChild(item);
+});
+
+// Inicializar el primero
+if(cargos.length > 0) updatePreview(0);
+
+// Interacciones Mapa Geográfico
+const mapLocations = {
+  cartago: { lat: 4.7466, lng: -75.9117, name: "Cartago", role: "Sede Principal", leader: "Pendiente por definir", address: "Casa del Maestro, Cra 4", phone: "Por definir" },
+  ansermanuevo: { lat: 4.7963, lng: -75.9961, name: "Ansermanuevo", role: "Comité Municipal", leader: "Pendiente por definir", address: "I.E. Sede Principal", phone: "Por definir" },
+  alcala: { lat: 4.6750, lng: -75.7828, name: "Alcalá", role: "Comité Municipal", leader: "Pendiente por definir", address: "I.E. Sede Principal", phone: "Por definir" },
+  ulloa: { lat: 4.7042, lng: -75.7606, name: "Ulloa", role: "Comité Municipal", leader: "Pendiente por definir", address: "I.E. Sede Principal", phone: "Por definir" },
+  argelia: { lat: 4.7297, lng: -76.1208, name: "Argelia", role: "Comité Municipal", leader: "Pendiente por definir", address: "I.E. Sede Principal", phone: "Por definir" },
+  toro: { lat: 4.6119, lng: -76.0811, name: "Toro", role: "Comité Municipal", leader: "Pendiente por definir", address: "I.E. Sede Principal", phone: "Por definir" },
+  aguila: { lat: 4.9125, lng: -76.0397, name: "El Águila", role: "Comité Municipal", leader: "Pendiente por definir", address: "I.E. Sede Principal", phone: "Por definir" },
+  cairo: { lat: 4.7628, lng: -76.2208, name: "El Cairo", role: "Comité Municipal", leader: "Pendiente por definir", address: "I.E. Sede Principal", phone: "Por definir" }
+};
+
+let map, markers = {};
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Inicializar Leaflet Map
+  map = L.map('territory-map').setView([4.7466, -75.9117], 10);
+  
+  // Capa base oscura premium
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+  }).addTo(map);
+
+  // Crear iconos
+  const defaultIcon = L.divIcon({ className: 'custom-leaflet-marker', html: '<div class="marker-pin"></div>', iconSize: [30, 30], iconAnchor: [15, 30] });
+  const activeIcon = L.divIcon({ className: 'custom-leaflet-marker active', html: '<div class="marker-pin"></div>', iconSize: [30, 30], iconAnchor: [15, 30] });
+
+  Object.keys(mapLocations).forEach(key => {
+    const loc = mapLocations[key];
+    const marker = L.marker([loc.lat, loc.lng], {icon: key === 'cartago' ? activeIcon : defaultIcon}).addTo(map);
+    
+    // Popup HTML Enriquecido
+    const popupHtml = `
+      <div style="font-family: var(--font-body); padding: 5px;">
+        <strong style="color: var(--green-400); font-size: 1.1rem; display: block; margin-bottom: 8px;">SUTEV ${loc.name}</strong>
+        <div style="font-size: 0.85rem; color: #bbb; margin-bottom: 4px;"><strong>Tipo:</strong> ${loc.role}</div>
+        <div style="font-size: 0.85rem; color: #bbb; margin-bottom: 4px;"><strong>Presidente(a):</strong> ${loc.leader}</div>
+        <div style="font-size: 0.85rem; color: #bbb; margin-bottom: 4px;"><strong>Punto de Encuentro:</strong> ${loc.address}</div>
+        <div style="font-size: 0.85rem; color: #bbb; margin-bottom: 12px;"><strong>Contacto:</strong> ${loc.phone}</div>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}" target="_blank" class="btn btn--primary" style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; padding: 8px; width: 100%; border-radius: 4px; text-decoration: none; background: var(--green-600); color: white;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          Cómo llegar
+        </a>
+      </div>
+    `;
+    
+    marker.bindPopup(popupHtml);
+    markers[key] = marker;
+  });
+});
+
+window.activateNode = (mun) => {
+  document.querySelectorAll('.territory-item').forEach(el => {
+    el.classList.toggle('active', el.getAttribute('data-mun') === mun);
+  });
+  
+  if(map && markers[mun]) {
+    const loc = mapLocations[mun];
+    map.flyTo([loc.lat, loc.lng], 12, { duration: 1.5 });
+    
+    // Reset all icons
+    Object.keys(markers).forEach(k => {
+      markers[k].setIcon(L.divIcon({ className: 'custom-leaflet-marker', html: '<div class="marker-pin"></div>', iconSize: [30, 30], iconAnchor: [15, 30] }));
+    });
+    // Set active icon
+    markers[mun].setIcon(L.divIcon({ className: 'custom-leaflet-marker active', html: '<div class="marker-pin"></div>', iconSize: [30, 30], iconAnchor: [15, 30] }));
+    markers[mun].openPopup();
+  }
+};
+
+// Re-init reveal for dynamically added elements
+document.querySelectorAll('.reveal').forEach(el => {
+  new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.12}).observe(el);
+});
+</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+</script>
+</body>
+</html>

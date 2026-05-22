@@ -1,0 +1,2350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Permisos de Ley y Licencias para Docentes - SUTEV Cartago</title>
+<meta name="description" content="Guía Jurídica Interactiva de Permisos de Ley, Licencias y Comisiones para Docentes y Directivos Docentes Oficiales de Colombia. Genera tu oficio de solicitud con fundamentación legal de forma gratuita.">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  /* ==========================================
+     ESTILOS PREMIUM PARA EL ESPACIO DE PERMISOS
+     ========================================== */
+  
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(20, 122, 53, 0.15);
+    --danger-red: #ef4444;
+    --danger-bg: rgba(239, 68, 68, 0.08);
+    --warning-orange: #f59e0b;
+    --warning-bg: rgba(245, 158, 11, 0.08);
+  }
+
+  /* Sección superior - Consultor y Selector */
+  .permits-hero-card {
+    background: linear-gradient(135deg, var(--green-900), var(--green-700));
+    color: var(--white);
+    padding: 60px 40px;
+    border-radius: var(--radius-lg);
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+  }
+  
+  .permits-hero-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  /* Filtros y Buscador */
+  .consultor-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .category-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--gray-700);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .filter-btn:hover {
+    border-color: var(--green-500);
+    color: var(--green-700);
+    transform: translateY(-1px);
+  }
+
+  .filter-btn.active {
+    background: var(--green-700);
+    border-color: var(--green-700);
+    color: var(--white);
+    box-shadow: var(--shadow-md);
+  }
+
+  .search-box {
+    position: relative;
+    min-width: 280px;
+    flex-grow: 1;
+    max-width: 400px;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 12px 16px 12px 42px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 30px;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .search-box input:focus {
+    outline: none;
+    border-color: var(--green-600);
+    box-shadow: 0 0 0 4px rgba(27, 140, 61, 0.15);
+  }
+
+  .search-box i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-400);
+    pointer-events: none;
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Grid Principal del Consultor */
+  .permits-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1.9fr;
+    gap: 32px;
+    align-items: start;
+    margin-bottom: 60px;
+  }
+
+  @media (max-width: 992px) {
+    .permits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Menú lateral izquierdo */
+  .permits-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 750px;
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+  
+  .permits-menu::-webkit-scrollbar {
+    width: 6px;
+  }
+  .permits-menu::-webkit-scrollbar-track {
+    background: var(--gray-100);
+    border-radius: 10px;
+  }
+  .permits-menu::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: 10px;
+  }
+  .permits-menu::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-400);
+  }
+
+  .permit-tab {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    text-align: left;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .permit-tab:hover {
+    transform: translateY(-2px);
+    border-color: var(--green-300);
+    box-shadow: var(--shadow-md);
+  }
+
+  .permit-tab.active {
+    background: var(--green-900);
+    border-color: var(--green-900);
+    color: var(--white);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .permit-tab__icon-wrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--green-50);
+    color: var(--green-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    flex-shrink: 0;
+  }
+
+  .permit-tab.active .permit-tab__icon-wrapper {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--white);
+  }
+
+  .permit-tab__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .permit-tab__title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    line-height: 1.3;
+  }
+
+  .permit-tab__badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--green-600);
+    align-self: flex-start;
+  }
+
+  .permit-tab.active .permit-tab__badge {
+    color: var(--green-300);
+  }
+
+  /* Tarjeta de Ficha Técnica Derecha */
+  .permit-detail-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    box-shadow: var(--shadow-lg);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  @media (max-width: 576px) {
+    .permit-detail-card {
+      padding: 24px;
+    }
+  }
+
+  .detail-header {
+    border-bottom: 1.5px solid var(--gray-100);
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+  }
+
+  .detail-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .badge-type {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    gap: 6px;
+  }
+
+  .badge-remunerado {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--green-700);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  .badge-no-remunerado {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger-red);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  }
+
+  .badge-authority {
+    background: var(--gray-100);
+    color: var(--gray-800);
+    border: 1px solid var(--gray-200);
+  }
+
+  /* Panel de duración */
+  .duration-highlight-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 576px) {
+    .duration-highlight-box {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .info-box {
+    background: var(--green-50);
+    border-left: 5px solid var(--green-600);
+    padding: 16px 20px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .info-box--danger {
+    background: var(--danger-bg);
+    border-left-color: var(--danger-red);
+  }
+
+  .info-box__label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--green-800);
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .info-box--danger .info-box__label {
+    color: #dc2626;
+  }
+
+  .info-box__value {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--green-900);
+    font-family: var(--font-heading);
+    line-height: 1.2;
+  }
+
+  .info-box--danger .info-box__value {
+    color: #991b1b;
+  }
+
+  /* Sección de Requisitos y Soportes */
+  .detail-section-title {
+    font-size: 1.05rem;
+    color: var(--green-900);
+    margin-top: 28px;
+    margin-bottom: 14px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1.5px solid var(--gray-100);
+    padding-bottom: 8px;
+  }
+
+  .detail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .detail-list li {
+    font-size: 0.92rem;
+    color: var(--gray-700);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+
+  .detail-list li i {
+    color: var(--green-600);
+    flex-shrink: 0;
+    margin-top: 3px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .detail-list--bullet li::before {
+    content: "•";
+    color: var(--green-600);
+    font-weight: 900;
+    font-size: 1.2rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  /* Acordeón Jurídico */
+  .legal-accordion {
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    margin-top: 30px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .legal-accordion__header {
+    background: var(--gray-50);
+    padding: 14px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--gray-800);
+    transition: var(--transition);
+  }
+
+  .legal-accordion__header:hover {
+    background: var(--gray-100);
+    color: var(--green-800);
+  }
+
+  .legal-accordion__content {
+    padding: 20px;
+    background: var(--white);
+    border-top: 1px solid var(--gray-200);
+    font-size: 0.88rem;
+    color: var(--gray-700);
+    line-height: 1.6;
+    display: none;
+  }
+
+  .legal-accordion__content ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .legal-accordion__content li {
+    position: relative;
+    padding-left: 18px;
+  }
+
+  .legal-accordion__content li::before {
+    content: "⚖️";
+    position: absolute;
+    left: 0;
+    top: 1px;
+    font-size: 0.85rem;
+  }
+
+  .legal-accordion.active .legal-accordion__content {
+    display: block;
+  }
+  
+  .legal-accordion.active .legal-accordion__header i {
+    transform: rotate(180deg);
+  }
+
+  /* ==========================================
+     WORKSTATION: FORMULARIO Y OFICIO DIGITAL
+     ========================================== */
+  
+  .workstation-title {
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 40px;
+  }
+
+  .workstation-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
+    gap: 32px;
+    align-items: start;
+    margin-bottom: 80px;
+  }
+
+  .workstation-grid > * {
+    min-width: 0;
+  }
+
+  @media (max-width: 992px) {
+    .workstation-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Formulario Persistente */
+  .workstation-form {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .form-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    border-bottom: 1.5px solid var(--gray-100);
+    padding-bottom: 12px;
+  }
+
+  .autosave-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--green-700);
+    background: var(--green-50);
+    padding: 4px 10px;
+    border-radius: 12px;
+  }
+
+  .form-group-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%234b5563' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 1.1rem;
+    padding-right: 32px !important;
+    padding-left: 12px !important;
+    text-overflow: clip;
+  }
+
+  @media (max-width: 768px) {
+    .form-group-row {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+
+  /* Avisos y Errores del formulario */
+  .validation-alert {
+    background: var(--warning-bg);
+    border: 1.5px solid var(--warning-orange);
+    color: #b45309;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    display: none;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.4;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .validation-alert i {
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Previsualización del papel físico A4 */
+  .sheet-wrapper {
+    background: #e5e7eb;
+    border: 1.5px solid var(--gray-300);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: inset 0 4px 12px rgba(0,0,0,0.06);
+    position: sticky;
+    top: 100px;
+  }
+
+  @media (max-width: 768px) {
+    .sheet-wrapper {
+      padding: 12px;
+      position: static;
+    }
+  }
+
+  .sheet-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .sheet-title-row span {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .paper-page {
+    background: var(--white);
+    border: 1px solid var(--gray-300);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.05);
+    padding: 50px 60px;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 1 / 1.414; /* Proporción A4 estándar */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.88rem;
+    color: #111;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overflow-wrap: break-word;
+    position: relative;
+    border-radius: 4px;
+  }
+
+  /* Marca de agua simulada en el papel de oficina */
+  .paper-page::before {
+    content: "BORRADOR SUTEV";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: rgba(20, 122, 53, 0.035);
+    font-family: var(--font-heading);
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .paper-page {
+      padding: 30px 24px;
+      font-size: 0.72rem;
+      aspect-ratio: auto;
+      min-height: 480px;
+    }
+    .paper-page::before {
+      font-size: 2.2rem;
+    }
+  }
+
+  .letter-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 576px) {
+    .letter-actions {
+      flex-direction: column;
+    }
+    .letter-actions .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  /* Estilos específicos para el botón copiar activo */
+  .btn--success {
+    background: #10b981;
+    border-color: #10b981;
+    color: var(--white);
+  }
+  .btn--success:hover {
+    background: #059669;
+    border-color: #059669;
+  }
+
+  /* ==========================================
+     REGLAS DE IMPRESIÓN (PRINT PREPARATION)
+     ========================================== */
+  
+  @media print {
+    /* Ocultar absolutamente todo excepto la hoja de papel */
+    body * {
+      visibility: hidden;
+    }
+    
+    #printable-sheet, #printable-sheet * {
+      visibility: visible;
+    }
+    
+    /* Reposicionar la hoja física para que use el 100% de la página real */
+    #printable-sheet {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: auto;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+      font-size: 11pt;
+      font-family: 'Courier New', Courier, monospace;
+      color: #000;
+      background: none;
+      white-space: pre-wrap;
+    }
+    
+    /* Quitar la marca de agua BORRADOR SUTEV al imprimir físicamente */
+    #printable-sheet::before {
+      display: none;
+    }
+
+    .sheet-wrapper, .letter-preview-container {
+      background: none !important;
+      border: none !important;
+      padding: 0 !important;
+    }
+    
+    @page {
+      size: letter;
+      margin: 2.5cm;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+<div class="container">
+<a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV"><div class="header__logo-text">SUTEV Cartago<span>Norte del Valle</span></div></a>
+<nav><ul class="nav__list" id="navList">
+<li><a href="index.html" class="nav__link">Inicio</a></li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Nosotros <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="index.html#nosotros" class="nav__dropdown-item"><i data-lucide="users" style="width: 14px; height: 14px;"></i> ¿Quiénes Somos?</a></li>
+    <li><a href="index.html#estatutos" class="nav__dropdown-item"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i> Estatutos del Sindicato</a></li>
+    <li><a href="index.html#galeria" class="nav__dropdown-item"><i data-lucide="image" style="width: 14px; height: 14px;"></i> Galería de Fotos</a></li>
+  </ul>
+</li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Servicios <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="index.html#servicios" class="nav__dropdown-item"><i data-lucide="briefcase" style="width: 14px; height: 14px;"></i> Portafolio de Servicios</a></li>
+    <li><a href="permisos-docentes.html" class="nav__dropdown-item"><i data-lucide="scale" style="width: 14px; height: 14px;"></i> Permisos de Ley y Licencias</a></li>
+    <li><a href="calculadora-salarial.html" class="nav__dropdown-item"><i data-lucide="calculator" style="width: 14px; height: 14px;"></i> Calculadora Salarial</a></li>
+    <li><a href="simulador-pension.html" class="nav__dropdown-item"><i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i> Simulador de Pensión</a></li>
+    <li><a href="derechos-peticion.html" class="nav__dropdown-item"><i data-lucide="file-signature" style="width: 14px; height: 14px;"></i> Derechos de Petición</a></li>
+    <li><a href="auditor-nomina.html" class="nav__dropdown-item"><i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> Auditor de Nómina</a></li>
+  </ul>
+</li>
+<li><a href="index.html#calendario" class="nav__link">Calendario</a></li>
+<li><a href="index.html#noticias" class="nav__link">Noticias</a></li>
+<li><a href="index.html#contacto" class="nav__link">Contacto</a></li>
+<li><a href="index.html#afiliacion" class="nav__link nav__link--cta">Afíliate</a></li>
+</ul></nav>
+<button class="nav__toggle" id="navToggle" aria-label="Menú"><span></span><span></span><span></span></button>
+</div>
+</header>
+
+<!-- HERO SECCION -->
+<section class="section section--dark" style="padding-top: 140px; padding-bottom: 50px;">
+  <div class="container">
+    <div class="section__header reveal" style="margin-bottom: 0;">
+      <span class="section__tag">Asesoría Sindical y Normativa</span>
+      <h1 class="section__title" style="color:var(--white);">Permisos de Ley y Licencias</h1>
+      <p class="section__desc">Tu consultor jurídico interactivo para conocer las 10 situaciones administrativas del Magisterio de Cartago. Analiza tus derechos y redacta tu oficio de solicitud con absoluta rigurosidad legal.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN 1: CONSULTOR JURÍDICO -->
+<section class="section" style="padding-top: 50px; padding-bottom: 30px; background-color: var(--gray-50);">
+  <div class="container">
+    
+    <!-- Filtros de Categorías y Buscador -->
+    <div class="consultor-controls reveal">
+      <div class="category-filters">
+        <button class="filter-btn active" onclick="filterPermits('all', this)"><i data-lucide="list"></i> Todos</button>
+        <button class="filter-btn" onclick="filterPermits('remunerado', this)"><i data-lucide="coins"></i> Remunerados</button>
+        <button class="filter-btn" onclick="filterPermits('no-remunerado', this)"><i data-lucide="ban"></i> No Remunerados</button>
+      </div>
+      <div class="search-box">
+        <i data-lucide="search"></i>
+        <input type="text" id="permit-search" placeholder="Buscar permiso o palabra clave (ej: luto)..." oninput="searchPermits()">
+      </div>
+    </div>
+    
+    <div class="permits-grid">
+      
+      <!-- Panel Izquierdo: Menú de Permisos -->
+      <div class="permits-menu reveal" id="tabs-container">
+        <!-- Las pestañas se inyectarán de forma dinámica mediante JavaScript -->
+      </div>
+      
+      <!-- Panel Derecho: Detalle de Ley y Soportes -->
+      <div class="reveal">
+        <div class="permit-detail-card" id="detail-card">
+          <!-- El contenido de la ficha técnica se inyectará dinámicamente -->
+        </div>
+      </div>
+      
+    </div>
+
+  </div>
+</section>
+
+<!-- SECCIÓN 2: WORKSTATION GENERADOR DE OFICIO -->
+<section class="section" style="padding-top: 40px; border-top: 1px solid var(--gray-200); background-color: var(--white);">
+  <div class="container">
+    
+    <div class="workstation-title reveal">
+      <span class="section__tag">Herramienta Autónoma</span>
+      <h2 style="font-size: 1.8rem; color: var(--green-900); font-weight: 800; font-family: var(--font-heading); margin-bottom: 8px;">Estación de Redacción de Oficios</h2>
+      <p style="font-size: 0.95rem; color: var(--gray-600); max-width: 700px; margin: 8px auto 0;">Digita tus datos a continuación. El generador inteligente adaptará la fundamentación jurídica, el destinatario formal y el cuerpo de la carta en tiempo real según el permiso seleccionado arriba.</p>
+    </div>
+
+    <div class="workstation-grid">
+      
+      <!-- Formulario Persistente -->
+      <div class="workstation-form reveal">
+        <div class="form-header-row">
+          <h3 style="font-size: 1.15rem; color: var(--green-900); font-weight: 800; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="edit-3" style="color:var(--green-700); width:20px; height:20px;"></i> Datos de Solicitud
+          </h3>
+          <span class="autosave-badge"><i data-lucide="save" style="width:12px; height:12px;"></i> Auto-guardado</span>
+        </div>
+
+        <!-- Alerta de Validación de Fechas o Días -->
+        <div class="validation-alert" id="date-validation-alert">
+          <i data-lucide="alert-triangle" style="width:18px; height:18px;"></i>
+          <span id="alert-message">La fecha de finalización no puede ser anterior a la de inicio.</span>
+        </div>
+
+        <form id="office-draft-form" onsubmit="event.preventDefault();">
+          <div class="form-group">
+            <label for="doc-tipo-permiso">Tipo de Permiso / Situación Administrativa</label>
+            <select id="doc-tipo-permiso" onchange="handlePermissionChangeDropdown(this)" required style="font-weight: 600; color: var(--green-900); border-color: var(--green-300);"></select>
+          </div>
+
+          <div class="form-group">
+            <label for="doc-nombre">Nombre Completo del Docente</label>
+            <input type="text" id="doc-nombre" placeholder="Ej. Natalia Córdoba Toro" oninput="handleFormInput()" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="doc-cedula">Cédula de Ciudadanía</label>
+            <input type="text" id="doc-cedula" placeholder="Ej. 1.112.345.678" oninput="handleFormInput()" required>
+          </div>
+
+          <div class="form-group">
+            <label for="doc-ie">Institución Educativa (Colegio de Cartago)</label>
+            <input type="text" id="doc-ie" placeholder="Ej. Institución Educativa Académico" oninput="handleFormInput()" required>
+          </div>
+
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-jornada">Jornada Laboral</label>
+              <select id="doc-jornada" onchange="handleFormInput()" required>
+                <option value="Mañana">Mañana</option>
+                <option value="Tarde">Tarde</option>
+                <option value="Única" selected>Única</option>
+                <option value="Nocturna">Nocturna</option>
+              </select>
+            </div>
+            <div class="form-group" id="ente-destinatario-group">
+              <label for="doc-ente">Ente Territorial Destinatario</label>
+              <select id="doc-ente" onchange="handleFormInput()" required>
+                <option value="Cartago" selected>Secretaría de Cartago</option>
+                <option value="Valle">Secretaría del Valle</option>
+              </select>
+            </div>
+            <div class="form-group" id="rector-destinatario-badge" style="display: none;">
+              <label>Destinatario Inteligente (Por Ley)</label>
+              <div style="background: var(--green-50); border: 1.5px solid var(--green-200); padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.88rem; color: var(--green-800); display: flex; align-items: center; gap: 8px; font-weight: 600; min-height: 48px;">
+                <i data-lucide="award" style="width: 18px; height: 18px; color: var(--green-700); flex-shrink: 0;"></i>
+                <span>Dirigido al Rector de la I.E.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contenedor reactivo de campos dinámicos específicos de cada permiso -->
+          <div id="dynamic-fields-container"></div>
+
+          <div style="margin-top: 10px;">
+            <button type="button" class="btn btn--outline" onclick="clearForm()" style="width:100%; display:inline-flex; align-items:center; justify-content:center; gap:8px;">
+              <i data-lucide="trash-2" style="width:16px; height:16px;"></i> Limpiar Datos de Sesión
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Previsualización en Hoja Física -->
+      <div class="reveal">
+        <div class="sheet-wrapper">
+          <div class="sheet-title-row">
+            <span><i data-lucide="eye" style="width:14px; height:14px;"></i> Borrador Formal (Formato Carta)</span>
+            <span id="business-days-badge" style="background:#e2e8f0; padding:2px 8px; border-radius:4px; font-weight:700; color:var(--gray-700);">0 días hábiles</span>
+          </div>
+
+          <div class="paper-page" id="printable-sheet">
+            <!-- La carta oficial se redactará dinámicamente -->
+          </div>
+
+          <!-- Botones de Acción -->
+          <div class="letter-actions">
+            <button class="btn btn--outline-dark" id="btn-copy" onclick="copyLetterText()" style="display:inline-flex; align-items:center; gap:8px;">
+              <i data-lucide="copy" id="icon-copy" style="width:16px; height:16px;"></i> <span id="text-copy">Copiar Texto</span>
+            </button>
+            <button class="btn btn--primary" onclick="printLetter()" style="display:inline-flex; align-items:center; gap:8px;">
+              <i data-lucide="printer" style="width:16px; height:16px;"></i> Imprimir / PDF
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="container">
+<div class="footer__grid">
+<div class="footer__brand"><a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV" style="height:40px"><div class="header__logo-text" style="color:var(--green-400)">SUTEV Cartago<span style="color:var(--gray-500)">Norte del Valle</span></div></a><p>Sindicato Único de Trabajadores de la Educación del Valle. Subdirectiva Cartago — Filial de FECODE.</p></div>
+<div><div class="footer__title">Navegación</div><ul class="footer__links"><li><a href="index.html#nosotros">Nosotros</a></li><li><a href="index.html#servicios">Servicios</a></li><li><a href="index.html#calendario">Calendario</a></li><li><a href="index.html#noticias">Noticias</a></li><li><a href="index.html#estatutos">Estatutos</a></li></ul></div>
+<div><div class="footer__title">Servicios y Herramientas</div><ul class="footer__links"><li><a href="index.html#reservas">Asesoría Jurídica</a></li><li><a href="index.html#reservas">CEID</a></li><li><a href="index.html#reservas">Bienestar</a></li><li><a href="permisos-docentes.html">Permisos y Licencias de Ley</a></li><li><a href="calculadora-salarial.html">Calculadora Salarial</a></li><li><a href="simulador-pension.html">Simulador de Pensión</a></li><li><a href="derechos-peticion.html">Derechos de Petición</a></li><li><a href="auditor-nomina.html">Auditor de Nómina</a></li></ul></div>
+</div>
+<div class="footer__bottom">© 2026 SUTEV Cartago — Subdirectiva Norte del Valle. Todos los derechos reservados.</div>
+</div>
+</footer>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  // ==========================================
+  // DATASET DE SITUACIONES ADMINISTRATIVAS
+  // ==========================================
+  const permitsData = [
+    {
+      id: "permiso-ordinario",
+      name: "Permiso Remunerado Ordinario",
+      icon: "file-text",
+      category: "remunerado",
+      typeBadge: "Remunerado",
+      duration: "Hasta 3 días hábiles en el mes",
+      durationDaysMax: 3,
+      durationDaysType: "habiles",
+      authority: "Rector de la Institución Educativa",
+      impact: "100% Remunerado. Se cuenta plenamente como tiempo de servicio y pensión. No genera vacancia ni interrupción de antigüedad laboral.",
+      requirements: [
+        "Mediar una causa justa y demostrable (calamidad doméstica grave, fuerza mayor insuperable o necesidades familiares urgentes).",
+        "Solicitarse previamente por escrito con radicado ante el Rector (salvo fuerza mayor súbita).",
+        "Estar sujeto a la concesión expresa por parte del Rector mediante acto de respuesta."
+      ],
+      soportes: [
+        "Oficio formal escrito justificando la calamidad doméstica o causa de fuerza mayor.",
+        "Soportes complementarios en caso de requerirse por parte del Rector a su reincorporación (ej. facturas de reparaciones locativas urgentes, reporte de emergencias)."
+      ],
+      legalBase: `
+        <ul>
+          <li><strong>Decreto Ley 1278 de 2002 (Estatuto de Profesionalización Docente)</strong>, Artículo 57 ("Permisos"): Establece expresamente el derecho de los educadores a percibir permiso remunerado hasta por tres (3) días hábiles consecutivos en un mes, siempre que medie justa causa.</li>
+          <li><strong>Decreto Ley 2277 de 1979 (Régimen Antiguo)</strong>, Artículo 65: Concede idénticos términos para los docentes regidos por esta norma.</li>
+          <li><strong>Decreto 1083 de 2015 (Decreto Único Reglamentario de la Función Pública)</strong>, Artículo 2.2.5.5.17: Regulación de permisos generales en el sector público por calamidades o causa justificada.</li>
+        </ul>
+      `,
+      destinatarioDefault: "Rector",
+      subject: "Solicitud de permiso remunerado ordinario por justa causa"
+    },
+    {
+      id: "licencia-luto",
+      name: "Licencia por Luto",
+      icon: "shield-alert",
+      category: "remunerado",
+      typeBadge: "Remunerado",
+      duration: "5 días hábiles consecutivos",
+      durationDaysMax: 5,
+      durationDaysType: "habiles",
+      authority: "Secretaría de Educación (a través del Rector)",
+      impact: "100% Remunerado. Cuenta plenamente para primas, pensión, cesantías y ascensos. Es un derecho inalienable e imperativo.",
+      requirements: [
+        "Fallecimiento del cónyuge o compañero/a permanente.",
+        "Fallecimiento de familiares hasta el segundo grado de consanguinidad (padres, hijos, hermanos, abuelos, nietos).",
+        "Fallecimiento de familiares en primer grado de afinidad (suegros, yernos, nueras, hijastros) o primer grado civil (padres adoptantes, hijos adoptivos).",
+        "Informar de inmediato al Rector para la asignación de reemplazos, y radicar los soportes formales."
+      ],
+      soportes: [
+        "Copia del Registro Civil de Defunción del familiar fallecido.",
+        "Copia de los Registros Civiles de Nacimiento o Matrimonio que demuestren el vínculo de parentesco legal.",
+        "Los soportes deben presentarse formalmente dentro de los treinta (30) días calendario siguientes al hecho."
+      ],
+      legalBase: `
+        <ul>
+          <li><strong>Ley 1280 de 2009 (Ley de Licencia por Luto)</strong>: Consagra la licencia de luto remunerada obligatoria de cinco (5) días hábiles para todos los servidores públicos y trabajadores de Colombia.</li>
+          <li><strong>Decreto 1083 de 2015</strong>, Artículo 2.2.5.5.18 ("Licencia por luto"): Regula las condiciones de concesión inmediata una vez verificado el parentesco.</li>
+        </ul>
+      `,
+      destinatarioDefault: "Secretaria",
+      subject: "Solicitud de legalización de licencia por luto remunerada - Ley 1280 de 2009"
+    },
+    {
+      id: "licencia-maternidad",
+      name: "Licencia por Maternidad",
+      icon: "baby",
+      category: "remunerado",
+      typeBadge: "Remunerado",
+      duration: "18 semanas calendario",
+      durationDaysMax: 126, // 18 * 7
+      durationDaysType: "calendario",
+      authority: "Secretaría de Educación Certificada",
+      impact: "100% Remunerado sobre la asignación básica. Financiado a través de COSMITET / FOMAG. El tiempo computa en su totalidad para antigüedad y cesantías.",
+      requirements: [
+        "Haber dado a luz o iniciar el periodo de descanso pre-parto según dictamen del obstetra de Cosmitet.",
+        "Radicar la correspondiente incapacidad ante el área de Talento Humano de la Secretaría de Educación.",
+        "Válido también en caso de adopción de menores (madre adoptante)."
+      ],
+      soportes: [
+        "Certificado oficial de Licencia Médica de Maternidad expedido por Cosmitet (prestador oficial de FOMAG).",
+        "Copia del Registro Civil de Nacimiento del recién nacido o sentencia de adopción oficial de bienestar familiar."
+      ],
+      legalBase: `
+        <ul>
+          <li><strong>Ley 1822 de 2017</strong>: Amplía el descanso remunerado en época de parto a dieciocho (18) semanas obligatorias financiadas por el Estado para las empleadas del sector público.</li>
+          <li><strong>Decreto 1083 de 2015</strong>, Artículo 2.2.5.5.12: Establece los efectos administrativos de interrupción laboral protegida por fuero de maternidad en el sector estatal.</li>
+        </ul>
+      `,
+      destinatarioDefault: "Secretaria",
+      subject: "Solicitud de licencia de maternidad remunerada - Ley 1822 de 2017"
+    },
+    {
+      id: "licencia-paternidad",
+      name: "Licencia por Paternidad",
+      icon: "user-check",
+      category: "remunerado",
+      typeBadge: "Remunerado",
+      duration: "2 semanas (10 días hábiles)",
+      durationDaysMax: 10,
+      durationDaysType: "habiles",
+      authority: "Secretaría de Educación Certificada",
+      impact: "100% Remunerado. Cubierto en su totalidad por el FOMAG/Ente Territorial. No afecta el salario ni las primas de servicios.",
+      requirements: [
+        "Nacimiento del hijo/a o proceso de adopción completado.",
+        "Presentar la solicitud y soporte dentro de los treinta (30) días calendario siguientes al nacimiento del menor."
+      ],
+      soportes: [
+        "Registro Civil de Nacimiento original de la Registraduría, a nombre del docente solicitante.",
+        "Copia de la certificación médica de nacimiento del menor."
+      ],
+      legalBase: `
+        <ul>
+          <li><strong>Ley 2114 de 2021</strong>: Incrementa la licencia de paternidad a dos semanas (10 días hábiles) en Colombia, aplicable para servidores públicos de carrera del magisterio.</li>
+          <li><strong>Decreto 1083 de 2015</strong>: Regula la concesión administrativa de la licencia para el padre biológico o adoptante.</li>
+        </ul>
+      `,
+      destinatarioDefault: "Secretaria",
+      subject: "Solicitud de licencia de paternidad remunerada - Ley 2114 de 2021"
+    },
+    {
+      id: "licencia-ordinaria",
+      name: "Licencia Ordinaria (No Remunerada)",
+      icon: "file-x",
+      category: "no-remunerado",
+      typeBadge: "No Remunerado",
+      duration: "Hasta 90 días prorrogables por 90 más",
+      durationDaysMax: 180,
+      durationDaysType: "calendario",
+      authority: "Secretaría de Educación Certificada",
+      impact: "NO REMUNERADO. Suspensión temporal del sueldo básico. El tiempo en esta licencia NO computa para pensión, antigüedad, cesantías ni ascensos en el Escalafón.",
+      requirements: [
+        "Solicitud justificada por motivos personales o estudios que requieran dedicación exclusiva.",
+        "Debe solicitarse con antelación mínima de quince (15) días hábiles ante la Secretaría de Educación.",
+        "Sujeta a conveniencia del servicio público educativo (puede negarse si genera vacíos sin docentes sustitutos)."
+      ],
+      soportes: [
+        "Oficio formal justificando los motivos de la solicitud.",
+        "Visto bueno del Rector del colegio o constancia de matrícula académica si aplica para estudios."
+      ],
+      legalBase: `
+        <ul>
+          <li><strong>Decreto Ley 1278 de 2002</strong>, Artículo 59 ("Licencia no remunerada"): Concede el derecho a solicitar hasta noventa (90) días calendario por año, prorrogables por una vez si media justa causa.</li>
+          <li><strong>Decreto Ley 2277 de 1979</strong>, Artículo 63: Regula la misma situación administrativa de suspensión temporal de actividades particulares para el escalafón tradicional.</li>
+          <li><strong>Decreto 1083 de 2015</strong>, Artículo 2.2.5.5.5: Detalla los efectos administrativos de separación transitoria del cargo del servidor.</li>
+        </ul>
+      `,
+      destinatarioDefault: "Secretaria",
+      subject: "Solicitud de licencia ordinaria no remunerada por asuntos particulares"
+    },
+    {
+      id: "voto",
+      name: "Descanso por Votación (Sufragio)",
+      icon: "check-square",
+      category: "remunerado",
+      typeBadge: "Remunerado",
+      duration: "1/2 día de descanso compensatorio",
+      durationDaysMax: 0.5,
+      durationDaysType: "habiles",
+      authority: "Rector de la Institución Educativa",
+      impact: "100% Remunerado. Se acuerda con el Rector para no interrumpir clases de forma crítica.",
+      requirements: [
+        "Haber sufragado de manera efectiva en elecciones oficiales (nacionales, departamentales o municipales).",
+        "Disfrutarse dentro de los **treinta (30) días calendario siguientes** a la jornada de elecciones.",
+        "No es acumulativo con otras elecciones pasadas."
+      ],
+      soportes: [
+        "Original o copia legible del Certificado Electoral debidamente firmado por los jurados de votación en la mesa asignada."
+      ],
+      legalBase: `
+        <ul>
+          <li><strong>Ley 403 de 1997</strong>, Artículo 3: Establece el derecho inalienable a media jornada de descanso compensatorio remunerado para todo ciudadano que ejerza el sufragio.</li>
+        </ul>
+      `,
+      destinatarioDefault: "Rector",
+      subject: "Solicitud de medio día de descanso compensatorio por ejercicio del voto"
+    },
+    {
+      id: "jurado",
+      name: "Descanso por Jurado de Votación",
+      icon: "users",
+      category: "remunerado",
+      typeBadge: "Remunerado",
+      duration: "1 día compensatorio completo",
+      durationDaysMax: 1,
+      durationDaysType: "habiles",
+      authority: "Rector de la Institución Educativa",
+      impact: "100% Remunerado. El día de descanso debe ser concertado y no puede ser denegado por la rectoría.",
+      requirements: [
+        "Haber sido designado y haber prestado el servicio como Jurado en elecciones oficiales.",
+        "Disfrutarse dentro de los **cuarenta y cinco (45) días hábiles siguientes** a las elecciones."
+      ],
+      soportes: [
+        "Formulario E-18 oficial de la Registraduría Nacional del Estado Civil donde consta la asistencia y servicio como Jurado."
+      ],
+      legalBase: `
+        <ul>
+          <li><strong>Decreto Ley 2241 de 1986 (Código Electoral)</strong>, Artículo 105: Consagra el derecho absoluto a un día libre compensatorio pagado para los jurados oficiales del Estado.</li>
+        </ul>
+      `,
+      destinatarioDefault: "Rector",
+      subject: "Solicitud de día libre compensatorio remunerado por servicio de Jurado de Votación"
+    },
+    {
+      id: "comision-estudios",
+      name: "Comisión de Estudios (Remunerada)",
+      icon: "graduation-cap",
+      category: "remunerado",
+      typeBadge: "Remunerado",
+      duration: "Duración formal del posgrado académico",
+      durationDaysMax: 365,
+      durationDaysType: "calendario",
+      authority: "Secretaría de Educación Certificada",
+      impact: "Conserva el 100% de la asignación salarial básica. Exige al docente firmar una póliza de cumplimiento donde se obliga a prestar sus servicios al magisterio el doble del tiempo otorgado en comisión.",
+      requirements: [
+        "Ser docente oficial con derechos de carrera y evaluación de desempeño satisfactoria previa.",
+        "Admisión formal en un programa de posgrado afín a las áreas curriculares o pedagógicas del colegio.",
+        "Cumplir con las convocatorias y cupos anuales asignados por el ente territorial."
+      ],
+      soportes: [
+        "Constancia de admisión definitiva de la institución educativa superior autorizada.",
+        "Pensum y cronograma de estudios oficial indicando horarios e intensidad lectiva.",
+        "Resolución aprobatoria de Comisión firmada por la Secretaría y póliza de cumplimiento legalizada."
+      ],
+      legalBase: `
+        <ul>
+          <li><strong>Decreto Ley 1278 de 2002</strong>, Artículo 60 ("Comisiones"): Reglamenta las comisiones de estudios remuneradas y las pólizas de garantía de permanencia en el Estado.</li>
+          <li><strong>Decreto Ley 2277 de 1979</strong>, Artículo 73: Regulación de comisiones de perfeccionamiento educativo.</li>
+        </ul>
+      `,
+      destinatarioDefault: "Secretaria",
+      subject: "Solicitud de Comisión de Estudios Remunerada para formación de posgrado"
+    },
+    {
+      id: "docencia-universitaria",
+      name: "Permiso para Docencia Universitaria",
+      icon: "book-open",
+      category: "remunerado",
+      typeBadge: "Compensado",
+      duration: "Hasta 5 horas semanales",
+      durationDaysMax: 5,
+      durationDaysType: "horas-semanales",
+      authority: "Rector (Acuerdo de Compensación)",
+      impact: "Mantiene el salario íntegro. El docente se obliga mediante cronograma firmado a compensar las horas académicas por fuera de su jornada escolar ordinaria.",
+      requirements: [
+        "La cátedra en educación superior no debe cruzar su horario con la atención de alumnos del colegio oficial.",
+        "Acordar previamente un plan exhaustivo de reposición o compensación de horas presenciales.",
+        "Garantizar el 100% de la ejecución curricular a su cargo."
+      ],
+      soportes: [
+        "Certificación de la Universidad acreditando el horario lectivo asignado al docente.",
+        "Acta interna de concertación escolar indicando días de compensación horaria avalada por el Rector."
+      ],
+      legalBase: `
+        <ul>
+          <li><strong>Leyes de la Función Pública y Estatuto Docente</strong>: Permiten a los servidores públicos con dedicación exclusiva dictar cátedra universitaria hasta por 5 horas semanales, supeditado a no afectar el servicio primario y compensar debidamente las horas escolares.</li>
+        </ul>
+      `,
+      destinatarioDefault: "Rector",
+      subject: "Solicitud de permiso académico y compensación para docencia universitaria"
+    },
+    {
+      id: "permiso-sindical",
+      name: "Permiso Sindical",
+      icon: "flag",
+      category: "remunerado",
+      typeBadge: "Remunerado",
+      duration: "Según asignación y delegación aprobada",
+      durationDaysMax: 30,
+      durationDaysType: "calendario",
+      authority: "Secretaría de Educación Certificada",
+      impact: "100% Remunerado. Se otorga para representar los intereses colectivos de los docentes agrupados en SUTEV y FECODE.",
+      requirements: [
+        "Ser directivo electo de la junta directiva de SUTEV o haber sido designado delegado oficial para asambleas u otros eventos sindicales.",
+        "Estar en el listado consolidado remitido formalmente por SUTEV a la Secretaría de Educación.",
+        "Contar con la respectiva Resolución de Permiso Sindical del ente territorial antes del inicio de la ausencia."
+      ],
+      soportes: [
+        "Oficio emitido por la Junta Directiva de SUTEV Valle / Subdirectiva Cartago certificando su designación obligatoria en el evento o asamblea.",
+        "Copia de la Resolución de Permisos Sindicales vigente de la Secretaría de Educación."
+      ],
+      legalBase: `
+        <ul>
+          <li><strong>Decreto 1075 de 2015 (Único Reglamentario de Educación)</strong>, Sección de Garantías Sindicales: Compila el Decreto 344 de 2010 y convenios internacionales de la OIT sobre garantías colectivas en el sector educativo estatal.</li>
+        </ul>
+      `,
+      destinatarioDefault: "Secretaria",
+      subject: "Solicitud de legalización de ausencia amparada bajo Permiso Sindical resolutivo"
+    }
+  ];
+
+  // Estado global de la aplicación y campos dinámicos
+  let selectedPermit = permitsData[0];
+  let currentCategoryFilter = 'all';
+  let currentSearchQuery = '';
+  let dynamicState = {}; // Diccionario para guardar el estado de los inputs dinámicos
+
+  // Elementos del DOM Cache
+  let docNombreEl, docCedulaEl, docIeEl, docJornadaEl, docEnteEl;
+  let validationAlertEl, alertMessageEl, printableSheetEl, businessDaysBadgeEl;
+
+  // Helper seguro para obtener valores de campos dinámicos o estáticos
+  function getVal(id) {
+    const el = document.getElementById(id);
+    return el ? el.value : (dynamicState[id] !== undefined ? dynamicState[id] : '');
+  }
+
+  // Poblar el dropdown de permisos
+  function populatePermissionDropdown() {
+    const dropdown = document.getElementById('doc-tipo-permiso');
+    if (!dropdown) return;
+    dropdown.innerHTML = permitsData.map(permit => 
+      `<option value="${permit.id}">${permit.name}</option>`
+    ).join('');
+    dropdown.value = selectedPermit.id;
+  }
+
+  // Manejar el cambio en el selector de permisos de la Workstation
+  function handlePermissionChangeDropdown(element) {
+    if (!element) return;
+    selectPermit(element.value, 'dropdown');
+  }
+
+  // ==========================================
+  // INICIALIZACIÓN
+  // ==========================================
+  window.addEventListener('DOMContentLoaded', () => {
+    // Inicializar elementos de caché del DOM del Formulario
+    docNombreEl = document.getElementById('doc-nombre');
+    docCedulaEl = document.getElementById('doc-cedula');
+    docIeEl = document.getElementById('doc-ie');
+    docJornadaEl = document.getElementById('doc-jornada');
+    docEnteEl = document.getElementById('doc-ente');
+
+
+    validationAlertEl = document.getElementById('date-validation-alert');
+    alertMessageEl = document.getElementById('alert-message');
+    printableSheetEl = document.getElementById('printable-sheet');
+    businessDaysBadgeEl = document.getElementById('business-days-badge');
+
+    // Cargar datos guardados del docente en localStorage
+    loadProfileFromStorage();
+
+    // Cargar el estado de los campos dinámicos en localStorage
+    loadDynamicState();
+
+    // Configurar menú móvil del sitio
+    setupMobileMenu();
+
+
+    // Render inicial y dropdown de permisos
+    renderTabs();
+    populatePermissionDropdown();
+    renderDetailCard();
+    
+    // Configurar Lucide inicial
+    createIconsSafe();
+
+    // Configurar Scroll Reveal local
+    initLocalScrollReveal();
+  });
+
+  function initLocalScrollReveal() {
+    const revealElements = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+      revealElements.forEach(el => observer.observe(el));
+    } else {
+      revealElements.forEach(el => el.classList.add('visible'));
+    }
+  }
+
+  // Configuración del menú hamburguesa del sitio
+  function setupMobileMenu() {
+    const navToggle = document.getElementById('navToggle');
+    const navList = document.getElementById('navList');
+    if (navToggle && navList) {
+      navToggle.addEventListener('click', () => {
+        navToggle.classList.toggle('active');
+        navList.classList.toggle('open');
+      });
+
+      // Manejo de dropdown en móviles (auto-cierra otros)
+      navList.querySelectorAll('.nav__dropdown').forEach(dropdown => {
+        const dropToggle = dropdown.querySelector('.nav__dropdown-toggle');
+        if (dropToggle) {
+          dropToggle.addEventListener('click', (e) => {
+            if (window.innerWidth <= 900) {
+              e.preventDefault();
+              e.stopPropagation();
+              
+              navList.querySelectorAll('.nav__dropdown').forEach(other => {
+                if (other !== dropdown) other.classList.remove('active');
+              });
+              
+              dropdown.classList.toggle('active');
+            }
+          });
+        }
+      });
+    }
+
+    // Efecto scrolled en header al hacer scroll
+    const header = document.getElementById('header');
+    if (header) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      });
+    }
+  }
+
+  // Cargar estado de campos dinámicos
+  function loadDynamicState() {
+    const saved = localStorage.getItem('sutev_dynamic_fields_state');
+    if (saved) {
+      try {
+        dynamicState = JSON.parse(saved);
+      } catch (e) {
+        console.error("Error al cargar estado dinámico: ", e);
+      }
+    }
+  }
+
+  // Renderizar campos dinámicos específicos del permiso seleccionado
+  function renderDynamicFields() {
+    const container = document.getElementById('dynamic-fields-container');
+    if (!container) return;
+
+    let html = '';
+
+    switch (selectedPermit.id) {
+      case 'permiso-ordinario':
+        html = `
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-fecha-inicio">Fecha de Inicio</label>
+              <input type="date" id="doc-fecha-inicio" onchange="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-fecha-fin">Fecha de Finalización</label>
+              <input type="date" id="doc-fecha-fin" onchange="handleDynamicInput(this)" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="doc-justificacion">Justificación de la Calamidad o Causa Justa</label>
+            <textarea id="doc-justificacion" placeholder="Ej. Razones urgentes asociadas a una calamidad doméstica familiar imprevista..." oninput="handleDynamicInput(this)" required></textarea>
+          </div>
+        `;
+        break;
+
+      case 'licencia-luto':
+        html = `
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-fecha-fallecimiento">Fecha del Fallecimiento del Familiar</label>
+              <input type="date" id="doc-fecha-fallecimiento" onchange="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-parentesco">Grado de Parentesco (Vínculo de Ley)</label>
+              <select id="doc-parentesco" onchange="handleDynamicInput(this)" required>
+                <option value="" disabled selected>-- Seleccione Parentesco --</option>
+                <option value="Cónyuge / Compañero(a) Permanente">Cónyuge / Compañero(a) Permanente</option>
+                <option value="Hijo(a)">Hijo(a) (1er grado consanguinidad)</option>
+                <option value="Padre / Madre">Padre / Madre (1er grado consanguinidad)</option>
+                <option value="Hermano(a)">Hermano(a) (2do grado consanguinidad)</option>
+                <option value="Abuelo(a)">Abuelo(a) (2do grado consanguinidad)</option>
+                <option value="Nieto(a)">Nieto(a) (2do grado consanguinidad)</option>
+                <option value="Suegro(a)">Suegro(a) (1er grado afinidad)</option>
+                <option value="Yerno / Nuera">Yerno / Nuera (1er grado afinidad)</option>
+                <option value="Hijastro(a)">Hijastro(a) (1er grado afinidad)</option>
+                <option value="Padre / Madre Adoptante">Padre / Madre Adoptante (1er grado civil)</option>
+                <option value="Hijo(a) Adoptivo(a)">Hijo(a) Adoptivo(a) (1er grado civil)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-fecha-inicio">Fecha de Inicio de la Licencia</label>
+              <input type="date" id="doc-fecha-inicio" onchange="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-fecha-fin-display">Fecha de Fin (Calculada - 5 días hábiles)</label>
+              <input type="date" id="doc-fecha-fin-display" disabled style="background-color: var(--gray-100); cursor: not-allowed;">
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'licencia-maternidad':
+        html = `
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-fecha-parto">Fecha de Nacimiento / Adopción del Bebé</label>
+              <input type="date" id="doc-fecha-parto" onchange="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-tipo-maternidad">Tipo de Parto / Situación de Ley</label>
+              <select id="doc-tipo-maternidad" onchange="handleDynamicInput(this)" required>
+                <option value="Parto Simple">Parto Simple (18 Semanas)</option>
+                <option value="Parto Múltiple">Parto Múltiple / Gemelar (20 Semanas)</option>
+                <option value="Parto Prematuro">Parto Prematuro (Especial)</option>
+                <option value="Adopción de Menor">Adopción de Menor (Protección Legal)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-fecha-inicio">Fecha de Inicio de la Licencia</label>
+              <input type="date" id="doc-fecha-inicio" onchange="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-fecha-fin-display">Fecha de Fin (Calculada - 18 semanas)</label>
+              <input type="date" id="doc-fecha-fin-display" disabled style="background-color: var(--gray-100); cursor: not-allowed;">
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'licencia-paternidad':
+        html = `
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-fecha-parto">Fecha de Nacimiento del Bebé</label>
+              <input type="date" id="doc-fecha-parto" onchange="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-fecha-inicio">Fecha de Inicio de la Licencia</label>
+              <input type="date" id="doc-fecha-inicio" onchange="handleDynamicInput(this)" required>
+            </div>
+          </div>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-fecha-fin-display">Fecha de Fin (Calculada - 10 días hábiles)</label>
+              <input type="date" id="doc-fecha-fin-display" disabled style="background-color: var(--gray-100); cursor: not-allowed;">
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'licencia-ordinaria':
+        html = `
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-fecha-inicio">Fecha de Inicio</label>
+              <input type="date" id="doc-fecha-inicio" onchange="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-fecha-fin">Fecha de Finalización</label>
+              <input type="date" id="doc-fecha-fin" onchange="handleDynamicInput(this)" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="doc-justificacion">Motivo de la Licencia Ordinaria (Asunto Particular)</label>
+            <textarea id="doc-justificacion" placeholder="Ej. Razones académicas y proyectos familiares particulares de carácter prioritario e impostergable..." oninput="handleDynamicInput(this)" required></textarea>
+          </div>
+        `;
+        break;
+
+      case 'voto':
+        html = `
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-fecha-elecciones">Fecha de la Jornada Electoral</label>
+              <input type="date" id="doc-fecha-elecciones" onchange="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-fecha-inicio">Fecha de Disfrute del Compensatorio (1/2 Día)</label>
+              <input type="date" id="doc-fecha-inicio" onchange="handleDynamicInput(this)" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="doc-jornada-descanso">Jornada Compensatoria de Descanso</label>
+            <select id="doc-jornada-descanso" onchange="handleDynamicInput(this)" required>
+              <option value="jornada de la mañana">Media jornada de la mañana</option>
+              <option value="jornada de la tarde">Media jornada de la tarde</option>
+            </select>
+          </div>
+        `;
+        break;
+
+      case 'jurado':
+        html = `
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-fecha-elecciones">Fecha de la Jornada Electoral</label>
+              <input type="date" id="doc-fecha-elecciones" onchange="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-fecha-inicio">Fecha del Descanso Compensatorio (1 Día Libre)</label>
+              <input type="date" id="doc-fecha-inicio" onchange="handleDynamicInput(this)" required>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'comision-estudios':
+        html = `
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-fecha-inicio">Fecha de Inicio</label>
+              <input type="date" id="doc-fecha-inicio" onchange="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-fecha-fin">Fecha de Finalización</label>
+              <input type="date" id="doc-fecha-fin" onchange="handleDynamicInput(this)" required>
+            </div>
+          </div>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-universidad">Institución de Educación Superior (Universidad)</label>
+              <input type="text" id="doc-universidad" placeholder="Ej. Universidad del Valle" oninput="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-programa-posgrado">Nombre del Programa / Posgrado Académico</label>
+              <input type="text" id="doc-programa-posgrado" placeholder="Ej. Maestría en Educación" oninput="handleDynamicInput(this)" required>
+            </div>
+          </div>
+        `;
+        break;
+
+      case 'docencia-universitaria':
+        html = `
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-fecha-inicio">Fecha de Inicio</label>
+              <input type="date" id="doc-fecha-inicio" onchange="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-fecha-fin">Fecha de Finalización</label>
+              <input type="date" id="doc-fecha-fin" onchange="handleDynamicInput(this)" required>
+            </div>
+          </div>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-universidad">Universidad o I.E.S. Destino</label>
+              <input type="text" id="doc-universidad" placeholder="Ej. Universidad del Valle - Sede Cartago" oninput="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-universidad-programa">Facultad / Programa Académico</label>
+              <input type="text" id="doc-universidad-programa" placeholder="Ej. Departamento de Lenguas y Pedagogía" oninput="handleDynamicInput(this)" required>
+            </div>
+          </div>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-asignatura">Asignatura o Cátedra Asignada</label>
+              <input type="text" id="doc-asignatura" placeholder="Ej. Cátedra de Modelos de Enseñanza" oninput="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-horas-semanales">Intensidad Horaria Semanal (Ley máx 5)</label>
+              <select id="doc-horas-semanales" onchange="handleDynamicInput(this)" required>
+                <option value="1">1 hora semanal</option>
+                <option value="2">2 horas semanales</option>
+                <option value="3">3 horas semanales</option>
+                <option value="4">4 horas semanales</option>
+                <option value="5">5 horas semanales (Máximo legal)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="doc-horario-catedra">Horario Específico de Clases</label>
+            <input type="text" id="doc-horario-catedra" placeholder="Ej. Viernes de 5:00 PM a 7:00 PM y Sábados de 8:00 AM a 11:00 AM" oninput="handleDynamicInput(this)" required>
+          </div>
+          <div class="form-group">
+            <label for="doc-justificacion">Plan de Compensación de Horas Presenciales (Obligatorio)</label>
+            <textarea id="doc-justificacion" placeholder="Ej. Me comprometo a compensar las 5 horas semanales en jornada contraria a mi asignación docente, los días martes y jueves de 6:00 AM a 8:30 AM..." oninput="handleDynamicInput(this)" required></textarea>
+          </div>
+        `;
+        break;
+
+      case 'permiso-sindical':
+        html = `
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-fecha-inicio">Fecha de Inicio</label>
+              <input type="date" id="doc-fecha-inicio" onchange="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-fecha-fin">Fecha de Finalización</label>
+              <input type="date" id="doc-fecha-fin" onchange="handleDynamicInput(this)" required>
+            </div>
+          </div>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="doc-evento-sindical">Evento Sindical / Convocatoria</label>
+              <input type="text" id="doc-evento-sindical" placeholder="Ej. Asamblea Departamental de Delegados de SUTEV" oninput="handleDynamicInput(this)" required>
+            </div>
+            <div class="form-group">
+              <label for="doc-sindical-rol">Calidad o Rol en la Organización Sindical</label>
+              <input type="text" id="doc-sindical-rol" placeholder="Ej. Delegado Oficial Electo del Magisterio de Cartago" oninput="handleDynamicInput(this)" required>
+            </div>
+          </div>
+        `;
+        break;
+    }
+
+    container.innerHTML = html;
+
+    // Poblar los elementos inyectados con los valores previos en dynamicState
+    const inputs = container.querySelectorAll('input, select, textarea');
+    inputs.forEach(el => {
+      if (dynamicState[el.id] !== undefined) {
+        el.value = dynamicState[el.id];
+      }
+    });
+
+    // Forzar cálculos automáticos si ya hay una fecha de inicio
+    const startVal = getVal('doc-fecha-inicio');
+    if (startVal) {
+      runAutomaticDateCalculations('doc-fecha-inicio', startVal);
+    }
+
+    // Actualizar la visibilidad del destinatario inteligente
+    updateDestinatarioVisibility();
+  }
+
+  // Actualizar visibilidad de destinatario inteligente
+  function updateDestinatarioVisibility() {
+    const enteGroup = document.getElementById('ente-destinatario-group');
+    const rectorBadge = document.getElementById('rector-destinatario-badge');
+    
+    if (!enteGroup || !rectorBadge) return;
+    
+    if (selectedPermit.destinatarioDefault === "Rector") {
+      enteGroup.style.display = 'none';
+      rectorBadge.style.display = 'block';
+    } else {
+      enteGroup.style.display = 'block';
+      rectorBadge.style.display = 'none';
+    }
+    createIconsSafe();
+  }
+
+  // Escuchar cambios en campos dinámicos
+  function handleDynamicInput(element) {
+    if (!element) return;
+    
+    // Guardar el valor en el estado dinámico
+    dynamicState[element.id] = element.value;
+    localStorage.setItem('sutev_dynamic_fields_state', JSON.stringify(dynamicState));
+    
+    // Ejecutar cálculos automáticos de fecha de fin
+    runAutomaticDateCalculations(element.id, element.value);
+    
+    // Ejecutar la validación de fechas general y actualizar previsualización
+    handleFormInput();
+  }
+
+  // Lógica de cálculo automático de fechas límites
+  function runAutomaticDateCalculations(changedId, value) {
+    if (changedId === 'doc-fecha-inicio' && value) {
+      let calculatedEndDateStr = '';
+      
+      if (selectedPermit.id === 'licencia-luto') {
+        calculatedEndDateStr = addBusinessDays(value, 5);
+      } else if (selectedPermit.id === 'licencia-maternidad') {
+        calculatedEndDateStr = addCalendarDays(value, 126);
+      } else if (selectedPermit.id === 'licencia-paternidad') {
+        calculatedEndDateStr = addBusinessDays(value, 10);
+      } else if (selectedPermit.id === 'voto' || selectedPermit.id === 'jurado') {
+        calculatedEndDateStr = value; // Un solo día, inicio = fin
+      }
+      
+      if (calculatedEndDateStr) {
+        // Guardar la fecha de finalización calculada en el estado
+        dynamicState['doc-fecha-fin'] = calculatedEndDateStr;
+        localStorage.setItem('sutev_dynamic_fields_state', JSON.stringify(dynamicState));
+        
+        // Si el elemento de fin visible o de display existe, actualizar su valor
+        const finDisplay = document.getElementById('doc-fecha-fin-display');
+        if (finDisplay) {
+          finDisplay.value = calculatedEndDateStr;
+        }
+        
+        const finInput = document.getElementById('doc-fecha-fin');
+        if (finInput) {
+          finInput.value = calculatedEndDateStr;
+        }
+      }
+    }
+  }
+
+  // Sumar días hábiles (excluyendo sábados y domingos). El día de inicio cuenta como Día 1.
+  function addBusinessDays(startDateStr, numDays) {
+    if (!startDateStr || numDays <= 0) return '';
+    const date = new Date(startDateStr + 'T00:00:00');
+    let daysAdded = 0;
+    
+    while (daysAdded < numDays - 1) {
+      date.setDate(date.getDate() + 1);
+      const dayOfWeek = date.getDay();
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) { // 0 = Domingo, 6 = Sábado
+        daysAdded++;
+      }
+    }
+    
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  // Sumar días calendario. El día de inicio cuenta como Día 1.
+  function addCalendarDays(startDateStr, numDays) {
+    if (!startDateStr || numDays <= 0) return '';
+    const date = new Date(startDateStr + 'T00:00:00');
+    date.setDate(date.getDate() + (numDays - 1));
+    
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  // ==========================================
+  // FILTRADO Y RENDERIZACIÓN DE TABS (IZQUIERDA)
+  // ==========================================
+  
+  function filterPermits(category, element) {
+    currentCategoryFilter = category;
+    
+    // Cambiar clase activa en los botones de filtro
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    if (element) {
+      element.classList.add('active');
+    }
+    
+    renderTabs();
+  }
+
+  function searchPermits() {
+    currentSearchQuery = document.getElementById('permit-search').value.toLowerCase().trim();
+    renderTabs();
+  }
+
+  function renderTabs() {
+    const container = document.getElementById('tabs-container');
+    container.innerHTML = '';
+
+    // Filtrar los permisos según categoría y consulta de búsqueda
+    const filtered = permitsData.filter(permit => {
+      const matchesCategory = (currentCategoryFilter === 'all') || (permit.category === currentCategoryFilter);
+      const matchesSearch = permit.name.toLowerCase().includes(currentSearchQuery) || 
+                            permit.authority.toLowerCase().includes(currentSearchQuery) ||
+                            permit.legalBase.toLowerCase().includes(currentSearchQuery);
+      return matchesCategory && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div style="text-align:center; padding: 30px; color: var(--gray-500); font-size: 0.9rem;">
+          <i data-lucide="info" style="width:32px; height:32px; margin: 0 auto 10px; color: var(--gray-400);"></i>
+          No se encontraron permisos para la búsqueda.
+        </div>
+      `;
+      createIconsSafe();
+      return;
+    }
+
+    filtered.forEach(permit => {
+      const tab = document.createElement('button');
+      tab.className = `permit-tab ${selectedPermit.id === permit.id ? 'active' : ''}`;
+      tab.onclick = () => selectPermit(permit.id);
+
+      const isRemunerado = permit.typeBadge === "Remunerado";
+
+      tab.innerHTML = `
+        <div class="permit-tab__icon-wrapper">
+          <i data-lucide="${permit.icon}" style="width: 20px; height: 20px;"></i>
+        </div>
+        <div class="permit-tab__content">
+          <div class="permit-tab__title">${permit.name}</div>
+          <span class="permit-tab__badge" style="color: ${isRemunerado ? 'var(--green-600)' : 'var(--danger-red)'}">${permit.typeBadge}</span>
+        </div>
+      `;
+
+      container.appendChild(tab);
+    });
+
+    createIconsSafe();
+  }
+
+  // Seleccionar un permiso de la lista
+  function selectPermit(id, source = 'tab') {
+    selectedPermit = permitsData.find(p => p.id === id);
+    renderTabs();
+
+    // Sincronizar el dropdown si el cambio viene de las pestañas
+    if (source === 'tab') {
+      const dropdown = document.getElementById('doc-tipo-permiso');
+      if (dropdown) {
+        dropdown.value = id;
+      }
+    }
+    
+    // Efecto visual de transición al cambiar de tarjeta
+    const detailCard = document.getElementById('detail-card');
+    detailCard.style.opacity = '0.3';
+    detailCard.style.transform = 'translateY(5px)';
+    
+    setTimeout(() => {
+      renderDetailCard();
+      detailCard.style.opacity = '1';
+      detailCard.style.transform = 'translateY(0)';
+    }, 150);
+  }
+
+  // ==========================================
+  // DETALLE DE FICHA TÉCNICA (DERECHA)
+  // ==========================================
+  
+  function renderDetailCard() {
+    const card = document.getElementById('detail-card');
+    const isRemunerado = selectedPermit.typeBadge === "Remunerado";
+    const badgeTypeClass = isRemunerado ? "badge-remunerado" : "badge-no-remunerado";
+    
+    // Generar listas
+    let reqsHTML = selectedPermit.requirements.map(req => `<li><i data-lucide="check-circle-2"></i> <span>${req}</span></li>`).join('');
+    let soportesHTML = selectedPermit.soportes.map(sop => `<li><i data-lucide="paperclip"></i> <span>${sop}</span></li>`).join('');
+
+    card.innerHTML = `
+      <div class="detail-header">
+        <div class="detail-badge-row">
+          <span class="badge-type ${badgeTypeClass}">
+            <i data-lucide="${isRemunerado ? 'circle-dollar-sign' : 'circle-slash'}"></i> ${selectedPermit.typeBadge}
+          </span>
+          <span class="badge-type badge-authority">
+            <i data-lucide="scale"></i> Aprueba: ${selectedPermit.authority}
+          </span>
+        </div>
+        <h2 style="font-size: 1.8rem; color: var(--green-900); font-weight: 800; font-family: var(--font-heading); margin-top:8px;">${selectedPermit.name}</h2>
+      </div>
+
+      <div class="duration-highlight-box">
+        <div class="info-box">
+          <span class="info-box__label">Duración Máxima</span>
+          <span class="info-box__value">${selectedPermit.duration}</span>
+        </div>
+        <div class="info-box ${!isRemunerado ? 'info-box--danger' : ''}">
+          <span class="info-box__label">Sueldo Básico</span>
+          <span class="info-box__value">${isRemunerado ? '100% Remunerado' : 'No Remunerado'}</span>
+        </div>
+      </div>
+
+      <div class="detail-section-title">
+        <i data-lucide="clipboard-list" style="width: 18px; height: 18px; color: var(--green-700);"></i> Requisitos para la Solicitud
+      </div>
+      <ul class="detail-list">
+        ${reqsHTML}
+      </ul>
+
+      <div class="detail-section-title">
+        <i data-lucide="files" style="width: 18px; height: 18px; color: var(--green-700);"></i> Soportes Obligatorios
+      </div>
+      <ul class="detail-list">
+        ${soportesHTML}
+      </ul>
+
+      <div class="detail-section-title">
+        <i data-lucide="landmark" style="width: 18px; height: 18px; color: var(--green-700);"></i> Impacto Laboral y Pensional
+      </div>
+      <p style="font-size: 0.92rem; color: var(--gray-700); line-height: 1.6; margin-bottom: 20px;">
+        ${selectedPermit.impact}
+      </p>
+
+      <div class="legal-accordion" id="legal-accordion">
+        <div class="legal-accordion__header" onclick="toggleAccordion()">
+          <span style="display:flex; align-items:center; gap:8px;"><i data-lucide="gavel" style="width:16px; height:16px;"></i> Fundamentación Jurídica Completa</span>
+          <i data-lucide="chevron-down" style="width: 16px; height: 16px; transition: var(--transition);"></i>
+        </div>
+        <div class="legal-accordion__content">
+          ${selectedPermit.legalBase}
+        </div>
+      </div>
+    `;
+
+    createIconsSafe();
+    
+    // Aplicar estilo de color superior a la hoja de papel según si es remunerado o no
+    if (printableSheetEl) {
+      printableSheetEl.style.borderTop = isRemunerado ? "6px solid var(--green-600)" : "6px solid var(--danger-red)";
+    }
+    
+    // Renderizar los campos dinámicos específicos del formulario
+    renderDynamicFields();
+    
+    // Al cambiar la ficha técnica, regeneramos el cuerpo de la carta oficial en vivo
+    updateLetterPreview();
+
+  }
+
+  function toggleAccordion() {
+    const acc = document.getElementById('legal-accordion');
+    acc.classList.toggle('active');
+  }
+
+  // ==========================================
+  // CÁLCULO DE FECHAS Y DE DÍAS HÁBILES
+  // ==========================================
+  
+  // Calcular los días hábiles excluyendo sábados y domingos
+  function calculateBusinessDays(startDateStr, endDateStr) {
+    if (!startDateStr || !endDateStr) return 0;
+    const start = new Date(startDateStr + 'T00:00:00');
+    const end = new Date(endDateStr + 'T00:00:00');
+    if (end < start) return 0;
+    
+    let count = 0;
+    let curDate = new Date(start.getTime());
+    while (curDate <= end) {
+      const dayOfWeek = curDate.getDay();
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) { // 0 = Domingo, 6 = Sábado
+        count++;
+      }
+      curDate.setDate(curDate.getDate() + 1);
+    }
+    return count;
+  }
+
+  // Calcular días calendario reales entre dos fechas
+  function calculateCalendarDays(startDateStr, endDateStr) {
+    if (!startDateStr || !endDateStr) return 0;
+    const start = new Date(startDateStr + 'T00:00:00');
+    const end = new Date(endDateStr + 'T00:00:00');
+    if (end < start) return 0;
+    
+    const diffTime = Math.abs(end - start);
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+  }
+
+  // Formatear fechas a un formato legible por humanos en español
+  function formatDateSpan(dateStr) {
+    if (!dateStr) return "[FECHA SELECCIONADA]";
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    const months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+    return `${parseInt(parts[2], 10)} de ${months[parseInt(parts[1], 10) - 1]} de ${parts[0]}`;
+  }
+
+  // ==========================================
+  // INTELIGENCIA DEL GENERADOR DE CARTAS (LIVE DRAFT)
+  // ==========================================
+  
+  function handleFormInput() {
+    // Guardar automáticamente los datos del perfil en localStorage
+    saveProfileToStorage();
+    
+    // Validar fechas y límites
+    validateDates();
+    
+    // Actualizar la previsualización del oficio
+    updateLetterPreview();
+  }
+
+  function validateDates() {
+    const startDateVal = getVal('doc-fecha-inicio');
+    const endDateVal = getVal('doc-fecha-fin');
+
+    if (!startDateVal || !endDateVal) {
+      validationAlertEl.style.display = 'none';
+      businessDaysBadgeEl.textContent = '0 días';
+      return;
+    }
+
+    const start = new Date(startDateVal + 'T00:00:00');
+    const end = new Date(endDateVal + 'T00:00:00');
+
+    // 1. Validar orden de fechas
+    if (end < start) {
+      validationAlertEl.style.display = 'flex';
+      alertMessageEl.innerHTML = `<strong>⚠️ Error de Fechas:</strong> La fecha de finalización no puede ser anterior a la fecha de inicio de la ausencia.`;
+      businessDaysBadgeEl.textContent = '0 días';
+      businessDaysBadgeEl.style.background = '#fee2e2';
+      businessDaysBadgeEl.style.color = '#ef4444';
+      return;
+    }
+
+    // Calcular días según tipo de duración del permiso seleccionado
+    let requestedDays = 0;
+    let label = '';
+    
+    if (selectedPermit.id === 'voto') {
+      requestedDays = 0.5;
+      label = 'medio día';
+    } else if (selectedPermit.id === 'jurado') {
+      requestedDays = 1;
+      label = 'día libre compensatorio';
+    } else if (selectedPermit.durationDaysType === 'habiles') {
+      requestedDays = calculateBusinessDays(startDateVal, endDateVal);
+      label = requestedDays === 1 ? 'día hábil' : 'días hábiles';
+    } else if (selectedPermit.durationDaysType === 'calendario') {
+      requestedDays = calculateCalendarDays(startDateVal, endDateVal);
+      label = requestedDays === 1 ? 'día calendario' : 'días calendario';
+    } else {
+      // Caso de docencia u otros (se calcula diferencia en días como referencia)
+      requestedDays = calculateBusinessDays(startDateVal, endDateVal);
+      label = 'días laborables';
+    }
+
+    // Actualizar el badge de la hoja de papel
+    businessDaysBadgeEl.textContent = `${requestedDays} ${label}`;
+    businessDaysBadgeEl.style.background = '#e2e8f0';
+    businessDaysBadgeEl.style.color = 'var(--gray-700)';
+
+    // 2. Validar contra el límite legal del permiso seleccionado
+    const maxDays = selectedPermit.durationDaysMax;
+    if (selectedPermit.id !== 'voto' && selectedPermit.id !== 'jurado' && maxDays && requestedDays > maxDays && selectedPermit.durationDaysType !== 'horas-semanales') {
+      validationAlertEl.style.display = 'flex';
+      alertMessageEl.innerHTML = `<strong>⚠️ Advertencia Legal:</strong> El permiso seleccionado tiene un límite máximo establecido por Ley de <strong>${maxDays} ${selectedPermit.durationDaysType === 'habiles' ? 'días hábiles' : 'días'}</strong>. Tu solicitud actual es de <strong>${requestedDays}</strong>. Asegúrate de justificar de forma contundente la procedencia de esta excepción.`;
+    } else {
+      validationAlertEl.style.display = 'none';
+    }
+  }
+
+
+  // Generar dinámicamente la carta en formato formal de Oficio
+  function updateLetterPreview() {
+    const nombre = docNombreEl.value.toUpperCase() || "_____________________________________";
+    const cedula = docCedulaEl.value || "______________________";
+    const ie = docIeEl.value || "_____________________________________";
+    const jornada = docJornadaEl.value || "___________";
+    const enteDestinatario = docEnteEl.value;
+    
+    // Obtener valores dinámicos
+    const fechaInicioStr = getVal('doc-fecha-inicio');
+    const fechaFinStr = getVal('doc-fecha-fin');
+    const justificacion = getVal('doc-justificacion') || "_________________________________________________________________________________________________________________________________________________________________________________________________.";
+    
+    const parentesco = getVal('doc-parentesco') || "[SELECCIONE VÍNCULO]";
+    const fechaFallecimiento = formatDateSpan(getVal('doc-fecha-fallecimiento'));
+    const fechaParto = formatDateSpan(getVal('doc-fecha-parto'));
+    const tipoMaternidad = getVal('doc-tipo-maternidad') || "[TIPO SITUACIÓN]";
+    const fechaElecciones = formatDateSpan(getVal('doc-fecha-elecciones'));
+    const jornadaDescanso = getVal('doc-jornada-descanso') || "jornada de la mañana";
+    const universidad = getVal('doc-universidad') || "_______________________";
+    const programaPosgrado = getVal('doc-programa-posgrado') || "_______________________";
+    const universidadPrograma = getVal('doc-universidad-programa') || "_______________________";
+    const asignatura = getVal('doc-asignatura') || "_______________________";
+    const horasSemanales = getVal('doc-horas-semanales') || "5";
+    const horarioCatedra = getVal('doc-horario-catedra') || "_______________________";
+    const eventoSindical = getVal('doc-evento-sindical') || "_______________________";
+    const sindicalRol = getVal('doc-sindical-rol') || "_______________________";
+
+    const fechaInicio = formatDateSpan(fechaInicioStr);
+    const fechaFin = formatDateSpan(fechaFinStr);
+
+    const today = new Date();
+    const currentDateFormatted = `${today.getDate()} de ${["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"][today.getMonth()]} de ${today.getFullYear()}`;
+
+    // Lógica inteligente de destinatario oficial y cuerpo de la carta
+    let destinatario = "";
+    let cargo = "";
+    let baseLegalDeOficio = "";
+    let parrafoCuerpo = "";
+
+    // 1. Enrutar destinatario oficial
+    if (selectedPermit.destinatarioDefault === "Rector") {
+      destinatario = `Señor(a)\nRECTOR(A) DE LA INSTITUCIÓN EDUCATIVA`;
+      cargo = `${ie}\nCartago, Valle del Cauca\nE. S. D.`;
+    } else {
+      if (enteDestinatario === "Cartago") {
+        destinatario = `Señor(a)\nSECRETARIO(A) DE EDUCACIÓN MUNICIPAL`;
+        cargo = `Secretaría de Educación Municipal de Cartago\nValle del Cauca\nE. S. D.`;
+      } else {
+        destinatario = `Señor(a)\nSECRETARIO(A) DE EDUCACIÓN DEPARTAMENTAL`;
+        cargo = `Gobernación del Valle del Cauca\nCali, Valle del Cauca\nE. S. D.`;
+      }
+    }
+
+    // 2. Calcular días para redactar en el cuerpo del texto
+    let totalDíasCuerpo = "[SELECCIONA FECHAS]";
+    if (fechaInicioStr && fechaFinStr) {
+      if (selectedPermit.id === 'voto') {
+        totalDíasCuerpo = 'medio día (1/2 jornada)';
+      } else if (selectedPermit.id === 'jurado') {
+        totalDíasCuerpo = 'un (1) día libre compensatorio';
+      } else if (selectedPermit.durationDaysType === 'habiles') {
+        const count = calculateBusinessDays(fechaInicioStr, fechaFinStr);
+        totalDíasCuerpo = `${count} ${count === 1 ? 'día hábil' : 'días hábiles'}`;
+      } else {
+        const count = calculateCalendarDays(fechaInicioStr, fechaFinStr);
+        totalDíasCuerpo = `${count} ${count === 1 ? 'día calendario' : 'días calendario'}`;
+      }
+    }
+
+    // 3. Establecer base legal e inyección en plantilla
+    switch (selectedPermit.id) {
+      case "permiso-ordinario":
+        baseLegalDeOficio = "fundamentado en el Artículo 57 del Decreto Ley 1278 de 2002 / Artículo 65 del Decreto Ley 2277 de 1979 y reglamentado por el Artículo 2.2.5.5.17 del Decreto 1083 de 2015";
+        parrafoCuerpo = `De manera atenta y respetuosa, me dirijo a usted con el fin de solicitar formalmente la concesión de un PERMISO REMUNERADO ORDINARIO por causa debidamente justificada, de acuerdo con los límites legales vigentes en el magisterio oficial.\n\nEl permiso solicitado comprende un término de ${totalDíasCuerpo}, iniciando a partir del día ${fechaInicio} y finalizando el día ${fechaFin} inclusive.\n\nLa justa causa que fundamenta esta solicitud obedece a las siguientes razones de carácter imprevisto y fuerza mayor en mi hogar:\n${justificacion}\n\nAgradezco de antemano su oportuna atención a esta solicitud y el trámite correspondiente. A mi reincorporación a las actividades escolares, procederé a anexar las constancias pertinentes de ser necesario.`;
+        break;
+      
+      case "licencia-luto":
+        baseLegalDeOficio = "con base en el derecho consagrado en la Ley 1280 de 2009 y el Artículo 2.2.5.5.18 del Decreto 1083 de 2015";
+        parrafoCuerpo = `Me dirijo a usted con el fin de informarle y solicitar formalmente la concesión y legalización administrativa de la LICENCIA POR LUTO remunerada, con ocasión al sensible fallecimiento de mi familiar cercano: ${parentesco}, hecho ocurrido el día ${fechaFallecimiento}.\n\nEsta licencia de carácter imperativo consta de cinco (5) días hábiles consecutivos, los cuales comprenden desde el día ${fechaInicio} hasta el día ${fechaFin} inclusive.\n\nPara tal efecto, adjunto a esta comunicación la copia del correspondiente Registro Civil de Defunción de mi familiar y los registros civiles idóneos para acreditar el grado de consanguinidad / afinidad exigido por la Ley dentro de los 30 días fijados.`;
+        break;
+
+      case "licencia-maternidad":
+        baseLegalDeOficio = "de acuerdo con lo establecido en la Ley 1822 de 2017 y el Artículo 2.2.5.5.12 del Decreto 1083 de 2015";
+        parrafoCuerpo = `Me dirijo a usted con el propósito de radicar la solicitud y correspondiente legalización de mi LICENCIA DE MATERNIDAD remunerada por el periodo legal establecido de dieciocho (18) semanas (126 días calendario), con ocasión del nacimiento/adopción de mi hijo(a) bajo la situación de: ${tipoMaternidad}, ocurrido el día ${fechaParto}.\n\nDe acuerdo con la indicación de mi ginecobstetra, la licencia tiene como fecha de inicio formal el día ${fechaInicio} y finaliza el día ${fechaFin} inclusive.\n\nPara constancia legal, adjunto el certificado original de incapacidad por maternidad expedido por los servicios médicos oficiales autorizados de COSMITET / FOMAG.`;
+        break;
+
+      case "licencia-paternidad":
+        baseLegalDeOficio = "conforme a los términos y derechos establecidos en la Ley 2114 de 2021";
+        parrafoCuerpo = `Me dirijo a usted con el propósito de solicitar formalmente la legalización de mi LICENCIA DE PATERNIDAD remunerada correspondiente al periodo de dos (2) semanas (10 días hábiles) consecutivas de descanso, con ocasión del nacimiento de mi hijo(a) el día ${fechaParto}.\n\nLa citada licencia de paternidad comprende desde el día ${fechaInicio} hasta el día ${fechaFin} inclusive.\n\nAdjunto a este oficio la fotocopia del Registro Civil de Nacimiento original expedido por la Registraduría, a fin de legalizar mi situación laboral y de nómina ante el ente territorial.`;
+        break;
+
+      case "licencia-ordinaria":
+        baseLegalDeOficio = "al amparo del Artículo 59 del Decreto Ley 1278 de 2002 / Artículo 63 del Decreto Ley 2277 de 1979 y el Artículo 2.2.5.5.5 del Decreto 1083 de 2015";
+        parrafoCuerpo = `De manera formal, acudo ante su despacho con el propósito de elevar solicitud de una LICENCIA ORDINARIA NO REMUNERADA por motivos de índole estrictamente particular, justificada por las siguientes razones:\n${justificacion}\n\nLa duración de la licencia ordinaria comprende un término de ${totalDíasCuerpo}, iniciando a partir del día ${fechaInicio} hasta el día ${fechaFin} inclusive.\n\nDeclaro estar plenamente al tanto de los efectos administrativos de esta suspensión transitoria del servicio docente público, incluyendo el cese temporal en la asignación básica de nómina.\n\nAgradezco de antemano la expedición del acto administrativo correspondiente.`;
+        break;
+
+      case "voto":
+        baseLegalDeOficio = "en virtud de los estímulos para votantes nacionales regulados por el Artículo 3 de la Ley 403 de 1997";
+        parrafoCuerpo = `Me dirijo a usted con el fin de solicitar la concesión de MEDIO DÍA (1/2 JORNADA) de descanso laboral compensatorio remunerado, con ocasión de haber ejercido mi derecho constitucional al sufragio en las pasadas contiendas electorales del día ${fechaElecciones}.\n\nDe mutuo acuerdo con la dirección y para no interferir con las tareas de atención de alumnos, solicito disfrutar de este beneficio compensatorio en la ${jornadaDescanso} del día ${fechaInicio}.\n\nAdjunto como soporte el original de mi Certificado Electoral firmado por los jurados de votación oficiales.`;
+        break;
+
+      case "jurado":
+        baseLegalDeOficio = "con base en el derecho estricto fijado en el Artículo 105 del Decreto Ley 2241 de 1986 (Código Electoral Colombiano)";
+        parrafoCuerpo = `De manera atenta, acudo ante usted con el fin de solicitar la concesión de UN DÍA COMPLETO de descanso compensatorio remunerado, por haberme desempeñado obligatoriamente en calidad de JURADO DE VOTACIÓN en la mesa designada en los comicios electorales del día ${fechaElecciones}.\n\nEl día de descanso solicitado para compensar mi servicio obligatorio a la Registraduría se fija para el día ${fechaInicio}.\n\nAdjunto a esta comunicación el correspondiente Formulario E-18 que certifica la efectiva prestación de la labor electoral.`;
+        break;
+
+      case "comision-estudios":
+        baseLegalDeOficio = "según lo consagrado en el Artículo 60 del Decreto Ley 1278 de 2002 / Artículo 73 del Decreto Ley 2277 de 1979";
+        parrafoCuerpo = `Me dirijo a usted con el propósito de presentar formalmente mi solicitud de una COMISIÓN DE ESTUDIOS REMUNERADA para adelantar estudios de posgrado en educación correspondientes al programa de ${programaPosgrado} en la institución de educación superior: ${universidad}.\n\nLa citada comisión comprende el periodo regular del programa de estudios aprobado, iniciando el día ${fechaInicio} y proyectado hasta el día ${fechaFin} inclusive.\n\nAdjunto los certificados de admisión definitiva emitidos por la Universidad y el plan académico correspondiente, manifestando mi compromiso de cumplir con la póliza de garantía de permanencia exigida por el Estado.`;
+        break;
+
+      case "docencia-universitaria":
+        baseLegalDeOficio = "dentro del límite de cinco (5) horas semanales permitido por la Ley y el Estatuto de la Función Pública";
+        parrafoCuerpo = `De manera respetuosa, acudo ante su despacho con el propósito de solicitar la autorización de un PERMISO ACADÉMICO SEMANAL con el fin de ejercer la cátedra en educación superior universitaria en la asignatura de ${asignatura} en la facultad/programa de ${universidadPrograma} de la institución: ${universidad}.\n\nEl permiso solicitado es por una intensidad de ${horasSemanales} horas semanales, comprendiendo el periodo académico desde el día ${fechaInicio} hasta el día ${fechaFin} inclusive. El horario de la cátedra es: ${horarioCatedra}.\n\nMe comprometo formalmente a realizar la compensación de horas presenciales por fuera de mi jornada escolar regular para no afectar el servicio primario, de acuerdo con el siguiente plan de compensación horaria:\n${justificacion}\n\nAdjunto el horario lectivo y certificado de la institución de destino.`;
+        break;
+
+      case "permiso-sindical":
+        baseLegalDeOficio = "con base en la Resolución de permisos sindicales y el Decreto 1075 de 2015 sobre garantías de asociación colectiva";
+        parrafoCuerpo = `Me dirijo a usted con el fin de legalizar mi ausencia justificada y solicitar el reconocimiento formal de mi PERMISO SINDICAL remunerado para el cumplimiento de tareas de representación colectiva del magisterio en mi calidad de ${sindicalRol}, con el fin de asistir formalmente al evento: ${eventoSindical}.\n\nLas citadas labores sindicales obligatorias comprenden desde el día ${fechaInicio} hasta el día ${fechaFin} inclusive.\n\nAdjunto a esta comunicación la certificación formal expedida por la Junta Directiva de la Subdirectiva SUTEV Cartago / Valle.`;
+        break;
+    }
+
+    const templateText = `Cartago, Valle del Cauca, ${currentDateFormatted}
+ 
+${destinatario}
+${cargo}
+ 
+ 
+Asunto: ${selectedPermit.subject.toUpperCase()}
+ 
+ 
+Yo, ${nombre}, identificado(a) con Cédula de Ciudadanía No. ${cedula}, en mi calidad de docente oficial del área de enseñanza de la Institución Educativa ${ie}, Jornada ${jornada}, de manera respetuosa comparezco ante su despacho.
+ 
+Por medio de la presente, presento formalmente solicitud de concesión de ${selectedPermit.name}, ${baseLegalDeOficio}.
+ 
+${parrafoCuerpo}
+ 
+Agradezco de antemano su gestión administrativa y colaboración.
+ 
+ 
+Atentamente,
+ 
+ 
+ 
+_________________________________________
+${nombre}
+C.C. No. ${cedula}
+Docente Oficial
+Institución Educativa ${ie}
+SUTEV Subdirectiva Cartago - Norte del Valle`;
+ 
+    printableSheetEl.textContent = templateText;
+  }
+
+
+  // ==========================================
+  // PERSISTENCIA Y LOCAL STORAGE
+  // ==========================================
+  
+  function saveProfileToStorage() {
+    const profile = {
+      nombre: docNombreEl.value.trim(),
+      cedula: docCedulaEl.value.trim(),
+      ie: docIeEl.value.trim(),
+      jornada: docJornadaEl.value,
+      ente: docEnteEl.value
+    };
+    const existing = localStorage.getItem('sutev_docente_perfil');
+    let mergedProfile = {};
+    if (existing) {
+      try {
+        mergedProfile = JSON.parse(existing);
+      } catch (e) {}
+    }
+    const newProfile = { ...mergedProfile, ...profile };
+    localStorage.setItem('sutev_docente_perfil', JSON.stringify(newProfile));
+  }
+
+  function loadProfileFromStorage() {
+    const saved = localStorage.getItem('sutev_docente_perfil');
+    if (saved) {
+      try {
+        const profile = JSON.parse(saved);
+        if (profile.nombre) docNombreEl.value = profile.nombre;
+        if (profile.cedula) docCedulaEl.value = profile.cedula;
+        if (profile.ie) docIeEl.value = profile.ie;
+        if (profile.jornada) docJornadaEl.value = profile.jornada;
+        if (profile.ente) docEnteEl.value = profile.ente;
+      } catch (e) {
+        console.error("Error al decodificar perfil guardado: ", e);
+      }
+    }
+  }
+
+  function clearForm() {
+    if (confirm("¿Estás seguro de que deseas limpiar el formulario y borrar tus datos de sesión guardados?")) {
+      docNombreEl.value = '';
+      docCedulaEl.value = '';
+      docIeEl.value = '';
+      docJornadaEl.value = 'Única';
+      docEnteEl.value = 'Cartago';
+      
+      dynamicState = {};
+      localStorage.removeItem('sutev_docente_perfil');
+      localStorage.removeItem('sutev_dynamic_fields_state');
+      
+      // Resetear alertas
+      validationAlertEl.style.display = 'none';
+      businessDaysBadgeEl.textContent = '0 días';
+      businessDaysBadgeEl.style.background = '#e2e8f0';
+      businessDaysBadgeEl.style.color = 'var(--gray-700)';
+      
+      // Re-renderizar campos dinámicos vacíos
+      renderDynamicFields();
+      
+      updateLetterPreview();
+    }
+  }
+
+  // ==========================================
+  // ACCIONES Y EXPORTACIÓN
+  // ==========================================
+  
+  // Copiar al portapapeles con animación de check
+  function copyLetterText() {
+    const text = printableSheetEl.textContent;
+    const btn = document.getElementById('btn-copy');
+    const icon = document.getElementById('icon-copy');
+    const textSpan = document.getElementById('text-copy');
+
+    navigator.clipboard.writeText(text).then(() => {
+      // Cambiar botón a estado exitoso
+      btn.classList.remove('btn--outline-dark');
+      btn.classList.add('btn--success');
+      textSpan.textContent = "¡Copiado con Éxito!";
+      
+      if (typeof lucide !== 'undefined') {
+        icon.setAttribute('data-lucide', 'check');
+        lucide.createIcons();
+      }
+
+      // Revertir a los 3 segundos
+      setTimeout(() => {
+        btn.classList.remove('btn--success');
+        btn.classList.add('btn--outline-dark');
+        textSpan.textContent = "Copiar Texto";
+        
+        if (typeof lucide !== 'undefined') {
+          icon.setAttribute('data-lucide', 'copy');
+          lucide.createIcons();
+        }
+      }, 3000);
+    }).catch(err => {
+      console.error("Error al copiar texto: ", err);
+      alert("No se pudo copiar el texto automáticamente. Selecciona el contenido de la hoja física y cópialo manualmente.");
+    });
+  }
+
+  // Imprimir el oficio
+  function printLetter() {
+    window.print();
+  }
+
+  // Función segura de Lucide para evitar caídas offline
+  function createIconsSafe() {
+    if (typeof lucide !== 'undefined') {
+      try {
+        lucide.createIcons();
+      } catch (e) {
+        console.error("Lucide render error: ", e);
+      }
+    } else {
+      console.warn("Lucide no se cargó correctamente desde el CDN.");
+    }
+  }
+</script>
+
+</body>
+</html>
