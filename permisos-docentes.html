@@ -687,46 +687,79 @@
      ========================================== */
   
   @media print {
-    /* Ocultar absolutamente todo excepto la hoja de papel */
-    body * {
-      visibility: hidden;
-    }
-    
-    #printable-sheet, #printable-sheet * {
-      visibility: visible;
-    }
-    
-    /* Reposicionar la hoja física para que use el 100% de la página real */
-    #printable-sheet {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: auto;
-      padding: 0;
-      border: none;
-      box-shadow: none;
-      font-size: 11pt;
-      font-family: 'Courier New', Courier, monospace;
-      color: #000;
-      background: none;
-      white-space: pre-wrap;
-    }
-    
-    /* Quitar la marca de agua BORRADOR SUTEV al imprimir físicamente */
-    #printable-sheet::before {
-      display: none;
+    /* Ocultar absolutamente todos los elementos de la interfaz */
+    .header, 
+    .footer, 
+    .nav__toggle, 
+    .section--dark, /* hero */
+    .consultor-controls, 
+    .permits-grid, 
+    .workstation-title, 
+    .workstation-form, 
+    .sheet-title-row, 
+    .letter-actions, 
+    #scrollTopBtn {
+      display: none !important;
     }
 
-    .sheet-wrapper, .letter-preview-container {
+    body {
+      background: var(--white) !important;
+      color: #000 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    
+    section {
+      padding: 0 !important;
+      margin: 0 !important;
+      background: none !important;
+      border: none !important;
+    }
+
+    .container {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .workstation-grid {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+    }
+
+    .sheet-wrapper {
       background: none !important;
       border: none !important;
       padding: 0 !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+    }
+
+    #printable-sheet {
+      border: none !important;
+      box-shadow: none !important;
+      padding: 2.5cm !important; /* Margen estándar de impresión */
+      min-height: auto !important;
+      background: var(--white) !important;
+      font-size: 11pt !important; /* Tipografía idónea de lectura física */
+      line-height: 1.5 !important;
+      font-family: 'Courier New', Courier, monospace !important;
+      color: #000 !important;
+      white-space: pre-wrap !important;
+      position: static !important;
+      width: 100% !important;
+    }
+    
+    #printable-sheet::before {
+      display: none !important;
     }
     
     @page {
       size: letter;
-      margin: 2.5cm;
+      margin: 0;
     }
   }
 </style>

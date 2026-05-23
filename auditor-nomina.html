@@ -408,25 +408,84 @@
 
   /* CSS específico para impresión física */
   @media print {
-    body * {
-      visibility: hidden;
+    /* Ocultar absolutamente todos los elementos de la interfaz */
+    .header, 
+    .footer, 
+    .nav__toggle, 
+    .section--dark, /* hero */
+    .helper-alert, 
+    .auditor-column-form, 
+    .preview-toolbar, 
+    #scrollTopBtn {
+      display: none !important;
     }
-    #printable-paper-area, #printable-paper-area * {
-      visibility: visible;
+
+    body {
+      background: var(--white) !important;
+      color: #000 !important;
+      padding: 0 !important;
+      margin: 0 !important;
     }
+
+    section {
+      padding: 0 !important;
+      margin: 0 !important;
+      background: none !important;
+      border: none !important;
+    }
+
+    .container {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .auditor-layout {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+    }
+
+    .workstation-column-preview {
+      display: block !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
     #printable-paper-area {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      box-shadow: none;
-      padding: 0;
-      border: none;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 2.5cm !important; /* Margen estándar de impresión */
+      min-height: auto !important;
+      background: var(--white) !important;
       font-size: 11pt !important;
       line-height: 1.5 !important;
+      font-family: 'Courier New', Courier, monospace !important;
+      color: #000 !important;
+      white-space: pre-wrap !important;
+      position: static !important;
+      width: 100% !important;
+      margin: 0 !important;
     }
-    .preview-toolbar, .header, .footer, .auditor-column-form, .dashboard-card, .section--dark {
-      display: none !important;
+
+    .paper-header {
+      border-bottom: 2px double #000 !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      margin-bottom: 30px !important;
+    }
+
+    .paper-body {
+      font-family: 'Courier New', Courier, monospace !important;
+    }
+    
+    @page {
+      size: letter;
+      margin: 0;
     }
   }
 </style>
