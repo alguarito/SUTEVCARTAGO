@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initForms();
   initGalleryLightbox();
   initCountUp();
+  initServicesAccordion();
 });
 
 /* ===== HEADER SCROLL ===== */
@@ -319,3 +320,36 @@ window.addEventListener('scroll', () => {
     }
   });
 });
+
+/* ===== SERVICES ACCORDION ===== */
+function initServicesAccordion() {
+  const cards = document.querySelectorAll('.service-card');
+  
+  cards.forEach(card => {
+    const trigger = card.querySelector('.service-card__header-trigger');
+    if (!trigger) return;
+    
+    trigger.addEventListener('click', (e) => {
+      // Accordion only operates on mobile/tablet widths (<= 900px)
+      if (window.innerWidth <= 900) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const isActive = card.classList.contains('active');
+        
+        // Find other cards in the same parent grid (Services or Herramientas)
+        const parentGrid = card.closest('.services__grid');
+        if (parentGrid) {
+          parentGrid.querySelectorAll('.service-card').forEach(other => {
+            other.classList.remove('active');
+          });
+        }
+        
+        // Toggle the clicked card
+        if (!isActive) {
+          card.classList.add('active');
+        }
+      }
+    });
+  });
+}

@@ -227,6 +227,39 @@ ul { list-style: none; }
 }
 .service-card__link:hover { gap: 10px; color: var(--green-800); }
 
+/* Accordion Desktop Defaults (Static fully expanded) */
+.service-card__header-trigger {
+  display: block;
+}
+.service-card__collapsible-content {
+  max-height: none;
+  opacity: 1;
+  overflow: visible;
+}
+.tools__grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+  gap: 30px !important;
+  margin-top: 30px !important;
+}
+.tools__grid .service-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.tools__grid .service-card__body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.tools__grid .service-card__collapsible-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.tools__grid .service-card__text {
+  flex-grow: 1;
+}
+
 /* ===== CALENDAR ===== */
 .calendar-wrapper {
   background: var(--white); border-radius: var(--radius-lg);
@@ -889,27 +922,118 @@ ul { list-style: none; }
   .about__grid, .news__grid, .form-section,
   .contact__grid, .footer__grid { grid-template-columns: 1fr; }
   
-  /* Services & Tools Horizontal Swipable Carousel */
+  /* Services & Tools Accordion System */
   .services__grid {
     display: flex !important;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 20px;
-    padding: 16px 24px 32px;
-    -webkit-overflow-scrolling: touch;
-    margin-left: -24px;
-    margin-right: -24px;
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin: 20px 0 0 0 !important;
+    padding: 0 !important;
+    overflow-x: visible !important;
     list-style: none;
   }
   .services__grid::-webkit-scrollbar {
     display: none;
   }
   .services__grid .service-card {
-    min-width: 290px;
-    max-width: 290px;
-    scroll-snap-align: start;
+    min-width: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+    cursor: pointer;
+    box-shadow: none !important;
+    transform: none !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-sizing: border-box;
+  }
+  .services__grid .service-card:hover {
+    transform: none !important;
+  }
+  .service-card__image {
+    display: none !important; /* Hide image on mobile for speed and cleanliness */
+  }
+  .services__grid .service-card__body {
+    padding: 16px 20px !important;
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .service-card__header-trigger {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    user-select: none;
+  }
+  .services__grid .service-card__icon {
+    font-size: 1.5rem !important;
+    margin-bottom: 0 !important;
+    color: var(--green-400) !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
-    margin-bottom: 8px;
+  }
+  .services__grid .service-card__icon i,
+  .services__grid .service-card__icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  .services__grid .service-card__title {
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    margin-bottom: 0 !important;
+    text-align: left;
+  }
+  .service-card__chevron {
+    margin-left: auto; /* Push to far right */
+    color: rgba(255, 255, 255, 0.5);
+    transition: transform 0.3s ease, color 0.3s ease;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+  }
+  .service-card__collapsible-content {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, padding 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .services__grid .service-card__text {
+    font-size: 0.9rem !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    line-height: 1.6 !important;
+    margin-bottom: 16px !important;
+    text-align: left;
+  }
+  .services__grid .btn,
+  .services__grid .service-card__link {
+    width: 100% !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Active expanded accordion state */
+  .services__grid .service-card.active {
+    background: rgba(76, 175, 80, 0.08) !important;
+    border-color: rgba(76, 175, 80, 0.3) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  }
+  .services__grid .service-card.active .service-card__chevron {
+    transform: rotate(180deg);
+    color: var(--green-400);
+  }
+  .services__grid .service-card.active .service-card__collapsible-content {
+    max-height: 380px; /* Safe upper height bound */
+    opacity: 1;
+    padding-top: 16px;
   }
 
   .junta-card { width: 100%; height: auto; padding: 24px; }
