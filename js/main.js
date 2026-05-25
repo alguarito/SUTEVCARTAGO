@@ -29,8 +29,9 @@ function initMobileNav() {
   if (!toggle || !list) return;
   
   toggle.addEventListener('click', () => {
-    list.classList.toggle('open');
+    const isOpen = list.classList.toggle('open');
     toggle.classList.toggle('active');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
   // Handle all dropdown toggles on mobile
@@ -58,6 +59,7 @@ function initMobileNav() {
     link.addEventListener('click', () => {
       list.classList.remove('open');
       toggle.classList.remove('active');
+      document.body.style.overflow = '';
       list.querySelectorAll('.nav__dropdown').forEach(d => d.classList.remove('active'));
     });
   });
@@ -67,6 +69,7 @@ function initMobileNav() {
     item.addEventListener('click', () => {
       list.classList.remove('open');
       toggle.classList.remove('active');
+      document.body.style.overflow = '';
       list.querySelectorAll('.nav__dropdown').forEach(d => d.classList.remove('active'));
     });
   });

@@ -104,35 +104,35 @@
     <div class="territory__layout reveal">
       <!-- Left side: List of municipalities -->
       <div class="territory__list">
-        <div class="territory-item active" data-mun="cartago" onmouseover="activateNode('cartago')">
+        <div class="territory-item active" data-mun="cartago" onmouseover="if(window.innerWidth > 900) activateNode('cartago')" onclick="if(window.innerWidth <= 900) openMunicipalityModal('cartago')">
           <div class="t-icon"><i data-lucide="map-pin"></i></div>
           <div class="t-info"><h3>Cartago</h3><p>Sede Principal SUTEV</p></div>
         </div>
-        <div class="territory-item" data-mun="ansermanuevo" onmouseover="activateNode('ansermanuevo')">
+        <div class="territory-item" data-mun="ansermanuevo" onmouseover="if(window.innerWidth > 900) activateNode('ansermanuevo')" onclick="if(window.innerWidth <= 900) openMunicipalityModal('ansermanuevo')">
           <div class="t-icon"><i data-lucide="users"></i></div>
           <div class="t-info"><h3>Ansermanuevo</h3><p>Comité Municipal</p></div>
         </div>
-        <div class="territory-item" data-mun="alcala" onmouseover="activateNode('alcala')">
+        <div class="territory-item" data-mun="alcala" onmouseover="if(window.innerWidth > 900) activateNode('alcala')" onclick="if(window.innerWidth <= 900) openMunicipalityModal('alcala')">
           <div class="t-icon"><i data-lucide="users"></i></div>
           <div class="t-info"><h3>Alcalá</h3><p>Comité Municipal</p></div>
         </div>
-        <div class="territory-item" data-mun="ulloa" onmouseover="activateNode('ulloa')">
+        <div class="territory-item" data-mun="ulloa" onmouseover="if(window.innerWidth > 900) activateNode('ulloa')" onclick="if(window.innerWidth <= 900) openMunicipalityModal('ulloa')">
           <div class="t-icon"><i data-lucide="users"></i></div>
           <div class="t-info"><h3>Ulloa</h3><p>Comité Municipal</p></div>
         </div>
-        <div class="territory-item" data-mun="argelia" onmouseover="activateNode('argelia')">
+        <div class="territory-item" data-mun="argelia" onmouseover="if(window.innerWidth > 900) activateNode('argelia')" onclick="if(window.innerWidth <= 900) openMunicipalityModal('argelia')">
           <div class="t-icon"><i data-lucide="users"></i></div>
           <div class="t-info"><h3>Argelia</h3><p>Comité Municipal</p></div>
         </div>
-        <div class="territory-item" data-mun="toro" onmouseover="activateNode('toro')">
+        <div class="territory-item" data-mun="toro" onmouseover="if(window.innerWidth > 900) activateNode('toro')" onclick="if(window.innerWidth <= 900) openMunicipalityModal('toro')">
           <div class="t-icon"><i data-lucide="users"></i></div>
           <div class="t-info"><h3>Toro</h3><p>Comité Municipal</p></div>
         </div>
-        <div class="territory-item" data-mun="aguila" onmouseover="activateNode('aguila')">
+        <div class="territory-item" data-mun="aguila" onmouseover="if(window.innerWidth > 900) activateNode('aguila')" onclick="if(window.innerWidth <= 900) openMunicipalityModal('aguila')">
           <div class="t-icon"><i data-lucide="users"></i></div>
           <div class="t-info"><h3>El Águila</h3><p>Comité Municipal</p></div>
         </div>
-        <div class="territory-item" data-mun="cairo" onmouseover="activateNode('cairo')">
+        <div class="territory-item" data-mun="cairo" onmouseover="if(window.innerWidth > 900) activateNode('cairo')" onclick="if(window.innerWidth <= 900) openMunicipalityModal('cairo')">
           <div class="t-icon"><i data-lucide="users"></i></div>
           <div class="t-info"><h3>El Cairo</h3><p>Comité Municipal</p></div>
         </div>
@@ -295,6 +295,11 @@
     <!-- El contenido del preview se generará por JS -->
   </div>
 </div>
+<div id="juntaExpandContainer" class="hide-on-desktop" style="text-align: center; margin-top: 24px;">
+  <button id="btnJuntaExpand" class="btn btn--outline" style="width: 100%; justify-content: center; font-size: 0.9rem; padding: 12px 24px; border-radius: var(--radius-md);">
+    Mostrar todos los directivos (+12)
+  </button>
+</div>
 </div>
 </section>
 
@@ -415,13 +420,29 @@
 <section class="section" id="estatutos">
 <div class="container">
 <div class="section__header reveal"><span class="section__tag">Documento Oficial</span><h2 class="section__title">Estatutos del SUTEV</h2><p class="section__desc">Consulta de forma interactiva nuestro marco legal y normativo.</p></div>
-<div class="estatutos-wrapper reveal" style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); background: #fff; height: 700px; position: relative;">
+
+<!-- Desktop Viewer (Hidden on Mobile) -->
+<div class="estatutos-wrapper reveal hide-on-mobile" style="border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); background: #fff; height: 700px; position: relative;">
 <iframe src="ESTATUTOS%202026.pdf" width="100%" height="100%" style="border: none; border-radius: var(--radius-lg);">
   <p>Tu navegador no soporta la visualización de PDFs. <a href="ESTATUTOS%202026.pdf" download style="color: var(--green-600); font-weight: bold;">Descarga los estatutos aquí</a>.</p>
 </iframe>
 </div>
-<div style="text-align: center; margin-top: 1.5rem;" class="reveal">
+<div style="text-align: center; margin-top: 1.5rem;" class="reveal hide-on-mobile">
   <a href="ESTATUTOS%202026.pdf" download class="btn btn--outline-dark" style="display:inline-flex; align-items:center; gap:8px;"><i data-lucide="download" style="width:18px;height:18px;"></i> Descargar PDF de los Estatutos</a>
+</div>
+
+<!-- Mobile Card Viewer (Hidden on Desktop) -->
+<div class="estatutos-mobile-card reveal hide-on-desktop">
+  <div class="estatutos-mobile-card__icon">
+    <i data-lucide="file-text"></i>
+  </div>
+  <div class="estatutos-mobile-card__content">
+    <h3>Estatutos Oficiales 2026</h3>
+    <p>Documento oficial completo en formato PDF (33 MB). Contiene el marco legal, estatutario y reglamentario que rige nuestra subdirectiva.</p>
+    <a href="ESTATUTOS%202026.pdf" download class="btn btn--primary" style="display: inline-flex; align-items: center; gap: 8px;">
+      <i data-lucide="download"></i> Descargar PDF (33 MB)
+    </a>
+  </div>
 </div>
 </div>
 </section>
@@ -483,26 +504,96 @@ const lClose = document.getElementById('lightboxClose');
 const lImg = document.getElementById('lightboxImg');
 const cModal = document.getElementById('cargoModal');
 
-window.openCargoModal = function(index) {
+window.openCargoModal = function(index, forceModal = false) {
   const c = cargos[index];
   
-  if(c.url) {
+  if(c.url && !forceModal) {
     window.location.href = c.url;
     return;
   }
   
-  document.getElementById('cargoIni').innerText = c.ini;
+  // Set avatar HTML (image or initials)
+  const titular = c.name || 'Titular por definir';
+  const avatarHtml = c.img ? `<img src="assets/images/${c.img}" alt="${titular}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` : c.ini;
+  
+  const cargoIniEl = document.getElementById('cargoIni');
+  cargoIniEl.innerHTML = avatarHtml;
+  cargoIniEl.style.padding = '0';
+  cargoIniEl.style.overflow = 'hidden';
+  
   document.getElementById('cargoTitle').innerText = c.cargo;
   document.getElementById('cargoDesc').innerText = c.desc;
-  document.getElementById('cargoName').innerText = c.name || 'Titular por definir';
+  document.getElementById('cargoName').innerText = titular;
+  
+  // Add a button inside the modal to go to the page if it has url
+  let actionBtn = document.getElementById('cargoModalActionBtn');
+  if (!actionBtn) {
+    actionBtn = document.createElement('a');
+    actionBtn.id = 'cargoModalActionBtn';
+    actionBtn.className = 'btn btn--primary';
+    actionBtn.style.marginTop = '24px';
+    actionBtn.style.width = '100%';
+    actionBtn.style.justifyContent = 'center';
+    cModal.appendChild(actionBtn);
+  }
+  
+  if (c.url) {
+    actionBtn.href = c.url;
+    actionBtn.innerText = 'Ver Secretaría Completa →';
+    actionBtn.style.display = 'inline-flex';
+  } else {
+    actionBtn.style.display = 'none';
+  }
   
   lImg.style.display = 'none';
   cModal.style.display = 'block';
   lightbox.classList.add('active');
+  document.body.style.overflow = 'hidden';
 };
 
-lClose.addEventListener('click', () => { lightbox.classList.remove('active'); });
-lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('active'); });
+const closeLightbox = () => {
+  lightbox.classList.remove('active');
+  document.body.style.overflow = '';
+};
+
+lClose.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
+
+// Modal interactivo de Municipios en Móvil
+window.openMunicipalityModal = function(key) {
+  const loc = mapLocations[key];
+  if (!loc) return;
+  
+  // Ocultar botón del modal para que solo actúe como tarjeta informativa
+  let actionBtn = document.getElementById('cargoModalActionBtn');
+  if (actionBtn) {
+    actionBtn.style.display = 'none';
+  }
+  
+  const cargoIniEl = document.getElementById('cargoIni');
+  cargoIniEl.innerHTML = "📍";
+  cargoIniEl.style.padding = '0';
+  cargoIniEl.style.fontSize = '2.5rem';
+  cargoIniEl.style.display = 'flex';
+  cargoIniEl.style.alignItems = 'center';
+  cargoIniEl.style.justifyContent = 'center';
+  
+  document.getElementById('cargoTitle').innerText = "SUTEV " + loc.name;
+  document.getElementById('cargoName').innerText = loc.role;
+  document.getElementById('cargoDesc').innerHTML = `
+    <div style="font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; color: var(--gray-700); text-align: left; display: flex; flex-direction: column; gap: 8px;">
+      <p><strong>Presidente(a):</strong> ${loc.leader}</p>
+      <p><strong>Sede / Punto de Encuentro:</strong> ${loc.address}</p>
+      <p><strong>Contacto:</strong> ${loc.phone}</p>
+    </div>
+  `;
+  
+  lImg.style.display = 'none';
+  cModal.style.display = 'block';
+  lightbox.classList.add('active');
+  document.body.style.overflow = 'hidden';
+};
 
 const juntaList = document.getElementById('juntaList');
 const juntaPreview = document.getElementById('juntaPreview');
@@ -531,13 +622,38 @@ const updatePreview = (index) => {
 cargos.forEach((c, i) => {
   const item = document.createElement('div');
   item.className = 'junta-list-item';
+  if (i >= 6) {
+    item.className += ' junta-collapsed-item hide-on-mobile';
+  }
   const titular = c.name || 'Titular por definir';
   const avatarHtml = c.img ? `<img src="assets/images/${c.img}" alt="${titular}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` : c.ini;
   item.innerHTML = `<span class="item-ini" style="padding:0; overflow:hidden;">${avatarHtml}</span> <span class="item-cargo">${c.cargo}</span>`;
-  item.onclick = () => updatePreview(i);
-  item.onmouseenter = () => updatePreview(i);
+  
+  item.onclick = () => {
+    if (window.innerWidth <= 900) {
+      openCargoModal(i, true);
+    } else {
+      updatePreview(i);
+    }
+  };
+  item.onmouseenter = () => {
+    if (window.innerWidth > 900) {
+      updatePreview(i);
+    }
+  };
   juntaList.appendChild(item);
 });
+
+// Expandir Junta Directiva en móvil
+const btnJuntaExpand = document.getElementById('btnJuntaExpand');
+if (btnJuntaExpand) {
+  btnJuntaExpand.addEventListener('click', () => {
+    document.querySelectorAll('.junta-collapsed-item').forEach(el => {
+      el.classList.remove('hide-on-mobile');
+    });
+    document.getElementById('juntaExpandContainer').style.display = 'none';
+  });
+}
 
 // Inicializar el primero
 if(cargos.length > 0) updatePreview(0);
@@ -557,8 +673,15 @@ const mapLocations = {
 let map, markers = {};
 
 document.addEventListener('DOMContentLoaded', () => {
+  const isMobile = window.innerWidth <= 900;
+  if (isMobile) return; // Desactivar Leaflet en móvil para optimizar red, memoria y touch scroll
+  
   // Inicializar Leaflet Map
-  map = L.map('territory-map').setView([4.7466, -75.9117], 10);
+  map = L.map('territory-map', {
+    dragging: true,
+    tap: true,
+    scrollWheelZoom: false
+  }).setView([4.7466, -75.9117], 10);
   
   // Capa base oscura premium
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
