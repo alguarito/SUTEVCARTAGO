@@ -227,14 +227,11 @@ ul { list-style: none; }
 }
 .service-card__link:hover { gap: 10px; color: var(--green-800); }
 
-/* Accordion Desktop Defaults (Static fully expanded) */
-.service-card__header-trigger {
-  display: block;
-}
-.service-card__collapsible-content {
-  max-height: none;
-  opacity: 1;
-  overflow: visible;
+/* Drawer Desktop Defaults */
+.services-collapsible-drawer {
+  max-height: none !important;
+  opacity: 1 !important;
+  overflow: visible !important;
 }
 .tools__grid {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
@@ -247,11 +244,6 @@ ul { list-style: none; }
   height: 100%;
 }
 .tools__grid .service-card__body {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-.tools__grid .service-card__collapsible-content {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -932,108 +924,136 @@ ul { list-style: none; }
     overflow-x: visible !important;
     list-style: none;
   }
+  /* Services & Tools Collapsible Drawer System */
+  .services-collapsible-drawer {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    width: 100%;
+  }
+  .services-collapsible-drawer.open {
+    max-height: 3200px; /* Safe upper limit for all cards */
+    opacity: 1;
+    padding-bottom: 24px;
+  }
+  
+  /* Toggle Button Mobile Styling */
+  .services-toggle-btn {
+    width: 100%;
+    background: var(--white);
+    border: 1.5px solid var(--green-200);
+    color: var(--green-800);
+    padding: 16px 24px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+  .services-toggle-btn:active {
+    transform: scale(0.98);
+    background: var(--green-50);
+  }
+  .services-toggle-btn i,
+  .services-toggle-btn svg {
+    color: var(--green-600);
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+  .toggle-btn-chevron {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+  }
+  .services-toggle-btn.active .toggle-btn-chevron {
+    transform: rotate(180deg);
+    color: var(--green-600);
+  }
+
+  /* Services Grid vertical stacking on Mobile */
+  .services__grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    margin: 20px 0 0 0 !important;
+    padding: 0 !important;
+    overflow-x: visible !important;
+    list-style: none;
+  }
   .services__grid::-webkit-scrollbar {
     display: none;
   }
+  
+  /* Restore original HIGH CONTRAST Cards on Mobile */
   .services__grid .service-card {
     min-width: 0 !important;
     max-width: none !important;
     width: 100% !important;
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    border-radius: var(--radius-md) !important;
+    background: var(--white) !important;
+    border: 1px solid var(--gray-200) !important;
+    border-radius: var(--radius-lg) !important;
     padding: 0 !important;
     margin-bottom: 0 !important;
-    cursor: pointer;
-    box-shadow: none !important;
+    box-shadow: var(--shadow-sm) !important;
     transform: none !important;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    transition: var(--transition) !important;
     box-sizing: border-box;
+    display: flex !important;
+    flex-direction: column !important;
   }
   .services__grid .service-card:hover {
     transform: none !important;
   }
   .service-card__image {
-    display: none !important; /* Hide image on mobile for speed and cleanliness */
+    display: none !important; /* Hide image on mobile for speed and clean lines */
   }
   .services__grid .service-card__body {
-    padding: 16px 20px !important;
-    display: block !important;
-    width: 100% !important;
+    padding: 24px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex-grow: 1 !important;
     box-sizing: border-box !important;
   }
-  .service-card__header-trigger {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    width: 100%;
-    user-select: none;
-  }
   .services__grid .service-card__icon {
-    font-size: 1.5rem !important;
-    margin-bottom: 0 !important;
-    color: var(--green-400) !important;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+    font-size: 2.2rem !important;
+    margin-bottom: 12px !important;
+    color: var(--green-600) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
   }
   .services__grid .service-card__icon i,
   .services__grid .service-card__icon svg {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
   }
   .services__grid .service-card__title {
-    font-size: 1.05rem !important;
-    font-weight: 700 !important;
-    color: rgba(255, 255, 255, 0.95) !important;
-    margin-bottom: 0 !important;
-    text-align: left;
-  }
-  .service-card__chevron {
-    margin-left: auto; /* Push to far right */
-    color: rgba(255, 255, 255, 0.5);
-    transition: transform 0.3s ease, color 0.3s ease;
-    flex-shrink: 0;
-    width: 18px;
-    height: 18px;
-  }
-  .service-card__collapsible-content {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, padding 0.3s ease;
-    width: 100%;
-    box-sizing: border-box;
+    font-size: 1.2rem !important;
+    font-weight: 800 !important;
+    color: var(--green-800) !important;
+    margin-bottom: 10px !important;
+    text-align: left !important;
   }
   .services__grid .service-card__text {
-    font-size: 0.9rem !important;
-    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 0.92rem !important;
+    color: var(--gray-600) !important;
     line-height: 1.6 !important;
-    margin-bottom: 16px !important;
-    text-align: left;
+    margin-bottom: 20px !important;
+    text-align: left !important;
+    flex-grow: 1 !important;
   }
   .services__grid .btn,
   .services__grid .service-card__link {
     width: 100% !important;
     justify-content: center !important;
     box-sizing: border-box !important;
-  }
-  
-  /* Active expanded accordion state */
-  .services__grid .service-card.active {
-    background: rgba(76, 175, 80, 0.08) !important;
-    border-color: rgba(76, 175, 80, 0.3) !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
-  }
-  .services__grid .service-card.active .service-card__chevron {
-    transform: rotate(180deg);
-    color: var(--green-400);
-  }
-  .services__grid .service-card.active .service-card__collapsible-content {
-    max-height: 380px; /* Safe upper height bound */
-    opacity: 1;
-    padding-top: 16px;
   }
 
   .junta-card { width: 100%; height: auto; padding: 24px; }

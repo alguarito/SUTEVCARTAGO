@@ -150,44 +150,39 @@
 <section class="section section--gray" id="servicios">
 <div class="container">
 <div class="section__header reveal"><span class="section__tag">Servicios</span><h2 class="section__title">Lo que hacemos por ti</h2><p class="section__desc">Brindamos acompañamiento integral a nuestros afiliados en las áreas jurídica, educativa y de bienestar.</p></div>
+<div class="services-toggle-wrapper hide-on-desktop">
+<button class="services-toggle-btn" id="toggleServicesBtn">
+<i data-lucide="briefcase"></i>
+<span>Ver Portafolio de Servicios (3)</span>
+<i data-lucide="chevron-down" class="toggle-btn-chevron"></i>
+</button>
+</div>
+
+<div class="services-collapsible-drawer" id="servicesDrawer">
 <div class="services__grid">
 <div class="service-card reveal">
 <div class="service-card__image"><img src="assets/images/services-legal.png" alt="Asesoría Jurídica"></div>
 <div class="service-card__body">
-<div class="service-card__header-trigger">
 <div class="service-card__icon"><i data-lucide="scale"></i></div>
 <h3 class="service-card__title">Asesoría Jurídica</h3>
-<i data-lucide="chevron-down" class="service-card__chevron hide-on-desktop"></i>
-</div>
-<div class="service-card__collapsible-content">
 <p class="service-card__text">Acompañamiento legal en derechos laborales, prestacionales, régimen disciplinario, pensiones, cesantías, tutelas y reclamaciones administrativas para docentes de los estatutos 2277 y 1278.</p>
 <a href="#reservas" class="service-card__link">Agenda tu cita →</a>
-</div>
 </div>
 </div>
 <div class="service-card reveal">
 <div class="service-card__image"><img src="assets/images/services-education.png" alt="CEID"></div>
 <div class="service-card__body">
-<div class="service-card__header-trigger">
 <div class="service-card__icon"><i data-lucide="graduation-cap"></i></div>
 <h3 class="service-card__title">Capacitación CEID</h3>
-<i data-lucide="chevron-down" class="service-card__chevron hide-on-desktop"></i>
-</div>
-<div class="service-card__collapsible-content">
 <p class="service-card__text">El Centro de Estudios e Investigaciones Docentes ofrece formación continua en pedagogía crítica, innovación educativa, investigación en el aula y actualización curricular.</p>
 <a href="#reservas" class="service-card__link">Inscríbete →</a>
-</div>
 </div>
 </div>
 <div class="service-card reveal">
 <div class="service-card__image"><img src="assets/images/services-welfare.png" alt="Bienestar"></div>
 <div class="service-card__body">
-<div class="service-card__header-trigger">
 <div class="service-card__icon"><i data-lucide="heart-handshake"></i></div>
 <h3 class="service-card__title">Bienestar Docente</h3>
-<i data-lucide="chevron-down" class="service-card__chevron hide-on-desktop"></i>
-</div>
-<div class="service-card__collapsible-content">
 <p class="service-card__text">Actividades culturales, deportivas, recreativas y de salud para los afiliados y sus familias. Jornadas de integración, encuentros deportivos y espacios de crecimiento personal.</p>
 <a href="#calendario" class="service-card__link">Ver actividades →</a>
 </div>
@@ -203,6 +198,15 @@
     <p style="font-size: 1rem; color: var(--gray-600); max-width: 700px; margin: 8px auto 0;">Simula tus condiciones laborales, pensiones y consulta tus permisos con total rigurosidad y facilidad desde cualquier dispositivo.</p>
   </div>
   
+<div class="services-toggle-wrapper hide-on-desktop" style="margin-top: 20px;">
+<button class="services-toggle-btn" id="toggleToolsBtn">
+<i data-lucide="settings"></i>
+<span>Ver Herramientas Digitales (8)</span>
+<i data-lucide="chevron-down" class="toggle-btn-chevron"></i>
+</button>
+</div>
+
+<div class="services-collapsible-drawer" id="toolsDrawer">
   <div class="services__grid tools__grid">
     
     <!-- CARD 1: PERMISOS DE LEY -->
@@ -211,15 +215,10 @@
         <i data-lucide="scale" style="width: 64px; height: 64px; color: white; opacity: 0.95;"></i>
       </div>
       <div class="service-card__body">
-        <div class="service-card__header-trigger">
-          <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="scale"></i></div>
-          <h3 class="service-card__title">Permisos de Ley y Licencias</h3>
-          <i data-lucide="chevron-down" class="service-card__chevron hide-on-desktop"></i>
-        </div>
-        <div class="service-card__collapsible-content">
-          <p class="service-card__text">Consulta la normatividad de 10 ausencias reglamentarias del Magisterio y genera tu oficio de solicitud pre-diligenciado para radicar ante el Rector o Secretaría de Educación.</p>
-          <a href="permisos-docentes.html" class="btn btn--primary">Abrir Consultor →</a>
-        </div>
+        <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="scale"></i></div>
+        <h3 class="service-card__title">Permisos de Ley y Licencias</h3>
+        <p class="service-card__text">Consulta la normatividad de 10 ausencias reglamentarias del Magisterio y genera tu oficio de solicitud pre-diligenciado para radicar ante el Rector o Secretaría de Educación.</p>
+        <a href="permisos-docentes.html" class="btn btn--primary">Abrir Consultor →</a>
       </div>
     </div>
 
@@ -229,15 +228,10 @@
         <i data-lucide="calculator" style="width: 64px; height: 64px; color: white; opacity: 0.95;"></i>
       </div>
       <div class="service-card__body">
-        <div class="service-card__header-trigger">
-          <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="calculator"></i></div>
-          <h3 class="service-card__title">Calculadora Salarial (2026)</h3>
-          <i data-lucide="chevron-down" class="service-card__chevron hide-on-desktop"></i>
-        </div>
-        <div class="service-card__collapsible-content">
-          <p class="service-card__text">Estima tu asignación básica mensual bajo los decretos actualizados de 2026, incluyendo nivelaciones salariales, bonificaciones pedagógicas y requisitos exactos de escalafón.</p>
-          <a href="calculadora-salarial.html" class="btn btn--primary">Abrir Calculadora →</a>
-        </div>
+        <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="calculator"></i></div>
+        <h3 class="service-card__title">Calculadora Salarial (2026)</h3>
+        <p class="service-card__text">Estima tu asignación básica mensual bajo los decretos actualizados de 2026, incluyendo nivelaciones salariales, bonificaciones pedagógicas y requisitos exactos de escalafón.</p>
+        <a href="calculadora-salarial.html" class="btn btn--primary">Abrir Calculadora →</a>
       </div>
     </div>
 
@@ -247,15 +241,10 @@
         <i data-lucide="shield-check" style="width: 64px; height: 64px; color: white; opacity: 0.95;"></i>
       </div>
       <div class="service-card__body">
-        <div class="service-card__header-trigger">
-          <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="calendar-clock"></i></div>
-          <h3 class="service-card__title">Simulador de Pensión Magisterio</h3>
-          <i data-lucide="chevron-down" class="service-card__chevron hide-on-desktop"></i>
-        </div>
-        <div class="service-card__collapsible-content">
-          <p class="service-card__text">Calcula tu tiempo de servicio, proyecta tu edad de jubilación según los decretos 2277 y 1278 y conoce la normatividad de pensión compatible con el FOMAG.</p>
-          <a href="simulador-pension.html" class="btn btn--primary">Abrir Simulador →</a>
-        </div>
+        <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="calendar-clock"></i></div>
+        <h3 class="service-card__title">Simulador de Pensión Magisterio</h3>
+        <p class="service-card__text">Calcula tu tiempo de servicio, proyecta tu edad de jubilación según los decretos 2277 y 1278 y conoce la normatividad de pensión compatible con el FOMAG.</p>
+        <a href="simulador-pension.html" class="btn btn--primary">Abrir Simulador →</a>
       </div>
     </div>
 
@@ -265,15 +254,10 @@
         <i data-lucide="file-signature" style="width: 64px; height: 64px; color: white; opacity: 0.95;"></i>
       </div>
       <div class="service-card__body">
-        <div class="service-card__header-trigger">
-          <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="file-signature"></i></div>
-          <h3 class="service-card__title">Derechos de Petición Express</h3>
-          <i data-lucide="chevron-down" class="service-card__chevron hide-on-desktop"></i>
-        </div>
-        <div class="service-card__collapsible-content">
-          <p class="service-card__text">Redacta de forma autónoma tus reclamaciones jurídicas válidas ante COSMITET por salud, el FOMAG por cesantías, y la Secretaría por ascenso.</p>
-          <a href="derechos-peticion.html" class="btn btn--primary">Abrir Asistente →</a>
-        </div>
+        <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="file-signature"></i></div>
+        <h3 class="service-card__title">Derechos de Petición Express</h3>
+        <p class="service-card__text">Redacta de forma autónoma tus reclamaciones jurídicas válidas ante COSMITET por salud, el FOMAG por cesantías, y la Secretaría por ascenso.</p>
+        <a href="derechos-peticion.html" class="btn btn--primary">Abrir Asistente →</a>
       </div>
     </div>
 
@@ -283,15 +267,10 @@
         <i data-lucide="shield-alert" style="width: 64px; height: 64px; color: white; opacity: 0.95;"></i>
       </div>
       <div class="service-card__body">
-        <div class="service-card__header-trigger">
-          <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="shield-alert"></i></div>
-          <h3 class="service-card__title">Auditor de Nómina y Extras</h3>
-          <i data-lucide="chevron-down" class="service-card__chevron hide-on-desktop"></i>
-        </div>
-        <div class="service-card__collapsible-content">
-          <p class="service-card__text">Audita tu desprendible de pago mensual frente a las asignaciones oficiales de 2026. Calcula horas extras diurnas y nocturnas y reclama diferencias salariales.</p>
-          <a href="auditor-nomina.html" class="btn btn--primary">Abrir Auditor →</a>
-        </div>
+        <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="shield-alert"></i></div>
+        <h3 class="service-card__title">Auditor de Nómina y Extras</h3>
+        <p class="service-card__text">Audita tu desprendible de pago mensual frente a las asignaciones oficiales de 2026. Calcula horas extras diurnas y nocturnas y reclama diferencias salariales.</p>
+        <a href="auditor-nomina.html" class="btn btn--primary">Abrir Auditor →</a>
       </div>
     </div>
     
@@ -301,15 +280,10 @@
         <i data-lucide="graduation-cap" style="width: 64px; height: 64px; color: white; opacity: 0.95;"></i>
       </div>
       <div class="service-card__body">
-        <div class="service-card__header-trigger">
-          <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="graduation-cap"></i></div>
-          <h3 class="service-card__title">Escalafón y Ascenso Profesional</h3>
-          <i data-lucide="chevron-down" class="service-card__chevron hide-on-desktop"></i>
-        </div>
-        <div class="service-card__collapsible-content">
-          <p class="service-card__text">Simula tu ascenso y reubicación salarial bajo los Decretos 1278 y 2277. Audita tus requisitos y gestiona tu portafolio de evidencias de evaluación de desempeño.</p>
-          <a href="escalafon-docente.html" class="btn btn--primary">Abrir Asistente →</a>
-        </div>
+        <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="graduation-cap"></i></div>
+        <h3 class="service-card__title">Escalafón y Ascenso Profesional</h3>
+        <p class="service-card__text">Simula tu ascenso y reubicación salarial bajo los Decretos 1278 y 2277. Audita tus requisitos y gestiona tu portafolio de evidencias de evaluación de desempeño.</p>
+        <a href="escalafon-docente.html" class="btn btn--primary">Abrir Asistente →</a>
       </div>
     </div>
 
@@ -319,15 +293,10 @@
         <i data-lucide="calendar-range" style="width: 64px; height: 64px; color: white; opacity: 0.95;"></i>
       </div>
       <div class="service-card__body">
-        <div class="service-card__header-trigger">
-          <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="calendar-range"></i></div>
-          <h3 class="service-card__title">Carga Académica y Jornada 1850</h3>
-          <i data-lucide="chevron-down" class="service-card__chevron hide-on-desktop"></i>
-        </div>
-        <div class="service-card__collapsible-content">
-          <p class="service-card__text">Audita tu jornada escolar semanal bajo el Decreto 1850 de 2002. Controla horas de clase, permanencia y genera oficios automáticos de reclamo por sobrecarga.</p>
-          <a href="carga-academica.html" class="btn btn--primary">Abrir Planificador →</a>
-        </div>
+        <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="calendar-range"></i></div>
+        <h3 class="service-card__title">Carga Académica y Jornada 1850</h3>
+        <p class="service-card__text">Audita tu jornada escolar semanal bajo el Decreto 1850 de 2002. Controla horas de clase, permanencia y genera oficios automáticos de reclamo por sobrecarga.</p>
+        <a href="carga-academica.html" class="btn btn--primary">Abrir Planificador →</a>
       </div>
     </div>
 
@@ -337,19 +306,15 @@
         <i data-lucide="clipboard-check" style="width: 64px; height: 64px; color: white; opacity: 0.95;"></i>
       </div>
       <div class="service-card__body">
-        <div class="service-card__header-trigger">
-          <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="clipboard-check"></i></div>
-          <h3 class="service-card__title">Concursos y Mineducación</h3>
-          <i data-lucide="chevron-down" class="service-card__chevron hide-on-desktop"></i>
-        </div>
-        <div class="service-card__collapsible-content">
-          <p class="service-card__text">Calcula tu puntaje de méritos para convocatorias de la CNSC y postulaciones del Sistema Maestro de Mineducación. Recibe recomendaciones para mejorar tu perfil.</p>
-          <a href="concurso-docente.html" class="btn btn--primary">Abrir Simulador →</a>
-        </div>
+        <div class="service-card__icon" style="color: var(--green-600);"><i data-lucide="clipboard-check"></i></div>
+        <h3 class="service-card__title">Concursos y Mineducación</h3>
+        <p class="service-card__text">Calcula tu puntaje de méritos para convocatorias de la CNSC y postulaciones del Sistema Maestro de Mineducación. Recibe recomendaciones para mejorar tu perfil.</p>
+        <a href="concurso-docente.html" class="btn btn--primary">Abrir Simulador →</a>
       </div>
     </div>
     
   </div>
+</div>
 </div>
 
 </div>

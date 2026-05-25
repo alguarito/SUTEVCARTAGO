@@ -321,35 +321,31 @@ window.addEventListener('scroll', () => {
   });
 });
 
-/* ===== SERVICES ACCORDION ===== */
+/* ===== SERVICES & TOOLS COLLAPSIBLE DRAWERS ===== */
 function initServicesAccordion() {
-  const cards = document.querySelectorAll('.service-card');
+  // Services Drawer Toggle
+  const servicesBtn = document.getElementById('toggleServicesBtn');
+  const servicesDrawer = document.getElementById('servicesDrawer');
   
-  cards.forEach(card => {
-    const trigger = card.querySelector('.service-card__header-trigger');
-    if (!trigger) return;
-    
-    trigger.addEventListener('click', (e) => {
-      // Accordion only operates on mobile/tablet widths (<= 900px)
+  if (servicesBtn && servicesDrawer) {
+    servicesBtn.addEventListener('click', () => {
       if (window.innerWidth <= 900) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        const isActive = card.classList.contains('active');
-        
-        // Find other cards in the same parent grid (Services or Herramientas)
-        const parentGrid = card.closest('.services__grid');
-        if (parentGrid) {
-          parentGrid.querySelectorAll('.service-card').forEach(other => {
-            other.classList.remove('active');
-          });
-        }
-        
-        // Toggle the clicked card
-        if (!isActive) {
-          card.classList.add('active');
-        }
+        const isOpen = servicesDrawer.classList.toggle('open');
+        servicesBtn.classList.toggle('active', isOpen);
       }
     });
-  });
+  }
+
+  // Tools Drawer Toggle
+  const toolsBtn = document.getElementById('toggleToolsBtn');
+  const toolsDrawer = document.getElementById('toolsDrawer');
+  
+  if (toolsBtn && toolsDrawer) {
+    toolsBtn.addEventListener('click', () => {
+      if (window.innerWidth <= 900) {
+        const isOpen = toolsDrawer.classList.toggle('open');
+        toolsBtn.classList.toggle('active', isOpen);
+      }
+    });
+  }
 }
