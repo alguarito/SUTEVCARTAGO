@@ -336,15 +336,43 @@ function initServicesAccordion() {
     });
   }
 
-  // Tools Drawer Toggle
-  const toolsBtn = document.getElementById('toggleToolsBtn');
-  const toolsDrawer = document.getElementById('toolsDrawer');
+  // Tools Dropdown Selector
+  const toolsSelector = document.getElementById('toolsSelector');
+  const selectedToolLabel = document.getElementById('selectedToolLabel');
+  const placeholderCard = document.getElementById('toolsPlaceholderCard');
+  const toolsGrid = document.querySelector('.tools__grid');
   
-  if (toolsBtn && toolsDrawer) {
-    toolsBtn.addEventListener('click', () => {
+  if (toolsSelector && selectedToolLabel) {
+    toolsSelector.addEventListener('change', function() {
       if (window.innerWidth <= 900) {
-        const isOpen = toolsDrawer.classList.toggle('open');
-        toolsBtn.classList.toggle('active', isOpen);
+        const val = this.value;
+        const txt = this.options[this.selectedIndex].text;
+        
+        // Update label text
+        selectedToolLabel.textContent = txt;
+        
+        // Hide placeholder card
+        if (placeholderCard) {
+          placeholderCard.style.setProperty('display', 'none', 'important');
+        }
+        
+        // Hide all tool cards
+        if (toolsGrid) {
+          toolsGrid.querySelectorAll('.service-card').forEach(card => {
+            card.classList.remove('active-mobile');
+          });
+          
+          // Show chosen tool card
+          const activeCard = toolsGrid.querySelector(`.service-card[data-tool="${val}"]`);
+          if (activeCard) {
+            activeCard.classList.add('active-mobile');
+            // Trigger quick CSS transition
+            activeCard.style.opacity = '0';
+            setTimeout(() => {
+              activeCard.style.opacity = '1';
+            }, 30);
+          }
+        }
       }
     });
   }
