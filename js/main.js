@@ -310,12 +310,18 @@ window.addEventListener('scroll', () => {
     const id = sec.getAttribute('id');
     const link = document.querySelector(`.nav__link[href="#${id}"]`);
     if (link) {
-      if (scrollY >= top && scrollY < top + height) {
-        link.style.color = 'var(--green-700)';
-        link.style.background = 'var(--green-50)';
+      const isActive = scrollY >= top && scrollY < top + height;
+      if (isActive) {
+        if (window.innerWidth > 900) {
+          link.style.color = 'var(--green-700)';
+          link.style.background = 'var(--green-50)';
+        } else {
+          link.classList.add('active');
+        }
       } else {
         link.style.color = '';
         link.style.background = '';
+        link.classList.remove('active');
       }
     }
   });
