@@ -360,6 +360,73 @@
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
     
+    /* Estilos Premium para Tarjeta Informativa Móvil del PDF */
+    .mobile-pdf-notice {
+      width: 100%;
+      max-width: 650px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+    .mobile-pdf-notice__icon {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+    }
+    .mobile-pdf-notice h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      color: #fff;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .mobile-pdf-notice p {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .mobile-pdf-notice__actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-native-pdf {
+      background: #1B8C3D !important;
+      color: #fff !important;
+      font-weight: 700 !important;
+      padding: 12px 20px !important;
+      border-radius: 8px !important;
+      border: none !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      box-shadow: 0 4px 12px rgba(27, 140, 61, 0.3) !important;
+      text-decoration: none !important;
+      font-size: 0.85rem !important;
+    }
+    .btn-download-pdf {
+      background: rgba(255, 255, 255, 0.08) !important;
+      color: #fff !important;
+      font-weight: 600 !important;
+      padding: 12px 20px !important;
+      border-radius: 8px !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      text-decoration: none !important;
+      font-size: 0.85rem !important;
+    }
+    .btn-native-pdf:active, .btn-download-pdf:active {
+      transform: scale(0.96) !important;
+      transition: transform 0.1s ease !important;
+    }
+    
     .mobile-page-indicator {
       position: fixed;
       bottom: 24px;
@@ -768,6 +835,24 @@
       const container = document.getElementById('mobile-scrolling-view');
       if (!container) return;
       container.innerHTML = '';
+      
+      // Inyectar tarjeta informativa primero en móvil
+      const noticeCard = document.createElement('div');
+      noticeCard.className = 'mobile-pdf-notice';
+      noticeCard.innerHTML = `
+        <div class="mobile-pdf-notice__icon">📄</div>
+        <h3>Revista Voces que Transforman</h3>
+        <p>Desplázate hacia abajo para ver la revista hoja por hoja. Para usar herramientas de búsqueda, zoom avanzado o lectura en voz alta, abre el documento original.</p>
+        <div class="mobile-pdf-notice__actions">
+          <a href="assets/docs/voces_que_transforman.pdf" target="_blank" class="btn-top btn-native-pdf">
+            <span>⚡ Abrir PDF Original</span>
+          </a>
+          <a href="assets/docs/voces_que_transforman.pdf" download class="btn-top btn-download-pdf">
+            <span>⬇️ Descargar PDF</span>
+          </a>
+        </div>
+      `;
+      container.appendChild(noticeCard);
       
       pages.forEach((src, idx) => {
         if (src) {
