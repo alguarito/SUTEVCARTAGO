@@ -561,7 +561,7 @@
         <div class="preview-toolbar">
           <span><i data-lucide="file-text" style="vertical-align: middle; margin-right: 6px; width: 18px; height: 18px;"></i> Vista Previa del Documento (A4)</span>
           <div class="toolbar-actions">
-            <button class="btn-action" onclick="copyPetitionText()"><i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copiar</button>
+            <button class="btn-action" id="btnCopiar" onclick="copyPetitionText()"><i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copiar</button>
             <button class="btn-action" style="background: var(--green-600);" onclick="window.print()"><i data-lucide="printer" style="width: 14px; height: 14px;"></i> Imprimir / PDF</button>
           </div>
         </div>
@@ -1224,6 +1224,29 @@ Celular / Teléfono: **${celular}**`;
     
     navigator.clipboard.writeText(fullText).then(() => {
       showCustomToast("📋 ¡Documento jurídico copiado al portapapeles!");
+      
+      // Retroalimentación visual interactiva en el botón
+      const copyBtn = document.getElementById('btnCopiar');
+      if (copyBtn) {
+        const originalHtml = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<i data-lucide="check" style="width: 14px; height: 14px;"></i> ¡Copiado!';
+        copyBtn.style.background = '#1B8C3D';
+        copyBtn.style.borderColor = '#1B8C3D';
+        
+        // Re-cargar Lucide para el nuevo icono check
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+        
+        setTimeout(() => {
+          copyBtn.innerHTML = originalHtml;
+          copyBtn.style.background = '';
+          copyBtn.style.borderColor = '';
+          if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+          }
+        }, 2000);
+      }
     }).catch(err => {
       console.error("Error copiando", err);
     });

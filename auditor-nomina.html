@@ -848,7 +848,7 @@
           <div class="preview-toolbar">
             <span style="display:inline-flex; align-items:center; gap:8px;"><i data-lucide="eye" style="width:16px;height:16px;"></i> Borrador Reclamación Salarial</span>
             <div class="toolbar-actions">
-              <button class="btn-action" onclick="copyReclamacionText()"><i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copiar Texto</button>
+              <button class="btn-action" id="btnCopiarReclamacion" onclick="copyReclamacionText()"><i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copiar Texto</button>
               <button class="btn-action" onclick="printReclamacion()"><i data-lucide="printer" style="width: 14px; height: 14px;"></i> Imprimir Reclamación</button>
             </div>
           </div>
@@ -1087,11 +1087,11 @@
     const pagadoVal = parseFloat(pagadoInput.value);
     
     if (!est) {
-      alert("Por favor selecciona tu Estatuto Docente.");
+      showToast("⚠️ Por favor selecciona tu Estatuto Docente.");
       return;
     }
     if (isNaN(pagadoVal) || pagadoVal < 0) {
-      alert("Por favor ingresa un valor válido y mayor a cero en el campo 'Neto Recibido'.");
+      showToast("⚠️ Por favor ingresa un valor válido y mayor a cero en el campo 'Neto Recibido'.");
       return;
     }
 
@@ -1104,7 +1104,7 @@
       const nivel = nivelSelect1278.value;
       
       if (!catVal || !nivel) {
-        alert("Por favor selecciona tu Grado/Formación y Nivel Salarial (Letra).");
+        showToast("⚠️ Por favor selecciona tu Grado/Formación y Nivel Salarial (Letra).");
         return;
       }
       
@@ -1115,7 +1115,7 @@
       try {
         baseSalary = salaryTable1278[grado][titulo][nivel];
       } catch (e) {
-        alert("Error al mapear las tablas oficiales de 1278. Por favor revisa tu selección.");
+        showToast("❌ Error al mapear las tablas oficiales de 1278. Por favor revisa tu selección.");
         return;
       }
       
@@ -1136,7 +1136,7 @@
     } else if (est === '2277') {
       const cat = gradoSelect2277.value;
       if (!cat) {
-        alert("Por favor selecciona tu Categoría en el Escalafón 2277.");
+        showToast("⚠️ Por favor selecciona tu Categoría en el Escalafón 2277.");
         return;
       }
       
@@ -1206,6 +1206,11 @@
     // 5. Renderizar Resultados en el Dashboard
     dbEmpty.style.display = 'none';
     dbResults.style.display = 'block';
+
+    // Disparar animación de resultados
+    dbResults.classList.remove('animate-results');
+    void dbResults.offsetWidth; // trigger reflow
+    dbResults.classList.add('animate-results');
     
     // Actualizar Textos
     document.getElementById('td-base').innerText = formatCOP(baseSalary);
@@ -1248,6 +1253,11 @@
       // Mostrar Botones y Hoja Virtual A4
       btnReclamarContainer.style.display = 'block';
       workstationPreview.style.display = 'block';
+
+      // Disparar animación en la hoja virtual
+      workstationPreview.classList.remove('animate-results');
+      void workstationPreview.offsetWidth; // trigger reflow
+      workstationPreview.classList.add('animate-results');
       
       // Renderizar el Borrador del Escrito
       updateLetterPreview();
@@ -1382,6 +1392,28 @@ Subdirectiva Norte del Valle`;
     
     navigator.clipboard.writeText(el.innerText).then(() => {
       showToast("📋 Texto de la reclamación copiado al portapapeles exitosamente.");
+      
+      // Retroalimentación visual interactiva en el botón
+      const copyBtn = document.getElementById('btnCopiarReclamacion');
+      if (copyBtn) {
+        const originalHtml = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<i data-lucide="check" style="width: 14px; height: 14px;"></i> ¡Copiado!';
+        copyBtn.style.background = '#1B8C3D';
+        copyBtn.style.borderColor = '#1B8C3D';
+        
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+        
+        setTimeout(() => {
+          copyBtn.innerHTML = originalHtml;
+          copyBtn.style.background = '';
+          copyBtn.style.borderColor = '';
+          if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+          }
+        }, 2000);
+      }
     }).catch(err => {
       console.error("Error al copiar texto", err);
       showToast("❌ Error al copiar al portapapeles.");

@@ -341,7 +341,7 @@
         </div>
 
         <!-- RESULTS CARD -->
-        <div class="result-card">
+        <div class="result-card" id="audit-result-card">
           <h3 style="font-size:1.25rem; font-weight:800; color:var(--green-900); margin-bottom:20px; display:flex; align-items:center; gap:8px;">
             <i data-lucide="shield-alert" style="color:var(--green-600);"></i> Resultado de la Auditoría
           </h3>
@@ -454,7 +454,7 @@
 
       <!-- Acciones del Papel -->
       <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin-top:20px;">
-        <button onclick="copyLetter()" class="btn btn--outline-dark" style="display:inline-flex; align-items:center; gap:8px; padding:12px 24px;">
+        <button id="btnCopiarOficio" onclick="copyLetter()" class="btn btn--outline-dark" style="display:inline-flex; align-items:center; gap:8px; padding:12px 24px;">
           <i data-lucide="copy"></i> Copiar Texto al Portapapeles
         </button>
         <button onclick="window.print()" class="btn btn--primary" style="display:inline-flex; align-items:center; gap:8px; padding:12px 24px;">
@@ -622,6 +622,14 @@ function runAudit() {
     lucide.createIcons();
   }
 
+  // Disparar animación de resultados
+  const resCard = document.getElementById('audit-result-card');
+  if (resCard) {
+    resCard.classList.remove('animate-results');
+    void resCard.offsetWidth; // trigger reflow
+    resCard.classList.add('animate-results');
+  }
+
   // Regenerar carta de reclamación automáticamente
   updateLetterText();
 }
@@ -714,9 +722,34 @@ C.C. ${cedula}`;
 function copyLetter() {
   const text = document.getElementById('letter-content').innerText;
   navigator.clipboard.writeText(text).then(() => {
-    alert('¡Oficio formal copiado al portapapeles exitosamente! Ya puedes pegarlo en Word o enviarlo por correo.');
+    showToast('📋 ¡Oficio formal copiado al portapapeles exitosamente!');
+    
+    // Retroalimentación visual interactiva en el botón
+    const copyBtn = document.getElementById('btnCopiarOficio');
+    if (copyBtn) {
+      const originalHtml = copyBtn.innerHTML;
+      copyBtn.innerHTML = '<i data-lucide="check" style="width: 18px; height: 18px;"></i> ¡Copiado!';
+      copyBtn.style.background = 'var(--green-700)';
+      copyBtn.style.color = '#ffffff';
+      copyBtn.style.borderColor = 'var(--green-700)';
+      
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+      
+      setTimeout(() => {
+        copyBtn.innerHTML = originalHtml;
+        copyBtn.style.background = '';
+        copyBtn.style.color = '';
+        copyBtn.style.borderColor = '';
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+      }, 2000);
+    }
   }).catch(e => {
-    console.error('Error al copiar');
+    console.error('Error al copiar', e);
+    showToast('❌ Error al copiar al portapapeles.');
   });
 }
 

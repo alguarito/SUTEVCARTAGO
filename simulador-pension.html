@@ -204,16 +204,16 @@
     const dNoLab = parseInt(document.getElementById('diasNoLaborados').value) || 0;
 
     if(isNaN(dNac.getTime()) || isNaN(dVin.getTime())) {
-      alert("Por favor ingresa ambas fechas correctamente.");
+      showToast("⚠️ Por favor ingresa ambas fechas correctamente.");
       return;
     }
 
     const today = new Date();
     
     // Validaciones lógicas básicas
-    if (dNac >= today) return alert("La fecha de nacimiento no puede ser futura.");
-    if (dVin >= today) return alert("La fecha de vinculación no puede ser futura.");
-    if (dVin <= dNac) return alert("La fecha de vinculación debe ser posterior a tu nacimiento.");
+    if (dNac >= today) { showToast("⚠️ La fecha de nacimiento no puede ser futura."); return; }
+    if (dVin >= today) { showToast("⚠️ La fecha de vinculación no puede ser futura."); return; }
+    if (dVin <= dNac) { showToast("⚠️ La fecha de vinculación debe ser posterior a tu nacimiento."); return; }
 
     // Corte del decreto 2277 y 1278 (26 de junio de 2003)
     // El 27 de junio ya es 1278.

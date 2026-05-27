@@ -460,6 +460,14 @@ function runMaestroSimulation() {
 
   // Dar formato negrita al texto
   txt.innerHTML = txt.innerHTML.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+  // Disparar animación de resultados
+  const card = document.getElementById('sm-result-card');
+  if (card) {
+    card.classList.remove('animate-results');
+    void card.offsetWidth; // trigger reflow
+    card.classList.add('animate-results');
+  }
 }
 
 // SIMULADOR CONCURSO CNSC
@@ -505,6 +513,14 @@ function runCnscSimulation() {
 
   // Dar formato negrita al texto
   txt.innerHTML = txt.innerHTML.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+  // Disparar animación de resultados
+  const card = document.getElementById('cnsc-result-card');
+  if (card) {
+    card.classList.remove('animate-results');
+    void card.offsetWidth; // trigger reflow
+    card.classList.add('animate-results');
+  }
 }
 
 // Iniciar simulaciones con valores por defecto

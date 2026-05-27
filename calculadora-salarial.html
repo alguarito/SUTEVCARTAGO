@@ -271,7 +271,7 @@ document.getElementById('btnCalcular').addEventListener('click', () => {
     const nivel = document.getElementById('nivel1278').value;
     
     if (!catVal || !nivel) {
-      alert('Por favor selecciona tu Grado/Formación y el Nivel Salarial.');
+      showToast('⚠️ Por favor selecciona tu Grado/Formación y el Nivel Salarial.');
       return;
     }
     
@@ -282,7 +282,7 @@ document.getElementById('btnCalcular').addEventListener('click', () => {
     try {
       salary = salaryTable1278[grado][titulo][nivel];
     } catch(e) {
-      alert('Error al calcular el salario con las opciones seleccionadas.');
+      showToast('❌ Error al calcular el salario con las opciones seleccionadas.');
       return;
     }
 
@@ -291,7 +291,7 @@ document.getElementById('btnCalcular').addEventListener('click', () => {
   } else if (est === '2277') {
     const cat = document.getElementById('grado2277').value;
     if (!cat) {
-      alert('Por favor selecciona tu categoría en el escalafón.');
+      showToast('⚠️ Por favor selecciona tu categoría en el escalafón.');
       return;
     }
     
@@ -305,7 +305,7 @@ document.getElementById('btnCalcular').addEventListener('click', () => {
       reqs = 'Para ascender a la siguiente categoría necesitas cumplir el tiempo mínimo de permanencia exigido en tu categoría actual (normalmente de 2 a 3 años según el nivel) y acumular los créditos de capacitación exigidos dictados o avalados por el Ministerio de Educación / CEID.';
     }
   } else {
-    alert('Por favor selecciona un estatuto docente.');
+    showToast('⚠️ Por favor selecciona un estatuto docente.');
     return;
   }
 
