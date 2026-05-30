@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUTEV Cartago - Asistente de Convivencia Escolar y Ley 1620</title>
+<meta name="description" content="Diagnostica situaciones de convivencia escolar según la Ley 1620 de 2013 en Colombia y genera tu acta oficial de inicio de protocolo para proteger tu responsabilidad laboral.">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  @media (min-width: 1024px) {
+    .dashboard-grid {
+      grid-template-columns: 460px 1fr;
+    }
+  }
+
+  .form-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .result-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 35px;
+    box-shadow: var(--shadow-md);
+    min-height: 400px;
+  }
+
+  .wizard-step {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .wizard-step.active {
+    display: block;
+  }
+
+  .wizard-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    background-color: var(--gray-100);
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+  }
+
+  .progress-dot-wrapper {
+    display: flex;
+    gap: 8px;
+  }
+  .progress-dot {
+    width: 10px;
+    height: 10px;
+    background-color: var(--gray-300);
+    border-radius: 50%;
+    transition: var(--transition);
+  }
+  .progress-dot.active {
+    background-color: var(--green-600);
+    transform: scale(1.2);
+  }
+  .progress-dot.completed {
+    background-color: var(--green-400);
+  }
+
+  .wizard-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    gap: 12px;
+  }
+
+  .btn-wizard {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .option-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+  }
+  .option-card {
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .option-card:hover {
+    border-color: var(--green-500);
+    background-color: var(--green-50);
+  }
+  .option-card input[type="radio"] {
+    margin-top: 4px;
+    cursor: pointer;
+  }
+  .option-card-content h4 {
+    font-size: 0.95rem;
+    color: var(--green-900);
+    margin-bottom: 4px;
+  }
+  .option-card-content p {
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    line-height: 1.4;
+  }
+
+  .score-badge {
+    text-align: center;
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 25px;
+  }
+  
+  .score-badge.tipo-1 {
+    background-color: var(--green-50);
+    border: 2px solid var(--green-200);
+  }
+  .score-badge.tipo-2 {
+    background-color: #fffbeb;
+    border: 2px solid #fef3c7;
+  }
+  .score-badge.tipo-3 {
+    background-color: #fef2f2;
+    border: 2px solid #fee2e2;
+  }
+
+  .score-value {
+    font-size: 2.2rem;
+    font-weight: 900;
+    font-family: var(--font-heading);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .score-badge.tipo-1 .score-value { color: var(--green-700); }
+  .score-badge.tipo-2 .score-value { color: #d97706; }
+  .score-badge.tipo-3 .score-value { color: #b91c1c; }
+
+  .score-label {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .highlight-box {
+    padding: 15px 20px;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin: 15px 0;
+  }
+  .highlight-box.tipo-1 {
+    background: rgba(16, 185, 129, 0.04);
+    border-left: 4px solid var(--green-600);
+  }
+  .highlight-box.tipo-2 {
+    background: rgba(217, 119, 6, 0.04);
+    border-left: 4px solid #d97706;
+  }
+  .highlight-box.tipo-3 {
+    background: rgba(185, 28, 28, 0.04);
+    border-left: 4px solid #b91c1c;
+  }
+
+  .action-checklist {
+    list-style: none;
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .action-checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--gray-800);
+    line-height: 1.4;
+  }
+  .action-checklist li i {
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  /* Vista Previa del Acta (Hoja Oficial Estilo Papel) */
+  .acta-preview-container {
+    background: #fdfdfd;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    padding: 40px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.02), var(--shadow-sm);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.88rem;
+    color: #111;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    max-height: 550px;
+    overflow-y: auto;
+    border-top: 4px solid var(--green-600);
+  }
+
+  .acta-header {
+    text-align: center;
+    border-bottom: 2px double #333;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    font-family: var(--font-heading);
+  }
+  .acta-header h2 {
+    font-size: 1.1rem;
+    color: var(--green-900);
+    font-weight: 800;
+  }
+  .acta-header p {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray-600);
+    margin-top: 4px;
+  }
+
+  /* Estilos especiales de impresión */
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    #print-area, #print-area * {
+      visibility: visible;
+    }
+    #print-area {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      max-height: none !important;
+      overflow-y: visible !important;
+      font-size: 11pt !important;
+      background: white !important;
+      color: black !important;
+    }
+    .header, .footer, .form-card, .btn, .tabs-nav, .section--dark, .highlight-box, .score-badge, .section__header, .hide-on-print {
+      display: none !important;
+    }
+  }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gray-50);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tab-btn:hover {
+    color: var(--green-700);
+    background-color: var(--green-50);
+  }
+
+  .tab-btn.active {
+    color: white;
+    background-color: var(--green-600);
+  }
+
+  .tabs-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--gray-200);
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+<div class="container">
+<a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV"><div class="header__logo-text">SUTEV Cartago<span>Norte del Valle</span></div></a>
+<nav><ul class="nav__list" id="navList">
+<li><a href="index.html" class="nav__link">Inicio</a></li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Nosotros <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="index.html#nosotros" class="nav__dropdown-item"><i data-lucide="users" style="width: 14px; height: 14px;"></i> ¿Quiénes Somos?</a></li>
+    <li><a href="index.html#estatutos" class="nav__dropdown-item"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i> Estatutos del Sindicato</a></li>
+    <li><a href="index.html#galeria" class="nav__dropdown-item"><i data-lucide="image" style="width: 14px; height: 14px;"></i> Galería de Fotos</a></li>
+  </ul>
+</li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Servicios <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+    <ul class="nav__dropdown-menu">
+    <li><a href="index.html#servicios" class="nav__dropdown-item"><i data-lucide="briefcase" style="width: 14px; height: 14px;"></i> Portafolio de Servicios</a></li>
+    <li><a href="permisos-docentes.html" class="nav__dropdown-item"><i data-lucide="scale" style="width: 14px; height: 14px;"></i> Permisos de Ley y Licencias</a></li>
+    <li><a href="calculadora-salarial.html" class="nav__dropdown-item"><i data-lucide="calculator" style="width: 14px; height: 14px;"></i> Calculadora Salarial</a></li>
+    <li><a href="simulador-pension.html" class="nav__dropdown-item"><i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i> Simulador de Pensión</a></li>
+    <li><a href="derechos-peticion.html" class="nav__dropdown-item"><i data-lucide="file-signature" style="width: 14px; height: 14px;"></i> Derechos de Petición</a></li>
+    <li><a href="auditor-nomina.html" class="nav__dropdown-item"><i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> Auditor de Nómina</a></li>
+    <li><a href="escalafon-docente.html" class="nav__dropdown-item"><i data-lucide="graduation-cap" style="width: 14px; height: 14px;"></i> Escalafón y Ascenso</a></li>
+    <li><a href="carga-academica.html" class="nav__dropdown-item"><i data-lucide="calendar-range" style="width: 14px; height: 14px;"></i> Carga Académica 1850</a></li>
+    <li><a href="concurso-docente.html" class="nav__dropdown-item"><i data-lucide="clipboard-check" style="width: 14px; height: 14px;"></i> Concursos y Mineducación</a></li>
+    <li><a href="convivencia-escolar.html" class="nav__dropdown-item"><i data-lucide="alert-triangle" style="width: 14px; height: 14px;"></i> Convivencia y Ley 1620</a></li>
+  </ul>
+</li>
+<li><a href="index.html#calendario" class="nav__link">Calendario</a></li>
+<li><a href="index.html#noticias" class="nav__link">Noticias</a></li>
+<li><a href="index.html#contacto" class="nav__link">Contacto</a></li>
+<li><a href="index.html#afiliacion" class="nav__link nav__link--cta">Afíliate</a></li>
+</ul></nav>
+<button class="nav__toggle" id="navToggle" aria-label="Menú"><span></span><span></span><span></span></button>
+</div>
+</header>
+
+<!-- HERO HEADER -->
+<section class="section section--dark" style="padding-top: 150px; padding-bottom: 50px;">
+  <div class="container">
+    <div class="section__header reveal" style="margin-bottom: 0;">
+      <span class="section__tag">Herramientas de Convivencia y Protección Legal</span>
+      <h2 class="section__title">Asistente de Convivencia Escolar Ley 1620</h2>
+      <p class="section__desc">Diagnostica con rigor legal el tipo de situación de convivencia escolar, conoce tu ruta de actuación obligatoria y genera el acta de inicio de protocolo para salvaguardar tu responsabilidad docente.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN SECTION -->
+<section class="section" style="padding-top: 40px;">
+  <div class="container">
+
+    <!-- TABS NAV -->
+    <div class="tabs-nav reveal hide-on-print">
+      <button class="tab-btn active" id="btn-tab-wizard" onclick="switchTab('tab-wizard')"><i data-lucide="help-circle"></i> 1. Diagnosticar Situación (Wizard)</button>
+      <button class="tab-btn" id="btn-tab-acta" onclick="switchTab('tab-acta')" style="opacity: 0.6;"><i data-lucide="file-text"></i> 2. Redactar Acta de Inicio de Protocolo</button>
+    </div>
+
+    <!-- TAB 1: DIAGNÓSTICO (WIZARD DECISIONAL) -->
+    <div id="tab-wizard" class="tab-content reveal hide-on-print">
+      <div class="dashboard-grid">
+        
+        <!-- WIZARD CARD (IZQUIERDA) -->
+        <div class="form-card" id="wizard-form-card">
+          <div class="wizard-progress">
+            <span style="font-size:0.75rem; font-weight:800; color:var(--gray-600); text-transform:uppercase; letter-spacing:0.5px;">Pregunta <span id="current-step-num">1</span> de 3</span>
+            <div class="progress-dot-wrapper">
+              <div class="progress-dot active" id="dot-1"></div>
+              <div class="progress-dot" id="dot-2"></div>
+              <div class="progress-dot" id="dot-3"></div>
+            </div>
+          </div>
+
+          <!-- STEP 1 -->
+          <div class="wizard-step active" id="step-1">
+            <h3 style="font-size:1.15rem; font-weight:800; color:var(--green-900); margin-bottom:12px;">¿Involucra un presunto delito penal o lesiones corporales graves?</h3>
+            <p style="font-size:0.9rem; color:var(--gray-600); line-height:1.5; margin-bottom:20px;">Indica si la conducta reviste características de un delito tipificado en la Ley Penal colombiana o si generó lesiones físicas de tal gravedad que requieren atención médica urgente o incapacidad.</p>
+            
+            <div class="option-card-list">
+              <label class="option-card" for="opt-1-yes">
+                <input type="radio" name="q-delito" id="opt-1-yes" value="yes">
+                <div class="option-card-content">
+                  <h4>Sí, involucra presuntos delitos o lesiones graves</h4>
+                  <p>Ej: Agresión física con arma, abuso o acoso sexual, consumo o venta de drogas en la escuela, robo violento, agresión física con hospitalización o incapacidad.</p>
+                </div>
+              </label>
+              
+              <label class="option-card" for="opt-1-no">
+                <input type="radio" name="q-delito" id="opt-1-no" value="no" checked>
+                <div class="option-card-content">
+                  <h4>No, no reviste características de delito</h4>
+                  <p>El suceso no involucra armas, abuso sexual, comercio de drogas ni agresiones físicas que generen incapacidades o requieran hospitalización de urgencia.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="wizard-step" id="step-2">
+            <h3 style="font-size:1.15rem; font-weight:800; color:var(--green-900); margin-bottom:12px;">¿Es una conducta de acoso escolar (bullying) sistemática, reiterada o ciberacoso?</h3>
+            <p style="font-size:0.9rem; color:var(--gray-600); line-height:1.5; margin-bottom:20px;">Determina si la agresión ha sido continua en el tiempo, intencionada y dirigida a una víctima específica, o si causó daños físicos/psicológicos leves pero recurrentes sin llegar a generar incapacidad.</p>
+            
+            <div class="option-card-list">
+              <label class="option-card" for="opt-2-yes">
+                <input type="radio" name="q-bullying" id="opt-2-yes" value="yes">
+                <div class="option-card-content">
+                  <h4>Sí, es acoso repetitivo (Bullying) o ciberacoso</h4>
+                  <p>Ej: Exclusión social sistemática, burlas repetitivas sobre el aspecto, ciberacoso en redes sociales continuado, peleas leves físicas constantes dirigidas a un alumno.</p>
+                </div>
+              </label>
+              
+              <label class="option-card" for="opt-2-no">
+                <input type="radio" name="q-bullying" id="opt-2-no" value="no" checked>
+                <div class="option-card-content">
+                  <h4>No, fue un suceso aislado o un conflicto puntual</h4>
+                  <p>Es una discusión ocasional, una riña de momento que no obedece a un patrón continuo de persecución o maltrato sistemático.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- STEP 3 -->
+          <div class="wizard-step" id="step-3">
+            <h3 style="font-size:1.15rem; font-weight:800; color:var(--green-900); margin-bottom:12px;">¿Fue un conflicto interpersonal ocasional sin daños corporales ni a la salud?</h3>
+            <p style="font-size:0.9rem; color:var(--gray-600); line-height:1.5; margin-bottom:20px;">Establece si se trata de un desacuerdo menor, discusiones esporádicas entre pares que alteran brevemente el clima escolar pero que se resuelven o se pueden mediar en el aula sin dejar secuelas ni daños físicos.</p>
+            
+            <div class="option-card-list">
+              <label class="option-card" for="opt-3-yes">
+                <input type="radio" name="q-menor" id="opt-3-yes" value="yes" checked>
+                <div class="option-card-content">
+                  <h4>Sí, es un conflicto menor o agresión verbal esporádica</h4>
+                  <p>Ej: Una discusión fuerte entre dos alumnos por un juego, uso ocasional de un apodo molesto en medio de un altercado menor, riña verbal sin golpes corporales.</p>
+                </div>
+              </label>
+              
+              <label class="option-card" for="opt-3-no">
+                <input type="radio" name="q-menor" id="opt-3-no" value="no">
+                <div class="option-card-content">
+                  <h4>No, la situación es diferente / Atípica</h4>
+                  <p>No encaja en conflictos comunes o implica factores complejos que requieren evaluación directa de orientación escolar o el Comité de Convivencia.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- ACCIONES DEL WIZARD -->
+          <div class="wizard-actions">
+            <button class="btn btn--outline-dark btn-wizard" id="btn-back" style="display:none;" onclick="prevStep()"><i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Atrás</button>
+            <button class="btn btn--primary btn-wizard" id="btn-next" onclick="nextStep()">Siguiente <i data-lucide="arrow-right" style="width:16px;height:16px;"></i></button>
+          </div>
+        </div>
+
+        <!-- DIAGNÓSTICO Y RUTA DE ACCIÓN (DERECHA) -->
+        <div class="result-card" id="diagnosis-card">
+          <div style="text-align: center; padding: 40px 0; color: var(--gray-400);" id="waiting-diagnosis-msg">
+            <i data-lucide="help-circle" style="width:64px; height:64px; margin-bottom:16px; opacity:0.5;"></i>
+            <h4 style="font-size:1.15rem;font-weight:700;color:var(--gray-700)">Esperando Diagnóstico</h4>
+            <p style="font-size:0.9rem; max-width:280px; margin:8px auto 0;">Responde las preguntas del cuestionario de la izquierda para analizar la ruta de atención legal.</p>
+          </div>
+
+          <!-- DIAGNÓSTICO DETALLADO (SE MOSTRARÁ MEDIANTE JS) -->
+          <div id="diagnosis-content" style="display:none;">
+            <h3 style="font-size:1.25rem; font-weight:800; color:var(--green-900); margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+              <i data-lucide="activity" style="color:var(--green-600)"></i> Diagnóstico y Ruta de Actuación Legal
+            </h3>
+
+            <div class="score-badge" id="diag-badge">
+              <div class="score-value" id="diag-title">SITUACIÓN TIPO I</div>
+              <div class="score-label" id="diag-subtitle">LEY 1620 DE 2013 (CONVIVENCIA ESCOLAR)</div>
+            </div>
+
+            <div class="highlight-box" id="diag-highlight">
+              <p style="margin:0; font-size:0.95rem; color:var(--gray-800); line-height:1.5;" id="diag-desc-text">
+                Cargando descripción jurídica...
+              </p>
+            </div>
+
+            <h4 style="font-size:1rem; font-weight:800; color:var(--gray-800); margin-top:25px; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">Acciones Obligatorias Inmediatas (Docente):</h4>
+            
+            <ul class="action-checklist" id="diag-checklist">
+              <!-- Cargado dinámicamente -->
+            </ul>
+
+            <div style="background-color:rgba(37,99,235,0.05); border-left:4px solid #2563eb; padding:15px; border-radius:0 8px 8px 0; margin-top:20px;" id="diag-entity-alert">
+              <p style="font-size:0.85rem;color:#1e40af;line-height:1.45;margin:0;" id="diag-entity-text">
+                * **Reporte Externo Obligatorio:** En este tipo de caso...
+              </p>
+            </div>
+
+            <button class="btn btn--primary" style="margin-top:25px; width:100%; justify-content:center;" onclick="goToActaTab()">
+              <i data-lucide="file-plus"></i> Redactar Acta de Inicio de Protocolo
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 2: REDACCIÓN DEL ACTA DE INICIO DE PROTOCOLO -->
+    <div id="tab-acta" class="tab-content reveal" style="display:none;">
+      <div class="dashboard-grid">
+        
+        <!-- REDACCIÓN FORM (IZQUIERDA) -->
+        <div class="form-card hide-on-print">
+          <h3 style="font-size:1.2rem; font-weight:800; color:var(--green-900); margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="edit-3" style="color:var(--green-600)"></i> Completar Datos del Acta
+          </h3>
+
+          <div class="form-group">
+            <label for="acta-docente" style="font-weight:700;">Nombre del Docente / Directivo Reportante</label>
+            <input type="text" id="acta-docente" value="" placeholder="Ej: Lic. Héctor Palomino" oninput="updateActaPreview()">
+          </div>
+
+          <div class="form-group">
+            <label for="acta-cedula" style="font-weight:700;">Cédula de Ciudadanía del Docente</label>
+            <input type="text" id="acta-cedula" value="" placeholder="Ej: 16.200.000" oninput="updateActaPreview()">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="acta-ie" style="font-weight:700;">Institución Educativa</label>
+              <input type="text" id="acta-ie" value="" placeholder="Ej: I.E. Gabo" oninput="updateActaPreview()">
+            </div>
+            <div class="form-group">
+              <label for="acta-sede" style="font-weight:700;">Sede Escolar</label>
+              <input type="text" id="acta-sede" value="" placeholder="Ej: Principal / Central" oninput="updateActaPreview()">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="acta-grado" style="font-weight:700;">Grado / Curso</label>
+              <input type="text" id="acta-grado" value="" placeholder="Ej: Noveno (9-1)" oninput="updateActaPreview()">
+            </div>
+            <div class="form-group">
+              <label for="acta-fecha" style="font-weight:700;">Fecha y Hora del Suceso</label>
+              <input type="datetime-local" id="acta-fecha" oninput="updateActaPreview()">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="acta-afectado" style="font-weight:700;">Iniciales del Alumno Afectado</label>
+              <input type="text" id="acta-afectado" placeholder="Ej: J.S.P. (Evitar nombres completos)" oninput="updateActaPreview()">
+              <small style="color:var(--gray-500);display:block;margin-top:2px;">* Por Ley 1098 de 2006, protege la identidad de menores.</small>
+            </div>
+            <div class="form-group">
+              <label for="acta-implicado" style="font-weight:700;">Iniciales del Alumno Implicado</label>
+              <input type="text" id="acta-implicado" placeholder="Ej: M.A.R." oninput="updateActaPreview()">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="acta-hechos" style="font-weight:700;">Descripción Clara y Sucinta de los Hechos</label>
+            <textarea id="acta-hechos" rows="4" placeholder="Describe objetivamente lo sucedido (qué, cómo, quiénes, sin juicios de valor de menores)..." oninput="updateActaPreview()"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="acta-medidas" style="font-weight:700;">Medidas y Acciones Inmediatas Adoptadas</label>
+            <textarea id="acta-medidas" rows="3" placeholder="Ej: Se separó a las partes, se citó a acudientes, se remitió a psicoorientación, se reportó al Rector..." oninput="updateActaPreview()"></textarea>
+          </div>
+        </div>
+
+        <!-- VISTA PREVIA DEL ACTA (DERECHA / IMPRIMIBLE) -->
+        <div class="result-card">
+          <div class="hide-on-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h3 style="font-size:1.15rem; font-weight:800; color:var(--green-900); margin:0;">
+              <i data-lucide="eye" style="color:var(--green-600)"></i> Vista Previa del Acta Oficial
+            </h3>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn--outline-dark" style="padding:6px 12px; font-size:0.8rem;" onclick="copyActaToClipboard()"><i data-lucide="copy" style="width:14px;height:14px;"></i> Copiar</button>
+              <button class="btn btn--primary" style="padding:6px 12px; font-size:0.8rem;" onclick="window.print()"><i data-lucide="printer" style="width:14px;height:14px;"></i> Imprimir / PDF</button>
+            </div>
+          </div>
+
+          <div class="acta-preview-container" id="print-area">
+            <div class="acta-header">
+              <h2>ACTA DE INICIO DE PROTOCOLO DE CONVIVENCIA ESCOLAR</h2>
+              <p>SOPORTE LEGAL DEL DOCENTE — LEY 1620 DE 2013</p>
+            </div>
+            <div id="acta-text-content">
+              <!-- Rellenado dinámicamente mediante JS -->
+            </div>
+          </div>
+          
+          <div class="hide-on-print" style="background-color:var(--green-50); border-left:4px solid var(--green-600); padding:15px; border-radius:0 8px 8px 0; margin-top:20px;">
+            <p style="font-size:0.82rem;color:var(--green-900);line-height:1.45;margin:0;">
+              * **Recomendación SUTEV:** Radica una copia física firmada de esta acta ante la Rectoría de tu Institución Educativa. Solicita sello de recibido con fecha y hora. Este documento constituye tu **primer escudo protector de responsabilidad civil y laboral** ante eventuales investigaciones disciplinarias.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="container">
+<div class="footer__grid">
+<div class="footer__brand"><a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV" style="height:40px"><div class="header__logo-text" style="color:var(--green-400)">SUTEV Cartago<span style="color:var(--gray-500)">Norte del Valle</span></div></a><p>Sindicato Único de Trabajadores de la Educación del Valle. Subdirectiva Cartago — Filial de FECODE.</p></div>
+<div><div class="footer__title">Navegación</div><ul class="footer__links"><li><a href="index.html#nosotros">Nosotros</a></li><li><a href="index.html#servicios">Servicios</a></li><li><a href="index.html#calendario">Calendario</a></li><li><a href="index.html#noticias">Noticias</a></li><li><a href="index.html#estatutos">Estatutos</a></li></ul></div>
+<div><div class="footer__title">Servicios y Herramientas</div><ul class="footer__links"><li><a href="index.html#reservas">Asesoría Jurídica</a></li><li><a href="index.html#reservas">CEID</a></li><li><a href="index.html#reservas">Bienestar</a></li><li><a href="permisos-docentes.html">Permisos y Licencias de Ley</a></li><li><a href="calculadora-salarial.html">Calculadora Salarial</a></li><li><a href="simulador-pension.html">Simulador de Pensión</a></li><li><a href="derechos-peticion.html">Derechos de Petición</a></li><li><a href="auditor-nomina.html">Auditor de Nómina</a></li><li><a href="escalafon-docente.html">Escalafón y Ascenso</a></li><li><a href="carga-academica.html">Carga Académica 1850</a></li><li><a href="concurso-docente.html">Concursos y Mineducación</a></li></ul></div>
+<div><div class="footer__title">Contacto y Redes</div><ul class="footer__links"><li><a href="index.html#contacto">📍 Casa del Maestro (Cra 4 #16-17)</a></li><li><a href="index.html#contacto">📍 Cartago, Valle del Cauca</a></li><li><a href="https://web.facebook.com/sutevcartago/?locale=es_LA&_rdc=1&_rdr#" target="_blank" style="color: var(--green-400); font-weight: 600;">📘 Facebook Oficial</a></li></ul></div>
+</div>
+<div class="footer__bottom">© 2026 SUTEV Cartago — Subdirectiva Norte del Valle. Todos los derechos reservados.</div>
+</div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (typeof lucide !== 'undefined') {
+  lucide.createIcons();
+}
+
+// Variables de estado del Wizard
+let currentStep = 1;
+let diagnosedType = null;
+
+// Lógica de Tabs
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.style.display = 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  document.getElementById(tabId).style.display = 'block';
+  
+  const btn = document.getElementById('btn-' + tabId);
+  if (btn) {
+    btn.classList.add('active');
+    btn.style.opacity = '1';
+  }
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    el.classList.remove('visible');
+  });
+  triggerReveal();
+}
+
+function goToActaTab() {
+  switchTab('tab-acta');
+  window.scrollTo({ top: 300, behavior: 'smooth' });
+}
+
+// Navegación en el Wizard
+function showStep(step) {
+  document.querySelectorAll('.wizard-step').forEach(el => {
+    el.classList.remove('active');
+  });
+  document.getElementById('step-' + step).classList.add('active');
+
+  // Actualizar indicadores (dots)
+  document.getElementById('current-step-num').innerText = step;
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('dot-' + i);
+    dot.classList.remove('active', 'completed');
+    if (i === step) {
+      dot.classList.add('active');
+    } else if (i < step) {
+      dot.classList.add('completed');
+    }
+  }
+
+  // Visibilidad de botones
+  document.getElementById('btn-back').style.display = step > 1 ? 'inline-flex' : 'none';
+  
+  const btnNext = document.getElementById('btn-next');
+  if (step === 3) {
+    btnNext.innerHTML = 'Diagnosticar Caso <i data-lucide="check" style="width:16px;height:16px;"></i>';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } else {
+    btnNext.innerHTML = 'Siguiente <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+}
+
+function nextStep() {
+  if (currentStep < 3) {
+    currentStep++;
+    showStep(currentStep);
+  } else {
+    runDiagnosis();
+  }
+}
+
+function prevStep() {
+  if (currentStep > 1) {
+    currentStep--;
+    showStep(currentStep);
+  }
+}
+
+// Lógica de Diagnóstico Determinista (Sin IA)
+function runDiagnosis() {
+  const isDelito = document.querySelector('input[name="q-delito"]:checked').value === 'yes';
+  const isBullying = document.querySelector('input[name="q-bullying"]:checked').value === 'yes';
+  const isMenor = document.querySelector('input[name="q-menor"]:checked').value === 'yes';
+
+  const waitingMsg = document.getElementById('waiting-diagnosis-msg');
+  const content = document.getElementById('diagnosis-content');
+  const badge = document.getElementById('diag-badge');
+  const title = document.getElementById('diag-title');
+  const highlight = document.getElementById('diag-highlight');
+  const descText = document.getElementById('diag-desc-text');
+  const checklist = document.getElementById('diag-checklist');
+  const entityAlert = document.getElementById('diag-entity-alert');
+  const entityText = document.getElementById('diag-entity-text');
+
+  waitingMsg.style.display = 'none';
+  content.style.display = 'block';
+
+  // Limpiar clases previas del badge y highlight
+  badge.className = 'score-badge';
+  highlight.className = 'highlight-box';
+
+  let checklistHTML = '';
+
+  if (isDelito) {
+    diagnosedType = 3;
+    title.innerText = 'SITUACIÓN TIPO III (PREPARACIÓN URGENTE)';
+    badge.classList.add('tipo-3');
+    highlight.classList.add('tipo-3');
+    descText.innerHTML = 'Corresponde a agresiones escolares constitutivas de **presuntos delitos** contra la libertad, integridad y formación sexual, porte de armas, consumo/venta de drogas o lesiones físicas graves que requirieron hospitalización o incapacidad según la Ley 1620 y el Art. 40 del Dto. 1965.';
+    
+    checklistHTML = `
+      <li><i data-lucide="alert-circle" style="color:#b91c1c;"></i> **Medidas de Seguridad:** Separar de forma inmediata a los involucrados y resguardar la seguridad de la víctima.</li>
+      <li><i data-lucide="phone-call" style="color:#b91c1c;"></i> **Llamado de Emergencia:** Avisar de inmediato a la Policía de Infancia y Adolescencia (Línea 141) o cuadrante local.</li>
+      <li><i data-lucide="shield-alert" style="color:#b91c1c;"></i> **Reporte a Directivos:** Informar por escrito inmediatamente al Rector y al Coordinador antes de terminar la jornada.</li>
+      <li><i data-lucide="users" style="color:#b91c1c;"></i> **Contacto Familiar:** Citar de forma urgente a los acudientes legales (víctima y agresor) para notificar hechos y medidas.</li>
+      <li><i data-lucide="file-text" style="color:#b91c1c;"></i> **Acta de Protocolo:** Diligenciar de forma detallada el Acta de Convivencia (pestaña 2) registrando las medidas adoptadas.</li>
+    `;
+    entityText.innerHTML = `⚠️ **REPORTE EXTERNO OBLIGATORIO URGENTE (Primeras 24 Horas):** Se debe radicar denuncia formal ante el ICBF o Fiscalía General de la Nación, y reportar la novedad en la plataforma del Sistema de Información de Convivencia Escolar (SICE) de la Secretaría de Educación de Cartago/Valle.`;
+    entityAlert.style.backgroundColor = '#fef2f2';
+    entityAlert.style.borderColor = '#ef4444';
+    entityText.style.color = '#991b1b';
+
+  } else if (isBullying) {
+    diagnosedType = 2;
+    title.innerText = 'SITUACIÓN TIPO II (ACOSO / CYBERBULLYING)';
+    badge.classList.add('tipo-2');
+    highlight.classList.add('tipo-2');
+    descText.innerHTML = 'Corresponde a situaciones de agresión escolar, acoso escolar (**bullying**) o ciberacoso (**cyberbullying**) que se presentan de manera **repetida o sistemática**, o que causan daños a la salud sin generar incapacidad médica (Art. 40, Dto. 1965).';
+    
+    checklistHTML = `
+      <li><i data-lucide="users" style="color:#d97706;"></i> **Reunión Directa:** Citar a los padres de familia o acudientes legales de la víctima y los agresores el mismo día.</li>
+      <li><i data-lucide="heart" style="color:#d97706;"></i> **Remisión a Orientación:** Remitir a ambos estudiantes con carácter obligatorio al servicio de Orientación Escolar o Psicoorientación.</li>
+      <li><i data-lucide="check-square" style="color:#d97706;"></i> **Plan de Seguimiento:** Diseñar un plan conjunto de compromisos y restauración, con fechas de revisión para detener el acoso.</li>
+      <li><i data-lucide="file-text" style="color:#d97706;"></i> **Acta de Convivencia:** Diligenciar el Acta de Inicio de Protocolo (pestaña 2) y firmarla con los acudientes.</li>
+    `;
+    entityText.innerHTML = `📢 **ACCIONES DE SEGUIMIENTO:** Si se evidencia inacción o si el acoso persiste, se debe convocar de inmediato al Comité Escolar de Convivencia para activar el protocolo de protección y reportar al SICE.`;
+    entityAlert.style.backgroundColor = '#fffbeb';
+    entityAlert.style.borderColor = '#f59e0b';
+    entityText.style.color = '#92400e';
+
+  } else if (isMenor) {
+    diagnosedType = 1;
+    title.innerText = 'SITUACIÓN TIPO I (CONFLICTO MENOR)';
+    badge.classList.add('tipo-1');
+    highlight.classList.add('tipo-1');
+    descText.innerHTML = 'Corresponde a conflictos manejados de manera inadecuada y situaciones esporádicas de agresión verbal o relacional que inciden negativamente en el clima escolar, **pero que NO generan daños al cuerpo o a la salud** de los involucrados (Art. 40, Dto. 1965).';
+    
+    checklistHTML = `
+      <li><i data-lucide="message-square" style="color:var(--green-700);"></i> **Mediación en el Aula:** Espacio de diálogo concertado liderado por el docente para que las partes resuelvan el conflicto.</li>
+      <li><i data-lucide="edit-3" style="color:var(--green-700);"></i> **Observador del Alumno:** Registrar de manera clara y objetiva el incidente y los acuerdos en la carpeta de ambos estudiantes.</li>
+      <li><i data-lucide="book-open" style="color:var(--green-700);"></i> **Citación Preventiva:** Notificar a acudientes el acuerdo si se considera necesario para prevenir escalamiento.</li>
+    `;
+    entityText.innerHTML = `💡 **DATO CLAVE SUTEV:** Las situaciones Tipo I se gestionan internamente en el aula. Si la mediación no tiene éxito o la situación se repite, el caso escala automáticamente a Situación Tipo II.`;
+    entityAlert.style.backgroundColor = 'var(--green-50)';
+    entityAlert.style.borderColor = 'var(--green-200)';
+    entityText.style.color = 'var(--green-900)';
+  } else {
+    // Caso de No / Atípico
+    diagnosedType = 'Atípico';
+    title.innerText = 'CASO ATÍPICO / REEVALUAR';
+    badge.classList.add('tipo-1');
+    highlight.classList.add('tipo-1');
+    descText.innerHTML = 'La situación consultada presenta elementos confusos que no corresponden directamente a las categorías estándar. Recomendamos remitir el caso a la Coordinación de Convivencia de forma preventiva.';
+    
+    checklistHTML = `
+      <li><i data-lucide="help-circle" style="color:var(--green-700);"></i> Consultar con el Coordinador de Convivencia Escolar de la Institución.</li>
+      <li><i data-lucide="scale" style="color:var(--green-700);"></i> Solicitar orientación a la Secretaría de Asuntos Laborales y Derechos Humanos de SUTEV Cartago.</li>
+    `;
+    entityText.innerHTML = `💡 **RECOMENDACIÓN:** Cuando hay dudas sobre la gravedad, es preferible iniciar protocolo preventivo tipo I para dejar constancia por escrito de la actuación profesional.`;
+    entityAlert.style.backgroundColor = 'var(--green-50)';
+    entityAlert.style.borderColor = 'var(--green-200)';
+    entityText.style.color = 'var(--green-900)';
+  }
+
+  checklist.innerHTML = checklistHTML;
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+
+  // Dar formato negrita
+  descText.innerHTML = descText.innerHTML.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  const allLi = checklist.querySelectorAll('li');
+  allLi.forEach(li => {
+    li.innerHTML = li.innerHTML.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  });
+
+  // Habilitar la pestaña de Redacción de Acta
+  const btnActa = document.getElementById('btn-tab-acta');
+  btnActa.style.opacity = '1';
+  
+  // Rellenar tipo de situación en la vista previa del acta
+  updateActaPreview();
+
+  // Disparar animación de resultados
+  const card = document.getElementById('diagnosis-card');
+  if (card) {
+    card.classList.remove('animate-results');
+    void card.offsetWidth; // trigger reflow
+    card.classList.add('animate-results');
+  }
+
+  // Notificar al docente mediante Toast
+  if (typeof showToast === 'function') {
+    showToast(`✅ Diagnóstico completado: Situación Tipo ${diagnosedType}`);
+  }
+}
+
+// Lógica de Actualización de Vista Previa del Acta
+function updateActaPreview() {
+  const docente = document.getElementById('acta-docente').value || '___________________________';
+  const cedula = document.getElementById('acta-cedula').value || '___________________________';
+  const ie = document.getElementById('acta-ie').value || '___________________________';
+  const sede = document.getElementById('acta-sede').value || '___________________________';
+  const grado = document.getElementById('acta-grado').value || '___________________________';
+  
+  const rawFecha = document.getElementById('acta-fecha').value;
+  let fecha = '___________________________';
+  if (rawFecha) {
+    const d = new Date(rawFecha);
+    fecha = d.toLocaleDateString() + ' a las ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  }
+
+  const afectado = document.getElementById('acta-afectado').value || '______';
+  const implicado = document.getElementById('acta-implicado').value || '______';
+  const hechos = document.getElementById('acta-hechos').value || ' (Describir detalladamente cómo sucedieron los hechos en este espacio...)';
+  const medidas = document.getElementById('acta-medidas').value || ' (Indicar las medidas inmediatas adoptadas por el docente...)';
+
+  let tipoText = 'NO DEFINIDA AÚN (Diligenciar Cuestionario de pestaña 1)';
+  let sustentoLegal = '';
+  if (diagnosedType === 1) {
+    tipoText = 'SITUACIÓN TIPO I (Conflicto Menor Escolar)';
+    sustentoLegal = 'Artículo 40 del Decreto 1965 de 2013.';
+  } else if (diagnosedType === 2) {
+    tipoText = 'SITUACIÓN TIPO II (Acoso Escolar / Bullying)';
+    sustentoLegal = 'Artículo 40 del Decreto 1965 de 2013 (Acoso / Ciberacoso repetitivo).';
+  } else if (diagnosedType === 3) {
+    tipoText = 'SITUACIÓN TIPO III (Presunto Delito Penal)';
+    sustentoLegal = 'Artículo 40 del Decreto 1965 de 2013 (Constitutivo de presuntos delitos penales).';
+  } else if (diagnosedType === 'Atípico') {
+    tipoText = 'SITUACIÓN ATÍPICA (Inicio preventivo de protocolo)';
+    sustentoLegal = 'Protocolo de Convivencia General Institucional.';
+  }
+
+  const actText = `ACTA DE INICIO DE PROTOCOLO DE CONVIVENCIA ESCOLAR (LEY 1620 DE 2013)
+
+Institución Educativa: ${ie}
+Sede Escolar: ${sede}
+Grado / Curso: ${grado}
+Fecha y Hora de la Novedad: ${fecha}
+
+1. DATOS DEL REPORTANTE
+Docente / Directivo Reportante: ${docente}
+Documento de Identidad: C.C. ${cedula}
+
+2. CLASIFICACIÓN DE LA SITUACIÓN (CONFORME A LA LEY 1620)
+Nivel de Gravedad: ${tipoText}
+Sustento Normativo: ${sustentoLegal}
+
+3. DESCRIPCIÓN DE LOS HECHOS
+${hechos}
+
+4. PERSONAS INVOLUCRADAS (REGISTRO EXCLUSIVO EN INICIALES - LEY 1098 DE 2006)
+- Estudiante Afectado(s) (Iniciales): ${afectado}
+- Estudiante Implicado(s) (Iniciales): ${implicado}
+
+5. MEDIDAS Y ACCIONES INMEDIATAS ADOPTADAS
+${medidas}
+
+6. COMPROMISOS Y CONSECUENCIAS DE LEY
+En constancia de la apertura del protocolo de atención integral escolar, se firma y se radica copia ante la Rectoría escolar, garantizando la debida diligencia del docente reportante para los fines laborales y disciplinarios pertinentes.
+
+
+________________________________________         ________________________________________
+Firma del Docente Reportante                     Recibido por (Rectoría / Coordinación)
+C.C. ${cedula}                                   Fecha y Hora de Recibido:
+`;
+
+  document.getElementById('acta-text-content').textContent = actText;
+}
+
+// Copiar Acta al Portapapeles
+function copyActaToClipboard() {
+  const content = document.getElementById('acta-text-content').textContent;
+  navigator.clipboard.writeText(content).then(() => {
+    if (typeof showToast === 'function') {
+      showToast('📋 ¡Acta copiada al portapapeles con éxito!');
+    } else {
+      alert('Acta copiada al portapapeles con éxito');
+    }
+  }).catch(err => {
+    console.error('Error al copiar al portapapeles: ', err);
+  });
+}
+
+// Iniciar con valores iniciales
+updateActaPreview();
+
+function triggerReveal() {
+  document.querySelectorAll('.reveal').forEach(el => {
+    new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if(e.isIntersecting) el.target.classList.add('visible');
+      });
+    }, {threshold: 0.1}).observe(el);
+  });
+}
+triggerReveal();
+</script>
+
+</body>
+</html>
