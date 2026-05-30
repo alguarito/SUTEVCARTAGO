@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUTEV Cartago - Portal Pedagógico PEPA y Planificador de EPA</title>
+<meta name="description" content="Explora el Proyecto Educativo y Pedagógico Alternativo (PEPA) del CEID y planifica tus Experiencias Pedagógicas Alternativas (EPA) con nuestro formulador estructurado de aula.">
+<link rel="stylesheet" href="css/styles.css">
+<style>
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  @media (min-width: 1024px) {
+    .dashboard-grid {
+      grid-template-columns: 460px 1fr;
+    }
+  }
+
+  .form-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .result-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 35px;
+    box-shadow: var(--shadow-md);
+    min-height: 400px;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 20px;
+  }
+  @media (min-width: 768px) {
+    .comparison-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .model-card {
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .model-card--standard {
+    border: 1px solid var(--gray-200);
+    background-color: var(--gray-50);
+  }
+  .model-card--standard:hover {
+    box-shadow: 0 10px 30px rgba(100, 116, 139, 0.1);
+    transform: translateY(-4px);
+  }
+  .model-card--pepa {
+    border: 2px solid var(--green-200);
+    background: linear-gradient(135deg, #ffffff 0%, var(--green-50) 100%);
+    box-shadow: var(--shadow-sm);
+  }
+  .model-card--pepa:hover {
+    box-shadow: 0 12px 35px rgba(16, 185, 129, 0.15);
+    border-color: var(--green-400);
+    transform: translateY(-4px);
+  }
+
+  .model-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--gray-200);
+    padding-bottom: 15px;
+  }
+  .model-badge {
+    padding: 4px 10px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: var(--radius-sm);
+  }
+  .model-badge--std {
+    background-color: var(--gray-200);
+    color: var(--gray-700);
+  }
+  .model-badge--pepa {
+    background-color: var(--green-600);
+    color: white;
+  }
+
+  .comparison-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .comparison-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+  .comparison-item i {
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .wizard-step {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .wizard-step.active {
+    display: block;
+  }
+
+  .wizard-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    background-color: var(--gray-100);
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+  }
+
+  .progress-dot-wrapper {
+    display: flex;
+    gap: 8px;
+  }
+  .progress-dot {
+    width: 10px;
+    height: 10px;
+    background-color: var(--gray-300);
+    border-radius: 50%;
+    transition: var(--transition);
+  }
+  .progress-dot.active {
+    background-color: var(--green-600);
+    transform: scale(1.2);
+  }
+  .progress-dot.completed {
+    background-color: var(--green-400);
+  }
+
+  .wizard-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    gap: 12px;
+  }
+
+  .btn-wizard {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .tabs-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--gray-200);
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gray-50);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tab-btn:hover {
+    color: var(--green-700);
+    background-color: var(--green-50);
+  }
+  .tab-btn.active {
+    color: white;
+    background-color: var(--green-600);
+  }
+
+  /* Vista Previa de la Ficha EPA (Hoja A4 Oficial digitalizada) */
+  .epa-preview-container {
+    background: #fdfdfd;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    padding: 45px;
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.02), var(--shadow-sm);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.82rem;
+    color: #111;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    max-height: 700px;
+    overflow-y: auto;
+    border-top: 6px solid var(--green-600);
+    position: relative;
+  }
+
+  .epa-preview-container::after {
+    content: "CEID SUTEV CARTAGO";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-35deg);
+    font-size: 3rem;
+    font-family: var(--font-heading);
+    font-weight: 900;
+    color: rgba(16, 185, 129, 0.03);
+    pointer-events: none;
+    letter-spacing: 5px;
+    white-space: nowrap;
+  }
+
+  .epa-header-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 25px;
+    font-family: var(--font-heading);
+  }
+  .epa-header-table td {
+    border: 1px solid #333;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .epa-logo-cell {
+    width: 70px;
+  }
+  .epa-logo-cell img {
+    height: 55px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .epa-meta-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  .epa-meta-table td {
+    border: 1px solid #444;
+    padding: 6px 10px;
+  }
+  .epa-meta-label {
+    font-weight: bold;
+    width: 140px;
+    background-color: #f7f7f7;
+  }
+
+  .epa-section-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 1.5px solid #222;
+    padding-bottom: 3px;
+    margin-top: 25px;
+    margin-bottom: 8px;
+    font-size: 0.88rem;
+    color: var(--green-950);
+  }
+
+  .epa-text-block {
+    text-align: justify;
+    margin-bottom: 15px;
+    min-height: 40px;
+    color: #222;
+  }
+
+  .epa-signatures {
+    margin-top: 45px;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-heading);
+  }
+  .epa-signature-line {
+    border-top: 1px solid #333;
+    width: 200px;
+    text-align: center;
+    padding-top: 5px;
+    font-size: 0.72rem;
+  }
+
+  /* Estilos de Impresión A4 Limpio */
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    #print-area, #print-area * {
+      visibility: visible;
+    }
+    #print-area {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      max-height: none !important;
+      overflow-y: visible !important;
+      font-size: 10pt !important;
+      background: white !important;
+      color: black !important;
+    }
+    .header, .footer, .form-card, .btn, .tabs-nav, .section--dark, .section__header, .hide-on-print, .model-card {
+      display: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+<div class="container">
+<a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV"><div class="header__logo-text">SUTEV Cartago<span>Norte del Valle</span></div></a>
+<nav><ul class="nav__list" id="navList">
+<li><a href="index.html" class="nav__link">Inicio</a></li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Nosotros <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+  <ul class="nav__dropdown-menu">
+    <li><a href="index.html#nosotros" class="nav__dropdown-item"><i data-lucide="users" style="width: 14px; height: 14px;"></i> ¿Quiénes Somos?</a></li>
+    <li><a href="index.html#estatutos" class="nav__dropdown-item"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i> Estatutos del Sindicato</a></li>
+    <li><a href="index.html#galeria" class="nav__dropdown-item"><i data-lucide="image" style="width: 14px; height: 14px;"></i> Galería de Fotos</a></li>
+  </ul>
+</li>
+<li class="nav__dropdown">
+  <a href="#" class="nav__link nav__dropdown-toggle" style="display: inline-flex; align-items: center; gap: 4px;">Servicios <i data-lucide="chevron-down" style="width: 14px; height: 14px;"></i></a>
+    <ul class="nav__dropdown-menu">
+    <li><a href="index.html#servicios" class="nav__dropdown-item"><i data-lucide="briefcase" style="width: 14px; height: 14px;"></i> Portafolio de Servicios</a></li>
+    <li><a href="permisos-docentes.html" class="nav__dropdown-item"><i data-lucide="scale" style="width: 14px; height: 14px;"></i> Permisos de Ley y Licencias</a></li>
+    <li><a href="calculadora-salarial.html" class="nav__dropdown-item"><i data-lucide="calculator" style="width: 14px; height: 14px;"></i> Calculadora Salarial</a></li>
+    <li><a href="simulador-pension.html" class="nav__dropdown-item"><i data-lucide="calendar-clock" style="width: 14px; height: 14px;"></i> Simulador de Pensión</a></li>
+    <li><a href="derechos-peticion.html" class="nav__dropdown-item"><i data-lucide="file-signature" style="width: 14px; height: 14px;"></i> Derechos de Petición</a></li>
+    <li><a href="auditor-nomina.html" class="nav__dropdown-item"><i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> Auditor de Nómina</a></li>
+    <li><a href="escalafon-docente.html" class="nav__dropdown-item"><i data-lucide="graduation-cap" style="width: 14px; height: 14px;"></i> Escalafón y Ascenso</a></li>
+    <li><a href="carga-academica.html" class="nav__dropdown-item"><i data-lucide="calendar-range" style="width: 14px; height: 14px;"></i> Carga Académica 1850</a></li>
+    <li><a href="concurso-docente.html" class="nav__dropdown-item"><i data-lucide="clipboard-check" style="width: 14px; height: 14px;"></i> Concursos y Mineducación</a></li>
+    <li><a href="convivencia-escolar.html" class="nav__dropdown-item"><i data-lucide="alert-triangle" style="width: 14px; height: 14px;"></i> Convivencia y Ley 1620</a></li>
+    <li><a href="pepa-epa.html" class="nav__dropdown-item"><i data-lucide="award" style="width: 14px; height: 14px;"></i> PEPA y EPA (CEID)</a></li>
+  </ul>
+</li>
+<li><a href="index.html#calendario" class="nav__link">Calendario</a></li>
+<li><a href="index.html#noticias" class="nav__link">Noticias</a></li>
+<li><a href="index.html#contacto" class="nav__link">Contacto</a></li>
+<li><a href="index.html#afiliacion" class="nav__link nav__link--cta">Afíliate</a></li>
+</ul></nav>
+<button class="nav__toggle" id="navToggle" aria-label="Menú"><span></span><span></span><span></span></button>
+</div>
+</header>
+
+<!-- HERO HEADER -->
+<section class="section section--dark" style="padding-top: 150px; padding-bottom: 50px;">
+  <div class="container">
+    <div class="section__header reveal" style="margin-bottom: 0;">
+      <span class="section__tag">Pedagogía Crítica y Emancipadora — CEID</span>
+      <h2 class="section__title">Portal de Pedagogía PEPA y Planificador de EPA</h2>
+      <p class="section__desc">Conoce el modelo contra-hegemónico de FECODE para transformar las aulas y diseña paso a paso tu Experiencia Pedagógica Alternativa (EPA) con la estructura oficial del CEID SUTEV Cartago.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT SECTION -->
+<section class="section" style="padding-top: 40px;">
+  <div class="container">
+
+    <!-- TABS NAV -->
+    <div class="tabs-nav reveal hide-on-print">
+      <button class="tab-btn active" id="btn-tab-theory" onclick="switchTab('tab-theory')"><i data-lucide="info"></i> 1. Explicación PEPA vs. Neoliberalismo</button>
+      <button class="tab-btn" id="btn-tab-wizard" onclick="switchTab('tab-wizard')"><i data-lucide="edit-3"></i> 2. Diseñar e Imprimir Proyecto EPA</button>
+    </div>
+
+    <!-- TAB 1: MODEL EXPLANATION (PEPA vs. NEOLIBERAL) -->
+    <div id="tab-theory" class="tab-content reveal hide-on-print">
+      <h3 style="font-size:1.3rem; font-weight:800; color:var(--green-950); margin-bottom:8px;">La Pedagogía Crítica como Saber Propio del Maestro</h3>
+      <p style="font-size:0.95rem; color:var(--gray-600); line-height:1.6; max-width:900px; margin-bottom:30px;">
+        El **Movimiento Pedagógico Colombiano**, articulado a través del **CEID de SUTEV y FECODE**, levanta las banderas de la emancipación frente a la imposición de recetas educativas externas. En Cartago y el Norte del Valle defendemos que el maestro es un intelectual transformador y autónomo, y no un simple operario de contenidos estandarizados.
+      </p>
+
+      <div class="comparison-grid">
+        <!-- CARD NEOLIBERAL -->
+        <div class="model-card model-card--standard">
+          <div class="model-header">
+            <span class="model-badge model-badge--std">Enfoque Hegemónico</span>
+            <h4 style="font-size:1.1rem; font-weight:850; color:var(--gray-700); margin:0;">Modelo Neoliberal Estandarizado</h4>
+          </div>
+          <p style="font-size:0.88rem; color:var(--gray-600); line-height:1.5; margin-bottom:20px;">
+            Este modelo se diseña en oficinas de tecnócratas con base en lineamientos del Banco Mundial y la OCDE. Reduce la educación pública a métricas cuantitativas y competencias laborales instrumentales.
+          </p>
+          <ul class="comparison-list">
+            <li class="comparison-item">
+              <i data-lucide="x-circle" style="color:#b91c1c;"></i>
+              <div>
+                <strong>Competitividad e Individualismo:</strong> Se educa al estudiante para "vencer" a los otros y adaptarse pasivamente a las exigencias del mercado de trabajo.
+              </div>
+            </li>
+            <li class="comparison-item">
+              <i data-lucide="x-circle" style="color:#b91c1c;"></i>
+              <div>
+                <strong>El Maestro como Técnico Executor:</strong> El docente pierde su autonomía; se convierte en un aplicador de guías prediseñadas y estándares uniformes.
+              </div>
+            </li>
+            <li class="comparison-item">
+              <i data-lucide="x-circle" style="color:#b91c1c;"></i>
+              <div>
+                <strong>Saber Descontextualizado:</strong> Los contenidos se imponen desde el centro del país o del extranjero, ignorando por completo la realidad del territorio local y social.
+              </div>
+            </li>
+            <li class="comparison-item">
+              <i data-lucide="x-circle" style="color:#b91c1c;"></i>
+              <div>
+                <strong>Evaluación Punitiva Cuantitativa:</strong> Medición inflexible mediante pruebas externas estandarizadas (Pruebas Saber / PISA) que clasifica y castiga a escuelas y alumnos.
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- CARD PEPA / CEID -->
+        <div class="model-card model-card--pepa">
+          <div class="model-header">
+            <span class="model-badge model-badge--pepa">Alternativa CEID</span>
+            <h4 style="font-size:1.1rem; font-weight:850; color:var(--green-900); margin:0;">Proyecto Pedagógico Alternativo (PEPA)</h4>
+          </div>
+          <p style="font-size:0.88rem; color:var(--green-950); line-height:1.5; margin-bottom:20px;">
+            La propuesta emancipadora del magisterio colombiano que concibe a la escuela pública como un espacio de resistencia cultural, formación crítica y transformación comunitaria desde el aula.
+          </p>
+          <ul class="comparison-list">
+            <li class="comparison-item">
+              <i data-lucide="check-circle-2" style="color:var(--green-600);"></i>
+              <div>
+                <strong>Cooperación y Conciencia Crítica:</strong> Se educa al educando para entender su realidad, cuestionar las injusticias y cooperar colectivamente en la transformación de su entorno.
+              </div>
+            </li>
+            <li class="comparison-item">
+              <i data-lucide="check-circle-2" style="color:var(--green-600);"></i>
+              <div>
+                <strong>El Maestro como Intelectual Crítico:</strong> Reivindica la pedagogía como el saber propio de los docentes. El maestro tiene autonomía intelectual, investiga y produce currículo.
+              </div>
+            </li>
+            <li class="comparison-item">
+              <i data-lucide="check-circle-2" style="color:var(--green-600);"></i>
+              <div>
+                <strong>Lectura del Territorio:</strong> El currículo no es estático; nace del diálogo directo con la realidad social, la historia local, la cultura y las necesidades de Cartago y sus comunas.
+              </div>
+            </li>
+            <li class="comparison-item">
+              <i data-lucide="check-circle-2" style="color:var(--green-600);"></i>
+              <div>
+                <strong>Evaluación Emancipadora y Cualitativa:</strong> Formativa, integral y procesual. Valora la evolución social, afectiva y reflexiva del estudiante en lugar de asignarle un código numérico frío.
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="background-color:rgba(16,185,129,0.04); border-left:4px solid var(--green-600); border-radius:0 8px 8px 0; padding:20px; margin-top:35px;">
+        <h4 style="font-size:1rem; font-weight:800; color:var(--green-950); margin-bottom:6px; display:flex; align-items:center; gap:6px;"><i data-lucide="award"></i> De la Teoría (PEPA) a la Práctica Viva (EPA)</h4>
+        <p style="font-size:0.9rem; color:var(--gray-700); line-height:1.5; margin:0;">
+          ¿Cómo se materializa el PEPA? A través de las **Experiencias Pedagógicas Alternativas (EPA)**. Cada vez que tú como docente modificas tu currículo escolar para conectarlo con el barrio, utilizas la investigación-acción participativa en el aula o promueves asambleas de diálogo con los estudiantes, estás construyendo una EPA. ¡Usa nuestra siguiente pestaña para planificar tu proyecto escolar y presentarlo ante la Secretaría de CEID SUTEV Cartago!
+        </p>
+        <button class="btn btn--primary" style="margin-top:20px;" onclick="goToWizardTab()"><i data-lucide="arrow-right"></i> Ir al Planificador e iniciar mi propuesta EPA</button>
+      </div>
+    </div>
+
+    <!-- TAB 2: EPA PLANNER WIZARD -->
+    <div id="tab-wizard" class="tab-content reveal" style="display:none;">
+      <div class="dashboard-grid">
+        
+        <!-- WIZARD FORM PANEL (LEFT) -->
+        <div class="form-card hide-on-print" id="planner-form-card">
+          <div class="wizard-progress">
+            <span style="font-size:0.72rem; font-weight:800; color:var(--gray-600); text-transform:uppercase; letter-spacing:0.5px;">Paso <span id="current-step-num">1</span> de 5</span>
+            <div class="progress-dot-wrapper">
+              <div class="progress-dot active" id="dot-1"></div>
+              <div class="progress-dot" id="dot-2"></div>
+              <div class="progress-dot" id="dot-3"></div>
+              <div class="progress-dot" id="dot-4"></div>
+              <div class="progress-dot" id="dot-5"></div>
+            </div>
+          </div>
+
+          <!-- STEP 1: IDENTIFICACIÓN -->
+          <div class="wizard-step active" id="step-1">
+            <h3 style="font-size:1.15rem; font-weight:800; color:var(--green-950); margin-bottom:6px; display:flex; align-items:center; gap:8px;"><i data-lucide="user-check"></i> 1. Datos Generales de la EPA</h3>
+            <p style="font-size:0.85rem; color:var(--gray-500); line-height:1.45; margin-bottom:20px;">Registra los datos de identificación administrativa de la experiencia educativa de aula.</p>
+
+            <div class="form-group">
+              <label for="epa-titulo" style="font-weight:700;">Título del Proyecto / Nombre de la Experiencia</label>
+              <input type="text" id="epa-titulo" placeholder="Ej: Sembradores de Paz y Territorio en el Río La Vieja" oninput="updateEPAPreview()">
+            </div>
+
+            <div class="form-group">
+              <label for="epa-docentes" style="font-weight:700;">Docente(s) Diseñador(es) / Responsable(s)</label>
+              <input type="text" id="epa-docentes" placeholder="Ej: Lic. Álvaro Cárdenas Orozco" oninput="updateEPAPreview()">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="epa-ie" style="font-weight:700;">Institución Educativa</label>
+                <input type="text" id="epa-ie" placeholder="Ej: I.E. Sor María Juliana" oninput="updateEPAPreview()">
+              </div>
+              <div class="form-group">
+                <label for="epa-sede" style="font-weight:700;">Sede Escolar</label>
+                <input type="text" id="epa-sede" placeholder="Ej: Principal / Sede Central" oninput="updateEPAPreview()">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="epa-area" style="font-weight:700;">Área o Asignatura</label>
+                <input type="text" id="epa-area" placeholder="Ej: Ciencias Sociales / Ética" oninput="updateEPAPreview()">
+              </div>
+              <div class="form-group">
+                <label for="epa-grado" style="font-weight:700;">Grado / Nivel de Aula</label>
+                <input type="text" id="epa-grado" placeholder="Ej: Octavo (8-2)" oninput="updateEPAPreview()">
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2: LECTURA DEL TERRITORIO -->
+          <div class="wizard-step" id="step-2">
+            <h3 style="font-size:1.15rem; font-weight:800; color:var(--green-950); margin-bottom:6px; display:flex; align-items:center; gap:8px;"><i data-lucide="map-pin"></i> 2. Lectura del Territorio (Contexto)</h3>
+            <p style="font-size:0.85rem; color:var(--gray-500); line-height:1.45; margin-bottom:20px;">
+              El CEID promueve una pedagogía situada. Describe críticamente el entorno de tu escuela y la realidad sociocultural en Cartago.
+            </p>
+
+            <div class="form-group">
+              <label for="epa-contexto-social" style="font-weight:700;">Realidad sociocultural del barrio o comunidad escolar</label>
+              <textarea id="epa-contexto-social" rows="4" placeholder="¿Qué factores sociales, culturales o ambientales caracterizan a la zona donde viven tus estudiantes? (Ej: Cercanía al río, desempleo familiar, arraigo cultural, saberes comunitarios)..." oninput="updateEPAPreview()"></textarea>
+              <small class="counter-label" id="cnt-contexto-social">0 / 800 caracteres</small>
+            </div>
+
+            <div class="form-group">
+              <label for="epa-diagnostico" style="font-weight:700;">Diagnóstico o Necesidad de los Estudiantes en el Aula</label>
+              <textarea id="epa-diagnostico" rows="4" placeholder="¿Qué problemáticas en la convivencia, en el aprendizaje crítico o qué intereses particulares de los estudiantes encienden la chispa de este proyecto?..." oninput="updateEPAPreview()"></textarea>
+              <small class="counter-label" id="cnt-diagnostico">0 / 800 caracteres</small>
+            </div>
+          </div>
+
+          <!-- STEP 3: INTENCIONALIDAD PEDAGÓGICA -->
+          <div class="wizard-step" id="step-3">
+            <h3 style="font-size:1.15rem; font-weight:800; color:var(--green-950); margin-bottom:6px; display:flex; align-items:center; gap:8px;"><i data-lucide="help-circle"></i> 3. Intencionalidad Pedagógica</h3>
+            <p style="font-size:0.85rem; color:var(--gray-500); line-height:1.45; margin-bottom:20px;">
+              Define la pregunta generadora de investigación y los propósitos de cambio social que buscas en tus estudiantes.
+            </p>
+
+            <div class="form-group">
+              <label for="epa-pregunta" style="font-weight:700;">Pregunta Orientadora o Generadora de Aula</label>
+              <input type="text" id="epa-pregunta" placeholder="Ej: ¿Cómo incide la memoria del río La Vieja en la identidad ecológica de los jóvenes?" oninput="updateEPAPreview()">
+            </div>
+
+            <div class="form-group">
+              <label for="epa-propositos" style="font-weight:700;">Propósitos Emancipadores (Objetivo Crítico)</label>
+              <textarea id="epa-propositos" rows="5" placeholder="¿Qué transformaciones humanas, de pensamiento crítico, autonomía y relación ecológica pretendes sembrar en tus educandos con este proyecto? (Evita objetivos mecanicistas rígidos)..." oninput="updateEPAPreview()"></textarea>
+              <small class="counter-label" id="cnt-propositos">0 / 800 caracteres</small>
+            </div>
+          </div>
+
+          <!-- STEP 4: RUTA METODOLÓGICA CRÍTICA -->
+          <div class="wizard-step" id="step-4">
+            <h3 style="font-size:1.15rem; font-weight:800; color:var(--green-950); margin-bottom:6px; display:flex; align-items:center; gap:8px;"><i data-lucide="route"></i> 4. Ruta Metodológica Crítica</h3>
+            <p style="font-size:0.85rem; color:var(--gray-500); line-height:1.45; margin-bottom:20px;">
+              Selecciona el enfoque metodológico de resistencia escolar y detalla el diseño de las actividades didácticas con los estudiantes.
+            </p>
+
+            <div class="form-group">
+              <label for="epa-metodologia" style="font-weight:700;">Metodología Crítica Principal</label>
+              <select id="epa-metodologia" onchange="updateEPAPreview()">
+                <option value="Investigación-Acción Participativa (IAP)">Investigación-Acción Participativa (IAP) - Orlando Fals Borda</option>
+                <option value="Aprendizaje Basado en Proyectos Críticos (ABP)">Aprendizaje Basado en Proyectos Críticos (ABP) Comunitarios</option>
+                <option value="Diálogo de Saberes e Interculturalidad">Diálogo de Saberes e Interculturalidad Crítica</option>
+                <option value="Pedagogía de la Tierra y el Buen Vivir">Pedagogía de la Tierra y el Buen Vivir</option>
+                <option value="Educación Popular y Comunitaria">Educación Popular y Comunitaria - Paulo Freire</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="epa-ruta" style="font-weight:700;">Desarrollo Metodológico (Fases o Etapas)</label>
+              <textarea id="epa-ruta" rows="5" placeholder="Describe brevemente las etapas de la experiencia de aula: ¿Cómo se organizan los estudiantes?, ¿cómo se investiga el territorio?, ¿qué producciones propias realizan?..." oninput="updateEPAPreview()"></textarea>
+              <small class="counter-label" id="cnt-ruta">0 / 1000 caracteres</small>
+            </div>
+          </div>
+
+          <!-- STEP 5: EVALUACIÓN Y COMUNIDAD -->
+          <div class="wizard-step" id="step-5">
+            <h3 style="font-size:1.15rem; font-weight:800; color:var(--green-950); margin-bottom:6px; display:flex; align-items:center; gap:8px;"><i data-lucide="message-square-text"></i> 5. Evaluación Emancipadora</h3>
+            <p style="font-size:0.85rem; color:var(--gray-500); line-height:1.45; margin-bottom:20px;">
+              ¿Cómo evaluamos de forma formativa y dialógica? Describe la participación comunitaria.
+            </p>
+
+            <div class="form-group">
+              <label for="epa-evaluacion" style="font-weight:700;">Criterios de Evaluación Formativa y Cualitativa</label>
+              <textarea id="epa-evaluacion" rows="4" placeholder="¿Cómo se promueve la autoevaluación y la coevaluación reflexiva? ¿Cómo se valora el proceso integral del estudiante más allá de una nota numérica de examen?..." oninput="updateEPAPreview()"></textarea>
+              <small class="counter-label" id="cnt-evaluacion">0 / 800 caracteres</small>
+            </div>
+
+            <div class="form-group">
+              <label for="epa-comunidad" style="font-weight:700;">Vinculación de la Comunidad Educativa y el Barrio</label>
+              <textarea id="epa-comunidad" rows="4" placeholder="¿Cómo participan los padres de familia, los sabedores locales, líderes sociales u otras instituciones en las fases o socialización del proyecto?..." oninput="updateEPAPreview()"></textarea>
+              <small class="counter-label" id="cnt-comunidad">0 / 800 caracteres</small>
+            </div>
+          </div>
+
+          <!-- WIZARD BUTTONS -->
+          <div class="wizard-actions">
+            <button class="btn btn--outline-dark btn-wizard" id="btn-back" style="display:none;" onclick="prevStep()"><i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Atrás</button>
+            <button class="btn btn--primary btn-wizard" id="btn-next" onclick="nextStep()">Siguiente <i data-lucide="arrow-right" style="width:16px;height:16px;"></i></button>
+          </div>
+        </div>
+
+        <!-- PRINT PREVIEW WINDOW (RIGHT / A4 PAPEL) -->
+        <div class="result-card">
+          <div class="hide-on-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px;">
+            <h3 style="font-size:1.15rem; font-weight:800; color:var(--green-950); margin:0; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="printer" style="color:var(--green-600)"></i> Ficha Técnica Oficial de Radicación
+            </h3>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn--outline-dark" style="padding:6px 12px; font-size:0.8rem;" onclick="copyEPAToClipboard()"><i data-lucide="copy" style="width:14px;height:14px;"></i> Copiar Texto</button>
+              <button class="btn btn--primary" style="padding:6px 12px; font-size:0.8rem;" onclick="window.print()"><i data-lucide="printer" style="width:14px;height:14px;"></i> Imprimir / PDF</button>
+            </div>
+          </div>
+
+          <!-- VIRTUAL A4 SHEET -->
+          <div class="epa-preview-container" id="print-area">
+            
+            <!-- OFICIAL CEID HEADER -->
+            <table class="epa-header-table">
+              <tr>
+                <td class="epa-logo-cell" rowspan="2">
+                  <img src="LOGO.png" alt="SUTEV">
+                </td>
+                <td style="font-size:0.88rem; font-weight:800; color:var(--green-950);">
+                  SINDICATO ÚNICO DE TRABAJADORES DE LA EDUCACIÓN DEL VALLE — SUTEV
+                </td>
+                <td style="font-size:0.7rem; font-weight:700; width:100px; background-color:#fafafa;">
+                  CÓDIGO: CEID-EPA
+                </td>
+              </tr>
+              <tr>
+                <td style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--gray-700); letter-spacing:0.5px;">
+                  Centro de Estudios e Investigaciones Docentes (CEID) - Subdirectiva Cartago
+                </td>
+                <td style="font-size:0.7rem; background-color:#fafafa;">
+                  FECHA: 2026
+                </td>
+              </tr>
+            </table>
+
+            <div style="text-align:center; font-family:var(--font-heading); margin-bottom:20px;">
+              <h3 style="font-size:0.95rem; font-weight:850; text-transform:uppercase; margin:0; letter-spacing:0.5px;">REGISTRO DE EXPERIENCIAS PEDAGÓGICAS ALTERNATIVAS (EPA)</h3>
+              <p style="font-size:0.72rem; color:var(--gray-600); margin-top:2px;">MODELO PEDAGÓGICO EMANCIPADOR — CEID SUTEV</p>
+            </div>
+
+            <!-- METADATA TABULAR -->
+            <table class="epa-meta-table">
+              <tr>
+                <td class="epa-meta-label">TÍTULO PROYECTO:</td>
+                <td id="lbl-titulo" style="font-weight:bold; color:var(--green-950);">— Por Diligenciar —</td>
+              </tr>
+              <tr>
+                <td class="epa-meta-label">DOCENTE(S):</td>
+                <td id="lbl-docentes">— Por Diligenciar —</td>
+              </tr>
+              <tr>
+                <td class="epa-meta-label">INSTITUCIÓN / SEDE:</td>
+                <td><span id="lbl-ie">— Por Diligenciar —</span> / <span id="lbl-sede">—</span></td>
+              </tr>
+              <tr>
+                <td class="epa-meta-label">ÁREA / GRADO:</td>
+                <td><span id="lbl-area">— Por Diligenciar —</span> / <span id="lbl-grado">—</span></td>
+              </tr>
+              <tr>
+                <td class="epa-meta-label">METODOLOGÍA CRÍTICA:</td>
+                <td id="lbl-metodologia" style="font-weight:bold; text-decoration:underline;">—</td>
+              </tr>
+            </table>
+
+            <!-- SECTIONS -->
+            <div class="epa-section-title">I. Lectura del Territorio (Contexto Sociocultural)</div>
+            <div class="epa-text-block" id="lbl-contexto-social">— Completa el Paso 2 en el planificador de la izquierda para rellenar este campo —</div>
+
+            <div class="epa-section-title">II. Diagnóstico Crítico del Aula y Necesidades</div>
+            <div class="epa-text-block" id="lbl-diagnostico">— Completa el Paso 2 en el planificador de la izquierda para rellenar este campo —</div>
+
+            <div class="epa-section-title">III. Pregunta Orientadora o Generadora</div>
+            <div class="epa-text-block" id="lbl-pregunta" style="font-style:italic; font-weight:bold; padding-left:15px; border-left:2px solid var(--green-600);">— Completa el Paso 3 en el planificador de la izquierda para rellenar este campo —</div>
+
+            <div class="epa-section-title">IV. Intencionalidad Pedagógica (Propósitos Emancipadores)</div>
+            <div class="epa-text-block" id="lbl-propositos">— Completa el Paso 3 en el planificador de la izquierda para rellenar este campo —</div>
+
+            <div class="epa-section-title">V. Desarrollo de la Ruta Metodológica Crítica (Fases)</div>
+            <div class="epa-text-block" id="lbl-ruta">— Completa el Paso 4 en el planificador de la izquierda para rellenar este campo —</div>
+
+            <div class="epa-section-title">VI. Criterios de Evaluación Cualitativa y Emancipadora</div>
+            <div class="epa-text-block" id="lbl-evaluacion">— Completa el Paso 5 en el planificador de la izquierda para rellenar este campo —</div>
+
+            <div class="epa-section-title">VII. Vinculación y Diálogo con la Comunidad</div>
+            <div class="epa-text-block" id="lbl-comunidad">— Completa el Paso 5 en el planificador de la izquierda para rellenar este campo —</div>
+
+            <!-- FIRMAS -->
+            <div class="epa-signatures">
+              <div class="epa-signature-line">
+                <span id="lbl-firma-docente" style="display:block; font-weight:bold; margin-bottom:20px;">—</span>
+                Docente Diseñador / Responsable<br>CC.
+              </div>
+              <div class="epa-signature-line">
+                <div style="height:35px;"></div>
+                Álvaro Cárdenas Orozco<br>Secretaría de Asuntos Educativos y CEID<br>Subdirectiva SUTEV Cartago
+              </div>
+            </div>
+
+          </div>
+
+          <div class="hide-on-print" style="background-color:var(--green-50); border-left:4px solid var(--green-600); padding:15px; border-radius:0 8px 8px 0; margin-top:20px;">
+            <p style="font-size:0.82rem;color:var(--green-900);line-height:1.45;margin:0;">
+              * **Orientación Radicación SUTEV:** Una vez estructurado tu proyecto de aula, descárgalo e imprímelo en formato PDF. Hazlo llegar físicamente o vía correo a la **Secretaría del CEID** para su correspondiente archivo y validación dentro de los Círculos Pedagógicos del Municipio. Esto sirve como aval de innovación curricular ante directivos de la Institución y el Ministerio de Educación.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+<div class="container">
+<div class="footer__grid">
+<div class="footer__brand"><a href="index.html" class="header__logo"><img src="LOGO.png" alt="SUTEV" style="height:40px"><div class="header__logo-text" style="color:var(--green-400)">SUTEV Cartago<span style="color:var(--gray-500)">Norte del Valle</span></div></a><p>Sindicato Único de Trabajadores de la Educación del Valle. Subdirectiva Cartago — Filial de FECODE.</p></div>
+<div><div class="footer__title">Navegación</div><ul class="footer__links"><li><a href="index.html#nosotros">Nosotros</a></li><li><a href="index.html#servicios">Servicios</a></li><li><a href="index.html#calendario">Calendario</a></li><li><a href="index.html#noticias">Noticias</a></li><li><a href="index.html#estatutos">Estatutos</a></li></ul></div>
+<div><div class="footer__title">Servicios y Herramientas</div><ul class="footer__links"><li><a href="index.html#reservas">Asesoría Jurídica</a></li><li><a href="index.html#reservas">CEID</a></li><li><a href="index.html#reservas">Bienestar</a></li><li><a href="permisos-docentes.html">Permisos y Licencias de Ley</a></li><li><a href="calculadora-salarial.html">Calculadora Salarial</a></li><li><a href="simulador-pension.html">Simulador de Pensión</a></li><li><a href="derechos-peticion.html">Derechos de Petición</a></li><li><a href="auditor-nomina.html">Auditor de Nómina</a></li><li><a href="escalafon-docente.html">Escalafón y Ascenso</a></li><li><a href="carga-academica.html">Carga Académica 1850</a></li><li><a href="concurso-docente.html">Concursos y Mineducación</a></li><li><a href="convivencia-escolar.html">Convivencia y Ley 1620</a></li><li><a href="pepa-epa.html">PEPA y EPA (CEID)</a></li></ul></div>
+<div><div class="footer__title">Contacto y Redes</div><ul class="footer__links"><li><a href="index.html#contacto">📍 Casa del Maestro (Cra 4 #16-17)</a></li><li><a href="index.html#contacto">📍 Cartago, Valle del Cauca</a></li><li><a href="https://web.facebook.com/sutevcartago/?locale=es_LA&_rdc=1&_rdr#" target="_blank" style="color: var(--green-400); font-weight: 600;">📘 Facebook Oficial</a></li></ul></div>
+</div>
+<div class="footer__bottom">© 2026 SUTEV Cartago — Subdirectiva Norte del Valle. Todos los derechos reservados.</div>
+</div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (typeof lucide !== 'undefined') {
+  lucide.createIcons();
+}
+
+// Wizard state variables
+let currentStep = 1;
+
+// Lógica de Tabs
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.style.display = 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  document.getElementById(tabId).style.display = 'block';
+  
+  const btn = document.getElementById('btn-' + tabId);
+  if (btn) {
+    btn.classList.add('active');
+  }
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    el.classList.remove('visible');
+  });
+  triggerReveal();
+}
+
+function goToWizardTab() {
+  switchTab('tab-wizard');
+  window.scrollTo({ top: 300, behavior: 'smooth' });
+}
+
+// Navigation in the Wizard
+function showStep(step) {
+  document.querySelectorAll('.wizard-step').forEach(el => {
+    el.classList.remove('active');
+  });
+  document.getElementById('step-' + step).classList.add('active');
+
+  // Update indicators (dots)
+  document.getElementById('current-step-num').innerText = step;
+  for (let i = 1; i <= 5; i++) {
+    const dot = document.getElementById('dot-' + i);
+    if (dot) {
+      dot.classList.remove('active', 'completed');
+      if (i === step) {
+        dot.classList.add('active');
+      } else if (i < step) {
+        dot.classList.add('completed');
+      }
+    }
+  }
+
+  // Button visibility
+  document.getElementById('btn-back').style.display = step > 1 ? 'inline-flex' : 'none';
+  
+  const btnNext = document.getElementById('btn-next');
+  if (step === 5) {
+    btnNext.innerHTML = 'Previsualizar e Imprimir <i data-lucide="check" style="width:16px;height:16px;"></i>';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } else {
+    btnNext.innerHTML = 'Siguiente <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+}
+
+function nextStep() {
+  if (currentStep < 5) {
+    currentStep++;
+    showStep(currentStep);
+  } else {
+    // Focus the preview
+    const previewContainer = document.getElementById('print-area');
+    previewContainer.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function prevStep() {
+  if (currentStep > 1) {
+    currentStep--;
+    showStep(currentStep);
+  }
+}
+
+// Live syncing inputs to preview sheet and character counting
+function updateEPAPreview() {
+  // Input fields
+  const titulo = document.getElementById('epa-titulo').value.trim();
+  const docentes = document.getElementById('epa-docentes').value.trim();
+  const ie = document.getElementById('epa-ie').value.trim();
+  const sede = document.getElementById('epa-sede').value.trim();
+  const area = document.getElementById('epa-area').value.trim();
+  const grado = document.getElementById('epa-grado').value.trim();
+  const metodologia = document.getElementById('epa-metodologia').value;
+  const pregunta = document.getElementById('epa-pregunta').value.trim();
+
+  // Textarea fields
+  const contextoSocial = document.getElementById('epa-contexto-social').value;
+  const diagnostico = document.getElementById('epa-diagnostico').value;
+  const propositos = document.getElementById('epa-propositos').value;
+  const ruta = document.getElementById('epa-ruta').value;
+  const evaluacion = document.getElementById('epa-evaluacion').value;
+  const comunidad = document.getElementById('epa-comunidad').value;
+
+  // Sync to labels
+  document.getElementById('lbl-titulo').innerText = titulo || '— Por Diligenciar —';
+  document.getElementById('lbl-docentes').innerText = docentes || '— Por Diligenciar —';
+  document.getElementById('lbl-firma-docente').innerText = docentes || '—';
+  document.getElementById('lbl-ie').innerText = ie || '— Por Diligenciar —';
+  document.getElementById('lbl-sede').innerText = sede || '—';
+  document.getElementById('lbl-area').innerText = area || '— Por Diligenciar —';
+  document.getElementById('lbl-grado').innerText = grado || '—';
+  document.getElementById('lbl-metodologia').innerText = metodologia;
+  document.getElementById('lbl-pregunta').innerText = pregunta ? `¿${pregunta.replace(/^[¿?]|[?]$/g, '')}?` : '— Por Diligenciar —';
+
+  // Sync text blocks
+  document.getElementById('lbl-contexto-social').innerText = contextsFormat(contextoSocial) || '— Completa el Paso 2 en el planificador de la izquierda para rellenar este campo —';
+  document.getElementById('lbl-diagnostico').innerText = contextsFormat(diagnostico) || '— Completa el Paso 2 en el planificador de la izquierda para rellenar este campo —';
+  document.getElementById('lbl-propositos').innerText = contextsFormat(propositos) || '— Completa el Paso 3 en el planificador de la izquierda para rellenar este campo —';
+  document.getElementById('lbl-ruta').innerText = contextsFormat(ruta) || '— Completa el Paso 4 en el planificador de la izquierda para rellenar este campo —';
+  document.getElementById('lbl-evaluacion').innerText = contextsFormat(evaluacion) || '— Completa el Paso 5 en el planificador de la izquierda para rellenar este campo —';
+  document.getElementById('lbl-comunidad').innerText = contextsFormat(comunidad) || '— Completa el Paso 5 en el planificador de la izquierda para rellenar este campo —';
+
+  // Update counters
+  updateCounter('epa-contexto-social', 'cnt-contexto-social', 800);
+  updateCounter('epa-diagnostico', 'cnt-diagnostico', 800);
+  updateCounter('epa-propositos', 'cnt-propositos', 800);
+  updateCounter('epa-ruta', 'cnt-ruta', 1000);
+  updateCounter('epa-evaluacion', 'cnt-evaluacion', 800);
+  updateCounter('epa-comunidad', 'cnt-comunidad', 800);
+}
+
+function contextsFormat(text) {
+  return text.trim();
+}
+
+function updateCounter(inputId, counterId, limit) {
+  const text = document.getElementById(inputId).value;
+  const count = text.length;
+  const el = document.getElementById(counterId);
+  el.innerText = `${count} / ${limit} caracteres`;
+  if (count > limit) {
+    el.style.color = '#b91c1c';
+    el.style.fontWeight = 'bold';
+  } else {
+    el.style.color = '';
+    el.style.fontWeight = '';
+  }
+}
+
+// Copy plain text to clipboard
+function copyEPAToClipboard() {
+  const titulo = document.getElementById('epa-titulo').value || '—';
+  const docentes = document.getElementById('epa-docentes').value || '—';
+  const ie = document.getElementById('epa-ie').value || '—';
+  const sede = document.getElementById('epa-sede').value || '—';
+  const area = document.getElementById('epa-area').value || '—';
+  const grado = document.getElementById('epa-grado').value || '—';
+  const metodologia = document.getElementById('epa-metodologia').value || '—';
+  const pregunta = document.getElementById('epa-pregunta').value || '—';
+  const contexto = document.getElementById('epa-contexto-social').value || '—';
+  const diagnostico = document.getElementById('epa-diagnostico').value || '—';
+  const propositos = document.getElementById('epa-propositos').value || '—';
+  const ruta = document.getElementById('epa-ruta').value || '—';
+  const evaluacion = document.getElementById('epa-evaluacion').value || '—';
+  const comunidad = document.getElementById('epa-comunidad').value || '—';
+
+  const fullText = `FICHA TÉCNICA OFICIAL DE RADICACIÓN - EXPERIENCIA PEDAGÓGICA ALTERNATIVA (EPA)
+CENTRO DE ESTUDIOS E INVESTIGACIONES DOCENTES (CEID) - SUTEV CARTAGO
+
+DATOS GENERALES:
+- TÍTULO: ${titulo}
+- DOCENTE(S): ${docentes}
+- INSTITUCIÓN / SEDE: ${ie} / ${sede}
+- ÁREA / GRADO: ${area} / ${grado}
+- METODOLOGÍA CRÍTICA: ${metodologia}
+
+I. LECTURA DEL TERRITORIO (CONTEXTO SOCIOCULTURAL):
+${contexto}
+
+II. DIAGNÓSTICO CRÍTICO DEL AULA Y NECESIDADES:
+${diagnostico}
+
+III. PREGUNTA GENERADORA:
+¿${pregunta.replace(/^[¿?]|[?]$/g, '')}?
+
+IV. INTENCIONALIDAD PEDAGÓGICA (PROPÓSITOS EMANCIPADORES):
+${propositos}
+
+V. DESARROLLO DE LA RUTA METODOLÓGICA (FASES):
+${ruta}
+
+VI. CRITERIOS DE EVALUACIÓN CUALITATIVA Y EMANCIPADORA:
+${evaluacion}
+
+VII. VINCULACIÓN Y DIÁLOGO CON LA COMUNIDAD:
+${comunidad}
+
+Generado en el Portal de SUTEV Cartago - CEID`;
+
+  navigator.clipboard.writeText(fullText).then(() => {
+    alert("¡Texto de la propuesta copiado al portapapeles con éxito!");
+  }).catch(err => {
+    alert("Error al copiar texto: " + err);
+  });
+}
+</script>
+</body>
+</html>
